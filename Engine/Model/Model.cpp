@@ -24,9 +24,8 @@ void Model::InitializeObj(const std::string& filename)
 
 	// VertexResource
 	resource_.vertexResource = CreateResource::CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
-	// VertexBufferView
+
 	// 頂点バッファビューを作成する
-	
 	// リソースの先頭のアドレスから使う
 	objVertexBufferView_.BufferLocation = resource_.vertexResource->GetGPUVirtualAddress();
 	// 使用するリソースのサイズは頂点サイズ

@@ -65,6 +65,15 @@
     <Filter Include="Engine\シェーダー">
       <UniqueIdentifier>{75fe7eba-20ef-41d6-b151-9e25db6dff22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Utility\StringUtility">
+      <UniqueIdentifier>{69a94dc8-1587-4d2a-95c0-520257861ec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Utility\ShaderCompile">
+      <UniqueIdentifier>{02155a2a-5291-4625-8f81-ee0ab1992425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ParticleSystem">
+      <UniqueIdentifier>{a7f7bbbc-b6d8-45f4-b64d-9312c4763b67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -84,12 +93,6 @@
     </ClCompile>
     <ClCompile Include="Engine\GraphicsPipeline\GraphicsPipeline.cpp">
       <Filter>Engine\GraphicsPipeline</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Utility\StringUtility.cpp">
-      <Filter>Engine\Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Utility\ShaderCompile.cpp">
-      <Filter>Engine\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Transform\WorldTransform.cpp">
       <Filter>Engine\Transform</Filter>
@@ -148,6 +151,15 @@
     <ClCompile Include="Engine\Model\State\ModelCube.cpp">
       <Filter>Engine\Model\State</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Utility\StringUtility.cpp">
+      <Filter>Engine\Utility\StringUtility</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Utility\ShaderCompile.cpp">
+      <Filter>Engine\Utility\ShaderCompile</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Engine\ParticleSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\CreateResource\CreateResource.h">
@@ -161,12 +173,6 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphicsPipeline\GraphicsPipeline.h">
       <Filter>Engine\GraphicsPipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Utility\ShaderCompile.h">
-      <Filter>Engine\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Utility\StringUtility.h">
-      <Filter>Engine\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\Mathfunction.h">
       <Filter>Engine\Math</Filter>
@@ -249,6 +255,15 @@
     <ClInclude Include="Engine\Model\State\ModelCube.h">
       <Filter>Engine\Model\State</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Utility\StringUtility.h">
+      <Filter>Engine\Utility\StringUtility</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Utility\ShaderCompile.h">
+      <Filter>Engine\Utility\ShaderCompile</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Engine\ParticleSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\ShaderFile\Object3d.PS.hlsl">
@@ -263,9 +278,18 @@
     <FxCompile Include="Engine\ShaderFile\Sprite2D.VS.hlsl">
       <Filter>Engine\シェーダー</Filter>
     </FxCompile>
+    <FxCompile Include="Particle.VS.hlsl">
+      <Filter>Engine\シェーダー</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\ShaderFile\Object3d.hlsli">
+      <Filter>Engine\シェーダー</Filter>
+    </None>
+    <None Include="Particle.hlsli">
+      <Filter>Engine\シェーダー</Filter>
+    </None>
+    <None Include="Particle.PS.hlsl">
       <Filter>Engine\シェーダー</Filter>
     </None>
   </ItemGroup>

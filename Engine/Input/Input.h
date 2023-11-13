@@ -1,6 +1,7 @@
 #pragma once
 #include"WinApp.h"
 #include <cassert>
+#include <wrl.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #pragma comment(lib,"xinput.lib")
@@ -22,8 +23,8 @@ public:
 
 private:
 
-	IDirectInput8* directInput = nullptr;
-	IDirectInputDevice8* keyboard = nullptr;
+	Microsoft::WRL::ComPtr<IDirectInput8> directInput = nullptr;
+	Microsoft::WRL::ComPtr<IDirectInputDevice8> keyboard = nullptr;
 
 	BYTE keys[256] = {};
 	BYTE preKeys[256] = {};
