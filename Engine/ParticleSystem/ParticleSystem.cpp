@@ -1,12 +1,11 @@
 #include "ParticleSystem.h"
 
-
-void ParticleSystem::Initialize(){
+void ParticleSystem::Initialize(const std::string& filename){
 
 	size_.SRV = DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	modelData_ = model_->LoadObjFile()
+	modelData_ = Model::LoadObjFile("resources", filename);
 	// リソース作成
-	CreateResource();
+	CreateResource(modelData_);
 	// instancing用のSRV作成
 	CreateInstancingSrv();
 
@@ -59,7 +58,7 @@ void ParticleSystem::CreateInstancingSrv(){
 	instancingSrvDesc.Buffer.NumElements = kNumInstance;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
 	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = TextureManager::GetCPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 129);
-	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU = TextureManager::GetGPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 129);
+	instancingSrvHandleGPU_ = TextureManager::GetGPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 129);
 	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(resource_.instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU);
 
 }
@@ -72,4 +71,17 @@ void ParticleSystem::Draw(WorldTransform worldTransform[], ViewProjection viewpr
 
 	Property property = GraphicsPipeline::GetInstance()->GetPSO().Particle;
 
+	// Rootsignatureを設定。PSOに設定してるけど別途設定が必要
+	DirectXCommon::GetCommandList()->SetGraphicsRootSignature(property.rootSignature_.Get());
+	DirectXCommon::GetCommandList()->SetPipelineState(property.graphicsPipelineState_.Get()); // PSOを設定
+	DirectXCommon::GetCommandList()->IASetVertexBuffers(0, 1, &VertexBufferView_); // VBVを設定
+	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
+	DirectXCommon::GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	// マテリアルCBufferの場所を設定
+	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(0, resource_.materialResource->GetGPUVirtualAddress());
+	// wvp用のCBufferの場所を設定
+	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(1, resource_.wvpResource->GetGPUVirtualAddress());
+	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(1,instancingSrvHandleGPU_);
+	// 描画。(DrawCall/ドローコール)。
+	DirectXCommon::GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), kNumInstance, 0, 0);
 }

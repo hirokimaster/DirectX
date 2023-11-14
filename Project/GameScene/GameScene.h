@@ -6,6 +6,7 @@
 #include "ModelCube.h"
 #include "Input.h"
 #include "ImGuiManager/ImGuiManager.h"
+#include "ParticleSystem/ParticleSystem.h"
 
 /// <summary>
 /// ゲームシーン
@@ -40,4 +41,8 @@ public: // メンバ関数
 
 private: // メンバ変数
 
+	WorldTransform trans_[10];
+	ViewProjection view_ = {};
+	ParticleSystem* particle_ = {};
+	
 };

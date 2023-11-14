@@ -58,9 +58,6 @@ public:
 	// 色のsetter
 	Vector4 SetColor(Vector4 color) { return materialData_->color = color; }
 
-
-private:
-
 	/// <summary>
 	/// Objファイルを読む
 	/// </summary>
@@ -76,6 +73,7 @@ private:
 	/// <param name="filename"></param>
 	/// <returns></returns>
 	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
+	
 
 private: // メンバ変数
 

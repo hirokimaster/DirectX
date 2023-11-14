@@ -157,7 +157,7 @@
     <ClCompile Include="Engine\Utility\ShaderCompile.cpp">
       <Filter>Engine\Utility\ShaderCompile</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleSystem.cpp">
+    <ClCompile Include="Engine\ParticleSystem\ParticleSystem.cpp">
       <Filter>Engine\ParticleSystem</Filter>
     </ClCompile>
   </ItemGroup>
@@ -261,7 +261,7 @@
     <ClInclude Include="Engine\Utility\ShaderCompile.h">
       <Filter>Engine\Utility\ShaderCompile</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleSystem.h">
+    <ClInclude Include="Engine\ParticleSystem\ParticleSystem.h">
       <Filter>Engine\ParticleSystem</Filter>
     </ClInclude>
   </ItemGroup>
@@ -278,7 +278,7 @@
     <FxCompile Include="Engine\ShaderFile\Sprite2D.VS.hlsl">
       <Filter>Engine\シェーダー</Filter>
     </FxCompile>
-    <FxCompile Include="Particle.VS.hlsl">
+    <FxCompile Include="Engine\ShaderFile\Particle.VS.hlsl">
       <Filter>Engine\シェーダー</Filter>
     </FxCompile>
   </ItemGroup>
@@ -286,10 +286,10 @@
     <None Include="Engine\ShaderFile\Object3d.hlsli">
       <Filter>Engine\シェーダー</Filter>
     </None>
-    <None Include="Particle.hlsli">
+    <None Include="Engine\ShaderFile\Particle.hlsli">
       <Filter>Engine\シェーダー</Filter>
     </None>
-    <None Include="Particle.PS.hlsl">
+    <None Include="Engine\ShaderFile\Particle.PS.hlsl">
       <Filter>Engine\シェーダー</Filter>
     </None>
   </ItemGroup>

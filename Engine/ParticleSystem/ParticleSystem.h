@@ -12,7 +12,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	void Initialize(const std::string& filename);
 
 	void CreateResource(ModelData modelData);
 
@@ -27,6 +27,6 @@ private:
 	ModelData modelData_;
 	Model* model_;
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView_{};
-	
+	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
 };
 
