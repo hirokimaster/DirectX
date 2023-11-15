@@ -189,6 +189,13 @@ void DirectXCommon::InitializeDxgi() {
 #ifdef _DEBUG
 	Microsoft::WRL::ComPtr<ID3D12InfoQueue> infoQueue;
 	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+		// ヤバイエラー時に止まる
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+		// エラー時に止まる
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		// 警告時に止まる
+		//infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+	
 		// 抑制するエラー
 		D3D12_MESSAGE_ID denyIds[] = {
 			/*
@@ -205,8 +212,6 @@ void DirectXCommon::InitializeDxgi() {
 		filter.DenyList.pSeverityList = severities;
 		// 指定したエラーの表示を抑制する
 		infoQueue->PushStorageFilter(&filter);
-		// エラー時にブレークを発生させる
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
 		
 	}
 
@@ -369,3 +374,6 @@ void DirectXCommon::CreateDepthBuffer()
 
 
 }
+
+
+

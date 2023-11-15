@@ -65,10 +65,9 @@ void ParticleSystem::CreateInstancingSrv(){
 
 void ParticleSystem::Draw(WorldTransform worldTransform, ViewProjection viewprojection) {
 
-
+	
 	worldTransform.TransferMatrix(resource_.wvpResource, viewprojection);
-
-
+	
 	Property property = GraphicsPipeline::GetInstance()->GetPSO().Particle;
 
 	// Rootsignatureを設定。PSOに設定してるけど別途設定が必要
@@ -80,8 +79,9 @@ void ParticleSystem::Draw(WorldTransform worldTransform, ViewProjection viewproj
 	// マテリアルCBufferの場所を設定
 	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(0, resource_.materialResource->GetGPUVirtualAddress());
 	// wvp用のCBufferの場所を設定
-	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(0, resource_.wvpResource->GetGPUVirtualAddress());
-	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(1,instancingSrvHandleGPU_);
+	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(1, resource_.wvpResource->GetGPUVirtualAddress());
+	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(2,instancingSrvHandleGPU_);
+	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetGPUHandle(texHandle_));
 	// 描画。(DrawCall/ドローコール)。
 	DirectXCommon::GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), kNumInstance, 0, 0);
 }

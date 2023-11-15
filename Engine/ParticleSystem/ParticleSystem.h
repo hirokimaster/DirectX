@@ -18,6 +18,9 @@ public:
 
 	void CreateInstancingSrv();
 
+	// setter
+	void SetTexHandle(uint32_t texHandle) { texHandle_ = texHandle; }
+
 	void Draw(WorldTransform worldTransform, ViewProjection viewprojection);
 
 private:
@@ -28,5 +31,6 @@ private:
 	Model* model_;
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView_{};
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
+	uint32_t texHandle_ = 0;
 };
 

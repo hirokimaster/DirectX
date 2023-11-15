@@ -3,16 +3,22 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-	//delete particle_;
+	for (uint32_t index = 0; index < 10; index++) {
+		delete particle_[index];
+	}
+	
 }
 
 // 初期化
 void GameScene::Initialize() {
 	
+	texHandle_ = TextureManager::Load("resources/uvChecker.png");
+
 	for (uint32_t index =0; index < 10; index++) {
 		particle_[index] = new ParticleSystem;
+		particle_[index]->Initialize("cube.obj");
+		particle_[index]->SetTexHandle(texHandle_);
 		trans_[index].Initialize();
-		particle_[index]->Initialize("plane.obj");
 	}
 	
 	view_.Initialize();
@@ -26,12 +32,10 @@ void GameScene::Update() {
 	
 	for (uint32_t index = 0; index < 10; index++) {
 		trans_[index].UpdateMatrix();
-		trans_[index].scale = { 1.0f,1.0f,1.0f };
-		trans_[index].rotate.y += 0.03f;
 		trans_[index].translate = { index * 0.1f,index * 0.1f,index * 0.1f };
+		
 	}
-
-
+	
 }
 
 // 描画
