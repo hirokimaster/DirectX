@@ -41,8 +41,8 @@ public: // メンバ関数
 
 private: // メンバ変数
 
-	WorldTransform trans_[10];
+	WorldTransform trans_[10] = {};
 	ViewProjection view_ = {};
-	ParticleSystem* particle_ = {};
+	ParticleSystem* particle_[10] = {};
 	
 };

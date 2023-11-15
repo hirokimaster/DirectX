@@ -3,16 +3,18 @@
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-	delete particle_;
+	//delete particle_;
 }
 
 // 初期化
 void GameScene::Initialize() {
-	particle_ = new ParticleSystem;
+	
 	for (uint32_t index =0; index < 10; index++) {
+		particle_[index] = new ParticleSystem;
 		trans_[index].Initialize();
+		particle_[index]->Initialize("plane.obj");
 	}
-	particle_->Initialize("plane.obj");
+	
 	view_.Initialize();
 	
 }
@@ -34,7 +36,7 @@ void GameScene::Update() {
 // 描画
 void GameScene::Draw(){
 	for (uint32_t index = 0; index < 10; index++) {
-		particle_->Draw(&trans_[index], view_);
+		particle_[index]->Draw(&trans_[index], view_);
 	}
 
 }
