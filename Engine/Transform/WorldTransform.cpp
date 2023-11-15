@@ -26,6 +26,16 @@ void WorldTransform::STransferMatrix(Microsoft::WRL::ComPtr<ID3D12Resource>& wvp
 	wvp->World = worldMatrix;
 }
 
+void WorldTransform::PTransferMatrix(TransformationMatrix* ins, ViewProjection& viewProjection)
+{
+	for (int i = 0; i < 10; ++i) {
+		pMatWorld[i] = Multiply(pMatWorld[i], Multiply(viewProjection.matView, viewProjection.matProjection));
+		ins[i].WVP = sMatWorld;
+		ins[i].World = worldMatrix;
+	}
+	
+}
+
 void WorldTransform::UpdateMatrix(){
 
 	matWorld = MakeAffineMatrix(scale, rotate, translate);

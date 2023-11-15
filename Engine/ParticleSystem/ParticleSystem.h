@@ -32,5 +32,6 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView_{};
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
 	uint32_t texHandle_ = 0;
+	TransformationMatrix* instancingData_ = nullptr;
 };
 

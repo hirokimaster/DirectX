@@ -19,6 +19,7 @@ struct WorldTransform {
 	Vector3 translate = { 0.0f,0.0f,0.0f };
 
 	Matrix4x4 matWorld = {};
+	Matrix4x4 pMatWorld[10] = {};
 	Matrix4x4 worldMatrix = {};
 	Matrix4x4 sMatWorld = {};
 
@@ -29,6 +30,8 @@ struct WorldTransform {
 	void TransferMatrix(Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, ViewProjection& viewProjection);
 
 	void STransferMatrix(Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, ViewProjection& viewProjection);
+
+	void PTransferMatrix(TransformationMatrix* ins, ViewProjection& viewProjection);
 
 	void UpdateMatrix();
 	

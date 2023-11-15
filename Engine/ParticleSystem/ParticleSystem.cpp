@@ -16,12 +16,11 @@ void ParticleSystem::CreateResource(ModelData modelData){
 	// Instancing用のTransformationMatrixResourceを作る
 	resource_.instancingResource = CreateResource::CreateBufferResource(sizeof(TransformationMatrix) * kNumInstance);
 	// 書き込むためのアドレスを取得
-	TransformationMatrix* instancingData = nullptr;
-	resource_.instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&instancingData));
+	resource_.instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 	// 単位行列を書き込む
 	for (uint32_t index = 0; index < kNumInstance; ++index) {
-		instancingData[index].WVP = MakeIdentityMatrix();
-		instancingData[index].World = MakeIdentityMatrix();
+		instancingData_[index].WVP = MakeIdentityMatrix();
+		instancingData_[index].World = MakeIdentityMatrix();
 	}
 
 	// VertexResource
@@ -66,7 +65,7 @@ void ParticleSystem::CreateInstancingSrv(){
 void ParticleSystem::Draw(WorldTransform worldTransform, ViewProjection viewprojection) {
 
 	
-	worldTransform.TransferMatrix(resource_.wvpResource, viewprojection);
+	worldTransform.PTransferMatrix(instancingData_, viewprojection);
 	
 	Property property = GraphicsPipeline::GetInstance()->GetPSO().Particle;
 
@@ -78,10 +77,9 @@ void ParticleSystem::Draw(WorldTransform worldTransform, ViewProjection viewproj
 	DirectXCommon::GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	// マテリアルCBufferの場所を設定
 	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(0, resource_.materialResource->GetGPUVirtualAddress());
-	// wvp用のCBufferの場所を設定
-	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(1, resource_.wvpResource->GetGPUVirtualAddress());
-	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(2,instancingSrvHandleGPU_);
-	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(3, TextureManager::GetInstance()->GetGPUHandle(texHandle_));
+	// instancing用のCBufferの場所を設定
+	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(1,instancingSrvHandleGPU_);
+	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetGPUHandle(texHandle_));
 	// 描画。(DrawCall/ドローコール)。
 	DirectXCommon::GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), kNumInstance, 0, 0);
 }

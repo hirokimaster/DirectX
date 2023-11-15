@@ -43,7 +43,7 @@ private: // メンバ変数
 
 	WorldTransform trans_[10] = {};
 	ViewProjection view_ = {};
-	ParticleSystem* particle_[10] = {};
+	ParticleSystem* particle_ = {};
 	uint32_t texHandle_ = 0;
 	
 };
