@@ -57,17 +57,17 @@ void ParticleSystem::CreateInstancingSrv(){
 	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 	instancingSrvDesc.Buffer.NumElements = kNumInstance;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
-	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = TextureManager::GetCPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 129);
-	instancingSrvHandleGPU_ = TextureManager::GetGPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 129);
+	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = TextureManager::GetCPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 5);
+	instancingSrvHandleGPU_ = TextureManager::GetGPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 5);
 	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(resource_.instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU);
 
 }
 
-void ParticleSystem::Draw(WorldTransform worldTransform[], ViewProjection viewprojection) {
+void ParticleSystem::Draw(WorldTransform worldTransform, ViewProjection viewprojection) {
 
-	for (uint32_t index = 0; index < kNumInstance; index++) {
-		worldTransform[index].TransferMatrix(resource_.wvpResource, viewprojection);
-	}
+
+	worldTransform.TransferMatrix(resource_.wvpResource, viewprojection);
+
 
 	Property property = GraphicsPipeline::GetInstance()->GetPSO().Particle;
 
@@ -80,7 +80,7 @@ void ParticleSystem::Draw(WorldTransform worldTransform[], ViewProjection viewpr
 	// マテリアルCBufferの場所を設定
 	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(0, resource_.materialResource->GetGPUVirtualAddress());
 	// wvp用のCBufferの場所を設定
-	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(1, resource_.wvpResource->GetGPUVirtualAddress());
+	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(0, resource_.wvpResource->GetGPUVirtualAddress());
 	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(1,instancingSrvHandleGPU_);
 	// 描画。(DrawCall/ドローコール)。
 	DirectXCommon::GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), kNumInstance, 0, 0);

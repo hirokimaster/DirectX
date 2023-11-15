@@ -18,7 +18,7 @@ public:
 
 	void CreateInstancingSrv();
 
-	void Draw(WorldTransform worldTransform[], ViewProjection viewprojection);
+	void Draw(WorldTransform worldTransform, ViewProjection viewprojection);
 
 private:
 	Resource resource_ = {};
