@@ -5,8 +5,6 @@ struct TransformationMatrix
     float32_t4x4 World;
 };
 
-TransformationMatrix gTransformationMatrices[10];
-
 StructuredBuffer<TransformationMatrix> gTransformationMatrices : register(t0);
 
 struct VertexShaderInput
