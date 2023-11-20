@@ -31,8 +31,6 @@ struct WorldTransform {
 
 	void STransferMatrix(Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, ViewProjection& viewProjection);
 
-	void PTransferMatrix(TransformationMatrix* ins, ViewProjection& viewProjection);
-
 	void UpdateMatrix();
 	
 };

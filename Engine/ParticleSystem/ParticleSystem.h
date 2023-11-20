@@ -14,18 +14,35 @@ public:
 	/// </summary>
 	void Initialize(const std::string& filename);
 
+	/// <summary>
+	/// リソース作成
+	/// </summary>
+	/// <param name="modelData"></param>
 	void CreateResource(ModelData modelData);
 
+	/// <summary>
+	/// instancing用のSRVの作成
+	/// </summary>
 	void CreateInstancingSrv();
 
-	// setter
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="worldTransform"></param>
+	/// <param name="viewprojection"></param>
+	void Draw(WorldTransform worldTransform[], ViewProjection viewprojection);
+
+#pragma region setter
+
 	void SetTexHandle(uint32_t texHandle) { texHandle_ = texHandle; }
 
-	void Draw(WorldTransform worldTransform, ViewProjection viewprojection);
+	void SetNumInstance(uint32_t kNumInstace) { kNumInstace = kNumInstance_; }
+
+#pragma endregion
 
 private:
 	Resource resource_ = {};
-	const uint32_t kNumInstance = 10;
+	const uint32_t kNumInstance_ = 10;
 	descSize size_ = {};
 	ModelData modelData_;
 	Model* model_;

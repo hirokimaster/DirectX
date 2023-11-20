@@ -1,5 +1,9 @@
 #include "ParticleSystem.h"
 
+/// <summary>
+/// 初期化
+/// </summary>
+/// <param name="filename"></param>
 void ParticleSystem::Initialize(const std::string& filename){
 
 	size_.SRV = DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
@@ -11,14 +15,18 @@ void ParticleSystem::Initialize(const std::string& filename){
 
 }
 
+/// <summary>
+/// リソース作成
+/// </summary>
+/// <param name="modelData"></param>
 void ParticleSystem::CreateResource(ModelData modelData){
 	
 	// Instancing用のTransformationMatrixResourceを作る
-	resource_.instancingResource = CreateResource::CreateBufferResource(sizeof(TransformationMatrix) * kNumInstance);
+	resource_.instancingResource = CreateResource::CreateBufferResource(sizeof(TransformationMatrix) * kNumInstance_);
 	// 書き込むためのアドレスを取得
 	resource_.instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 	// 単位行列を書き込む
-	for (uint32_t index = 0; index < kNumInstance; ++index) {
+	for (uint32_t index = 0; index < kNumInstance_; ++index) {
 		instancingData_[index].WVP = MakeIdentityMatrix();
 		instancingData_[index].World = MakeIdentityMatrix();
 	}
@@ -47,6 +55,9 @@ void ParticleSystem::CreateResource(ModelData modelData){
 	resource_.wvpResource = CreateResource::CreateBufferResource(sizeof(TransformationMatrix));
 }
 
+/// <summary>
+/// instancing用のSRV作成
+/// </summary>
 void ParticleSystem::CreateInstancingSrv(){
 	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
 	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -54,18 +65,28 @@ void ParticleSystem::CreateInstancingSrv(){
 	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 	instancingSrvDesc.Buffer.FirstElement = 0;
 	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	instancingSrvDesc.Buffer.NumElements = kNumInstance;
+	instancingSrvDesc.Buffer.NumElements = kNumInstance_;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
-	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = TextureManager::GetCPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 5);
-	instancingSrvHandleGPU_ = TextureManager::GetGPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 5);
+	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = TextureManager::GetCPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 3);
+	instancingSrvHandleGPU_ = TextureManager::GetGPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 3);
 	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(resource_.instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU);
 
 }
 
-void ParticleSystem::Draw(WorldTransform worldTransform, ViewProjection viewprojection) {
+/// <summary>
+/// 描画
+/// </summary>
+/// <param name="worldTransform"></param>
+/// <param name="viewprojection"></param>
+void ParticleSystem::Draw(WorldTransform worldTransform[], ViewProjection viewprojection) {
 
-	
-	worldTransform.PTransferMatrix(instancingData_, viewprojection);
+	for (uint32_t index = 0; index < kNumInstance_; ++index) {
+		Matrix4x4 worldMatrix = MakeAffineMatrix(worldTransform[index].scale, worldTransform[index].rotate,
+			worldTransform[index].translate);
+		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix,Multiply(viewprojection.matView,viewprojection.matProjection));
+		instancingData_[index].WVP = worldViewProjectionMatrix;
+		instancingData_[index].World = worldMatrix;
+	}
 	
 	Property property = GraphicsPipeline::GetInstance()->GetPSO().Particle;
 
@@ -81,5 +102,5 @@ void ParticleSystem::Draw(WorldTransform worldTransform, ViewProjection viewproj
 	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(1,instancingSrvHandleGPU_);
 	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetGPUHandle(texHandle_));
 	// 描画。(DrawCall/ドローコール)。
-	DirectXCommon::GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), kNumInstance, 0, 0);
+	DirectXCommon::GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), kNumInstance_, 0, 0);
 }

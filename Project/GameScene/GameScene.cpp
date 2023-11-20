@@ -4,7 +4,7 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	
-	delete particle_;
+	//delete particle_;
 	
 }
 
@@ -16,7 +16,7 @@ void GameScene::Initialize() {
 	particle_->Initialize("cube.obj");
 	particle_->SetTexHandle(texHandle_);
 
-	for (uint32_t index = 0; index < 1; index++) {
+	for (uint32_t index = 0; index < 10; index++) {
 		trans_[index].Initialize();
 	}
 	
@@ -29,18 +29,18 @@ void GameScene::Update() {
 
 	view_.UpdateMatrix();
 	
-	for (uint32_t index = 0; index < 1; index++) {
-		trans_[index].translate = { index * 0.1f,index * 0.1f,index * 0.1f };
+	for (uint32_t index = 0; index < 10; index++) {
 		trans_[index].UpdateMatrix();
-		
 	}
 	
 }
 
 // 描画
 void GameScene::Draw(){
-	for (uint32_t index = 0; index < 1; index++) {
-		particle_->Draw(trans_[index], view_);
+	for (uint32_t index = 0; index < 10; index++) {
+		trans_[index].translate = { index * 0.1f,index * 0.1f,index * 0.1f };
 	}
+
+	particle_->Draw(trans_, view_);
 
 }
