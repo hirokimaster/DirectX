@@ -5,6 +5,21 @@
 #include "ViewProjection/ViewProjection.h"
 #include "TextureManager/TextureManager.h"
 #include "Model/Model.h"
+#include <random>
+
+struct ParticleForGPU {
+	Matrix4x4 WVP;
+	Matrix4x4 World;
+	Vector4 color;
+};
+
+struct Particle {
+	WorldTransform worldTransform;
+	Vector3 velocity;
+	Vector4 color;
+	float lifeTime;
+	float currentTime;
+};
 
 class ParticleSystem{
 public:
@@ -30,25 +45,32 @@ public:
 	/// </summary>
 	/// <param name="worldTransform"></param>
 	/// <param name="viewprojection"></param>
-	void Draw(WorldTransform worldTransform[], ViewProjection viewprojection);
+	void Draw(Particle partcle[], ViewProjection viewprojection);
 
 #pragma region setter
 
 	void SetTexHandle(uint32_t texHandle) { texHandle_ = texHandle; }
 
-	void SetNumInstance(uint32_t kNumInstace) { kNumInstace = kNumInstance_; }
+	void SetNumInstance(uint32_t kNumMaxInstace) { kNumMaxInstance_ = kNumMaxInstace; }
 
 #pragma endregion
 
+	/// <summary>
+	/// particleをランダム発生
+	/// </summary>
+	/// <param name="randomEngine"></param>
+	/// <returns></returns>
+	static Particle MakeNewParticle(std::mt19937& randomEngine);
+
 private:
 	Resource resource_ = {};
-	const uint32_t kNumInstance_ = 10;
+	uint32_t kNumMaxInstance_ = 10;
 	descSize size_ = {};
 	ModelData modelData_;
 	Model* model_;
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView_{};
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
 	uint32_t texHandle_ = 0;
-	TransformationMatrix* instancingData_ = nullptr;
+	ParticleForGPU* instancingData_ = nullptr;
 };
 
