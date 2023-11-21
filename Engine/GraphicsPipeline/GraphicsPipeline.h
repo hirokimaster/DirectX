@@ -23,7 +23,7 @@ struct PipelineState {
 // BlendMode
 enum BlendMode {
 	BlendNormal,
-
+	BlendAdd,
 };
 
 class GraphicsPipeline {

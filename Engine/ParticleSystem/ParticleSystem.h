@@ -6,6 +6,8 @@
 #include "TextureManager/TextureManager.h"
 #include "Model/Model.h"
 #include <random>
+#include <numbers>
+#include "Input/Input.h"
 
 struct ParticleForGPU {
 	Matrix4x4 WVP;

@@ -83,20 +83,42 @@ void ParticleSystem::Draw(Particle particle[], ViewProjection viewprojection) {
 
 	uint32_t  numInstance = 0; // 描画すべきインスタンス数
 
+	Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
+
+	WorldTransform trans = { {1.0f,1.0f,1.0f},{std::numbers::pi_v<float> / 3.0f, std::numbers::pi_v<float>, 0.0f}, {0.0f, 23.0f,10.0f} };
+
+	Matrix4x4 cameraMatrix = MakeAffineMatrix(trans.scale, trans.rotate, trans.translate);
+
+	Matrix4x4 billboardMatrix = Multiply(backToFrontMatrix,cameraMatrix);
+	billboardMatrix.m[3][0] = 0.0f;
+	billboardMatrix.m[3][1] = 0.0f;
+	billboardMatrix.m[3][2] = 0.0f;
+
+	if (Input::GetInstance()->PushKey(DIK_R)) {
+		billboardMatrix = MakeIdentityMatrix();
+	}
+
+
 	for (uint32_t index = 0; index < kNumMaxInstance_; ++index) {
 		if (particle[index].lifeTime <= particle[index].currentTime) {
 			continue;
 		}
 
-		Matrix4x4 worldMatrix = MakeAffineMatrix(particle[index].worldTransform.scale, particle[index].worldTransform.rotate,
+		Matrix4x4 worldMatrix = MakeBiilboardWorldMatrix(particle[index].worldTransform.scale,billboardMatrix,
 			particle[index].worldTransform.translate);
+		/*Matrix4x4 worldMatrix = MakeAffineMatrix(particle[index].worldTransform.scale, particle[index].worldTransform.rotate,
+			particle[index].worldTransform.translate);*/
 		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix,Multiply(viewprojection.matView,viewprojection.matProjection));
 		particle[index].currentTime += 1.0f / 60.0f;
+		float alpha = 1.0f - (particle[index].currentTime / particle[index].lifeTime);
 		instancingData_[index].WVP = worldViewProjectionMatrix;
 		instancingData_[index].World = worldMatrix;
 		instancingData_[index].color = particle[index].color;
+		instancingData_[numInstance].color.w = alpha;
 		++numInstance;
 	}
+
+	
 	
 	Property property = GraphicsPipeline::GetInstance()->GetPSO().Particle;
 
@@ -128,10 +150,10 @@ Particle ParticleSystem::MakeNewParticle(std::mt19937& randomEngine) {
 	particle.worldTransform.Initialize();
 	particle.worldTransform.scale = { 1.0f, 1.0f, 1.0f };
 	particle.worldTransform.rotate = { 0.0f,0.0f,0.0f };
+	particle.worldTransform.translate = { distribution(randomEngine),  distribution(randomEngine) , distribution(randomEngine) };
 	particle.velocity = { distribution(randomEngine) , distribution(randomEngine) , distribution(randomEngine) };
 	particle.color = { distColor(randomEngine) , distColor(randomEngine) , distColor(randomEngine), 1.0f };
 	particle.lifeTime = distTime(randomEngine);
 	particle.currentTime = 0;
-	particle.worldTransform.translate = { distribution(randomEngine),  distribution(randomEngine) , distribution(randomEngine) };
 	return particle;
 }
