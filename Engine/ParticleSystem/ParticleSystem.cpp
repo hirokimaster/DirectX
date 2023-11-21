@@ -85,19 +85,12 @@ void ParticleSystem::Draw(Particle particle[], ViewProjection viewprojection) {
 
 	Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
 
-	WorldTransform trans = { {1.0f,1.0f,1.0f},{std::numbers::pi_v<float> / 3.0f, std::numbers::pi_v<float>, 0.0f}, {0.0f, 23.0f,10.0f} };
-
-	Matrix4x4 cameraMatrix = MakeAffineMatrix(trans.scale, trans.rotate, trans.translate);
+	Matrix4x4 cameraMatrix = Inverse(viewprojection.matView);
 
 	Matrix4x4 billboardMatrix = Multiply(backToFrontMatrix,cameraMatrix);
 	billboardMatrix.m[3][0] = 0.0f;
 	billboardMatrix.m[3][1] = 0.0f;
 	billboardMatrix.m[3][2] = 0.0f;
-
-	if (Input::GetInstance()->PushKey(DIK_R)) {
-		billboardMatrix = MakeIdentityMatrix();
-	}
-
 
 	for (uint32_t index = 0; index < kNumMaxInstance_; ++index) {
 		if (particle[index].lifeTime <= particle[index].currentTime) {
@@ -106,8 +99,6 @@ void ParticleSystem::Draw(Particle particle[], ViewProjection viewprojection) {
 
 		Matrix4x4 worldMatrix = MakeBiilboardWorldMatrix(particle[index].worldTransform.scale,billboardMatrix,
 			particle[index].worldTransform.translate);
-		/*Matrix4x4 worldMatrix = MakeAffineMatrix(particle[index].worldTransform.scale, particle[index].worldTransform.rotate,
-			particle[index].worldTransform.translate);*/
 		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix,Multiply(viewprojection.matView,viewprojection.matProjection));
 		particle[index].currentTime += 1.0f / 60.0f;
 		float alpha = 1.0f - (particle[index].currentTime / particle[index].lifeTime);
@@ -118,8 +109,6 @@ void ParticleSystem::Draw(Particle particle[], ViewProjection viewprojection) {
 		++numInstance;
 	}
 
-	
-	
 	Property property = GraphicsPipeline::GetInstance()->GetPSO().Particle;
 
 	// Rootsignatureを設定。PSOに設定してるけど別途設定が必要

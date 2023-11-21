@@ -4,8 +4,6 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	
-	//delete particle_;
-	
 }
 
 // 初期化
@@ -16,7 +14,7 @@ void GameScene::Initialize() {
 	std::mt19937 randomEngine(seed());
 	
 	texHandle_ = TextureManager::Load("resources/circle.png");
-	particle_ = new ParticleSystem;
+	particle_ = std::make_unique<ParticleSystem>();
 	particle_->Initialize("plane.obj");
 	particle_->SetTexHandle(texHandle_);
 
@@ -24,18 +22,18 @@ void GameScene::Initialize() {
 		particles_[index] = ParticleSystem::MakeNewParticle(randomEngine);
 	}
 	
-	view_.Initialize();
+	viewProjection_.Initialize();
 	
 }
 
 // 更新
 void GameScene::Update() {
 
-	view_.UpdateMatrix();
+	viewProjection_.UpdateMatrix();
 
 	ImGui::Begin("camera");
-	ImGui::DragFloat3("translate", &view_.translate.x, 0.01f, -100.0f, 100.0f);
-	ImGui::DragFloat3("rotate", &view_.rotate.x, 0.01f, -100.0f, 100.0f);
+	ImGui::DragFloat3("translate", &viewProjection_.translate.x, 0.01f, -100.0f, 100.0f);
+	ImGui::DragFloat3("rotate", &viewProjection_.rotate.x, 0.01f, -100.0f, 100.0f);
 	ImGui::End();
 	
 	for (uint32_t index = 0; index < 10; index++) {
@@ -49,8 +47,6 @@ void GameScene::Update() {
 // 描画
 void GameScene::Draw(){
 	
-	
-	particle_->Draw(particles_, view_);
+	particle_->Draw(particles_, viewProjection_);
 
-	
 }
