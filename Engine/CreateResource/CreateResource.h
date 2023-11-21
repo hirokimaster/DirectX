@@ -29,6 +29,16 @@ struct DirectionalLight {
 	float intensity; // 輝度
 };
 
+struct PointLight {
+	Vector4 color;
+	Vector3 position;
+	float intensity;
+};
+
+struct Camera {
+	Vector3 worldPosition;
+};
+
 class CreateResource {
 public:
 	// Resource作成

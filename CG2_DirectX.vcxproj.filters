@@ -263,6 +263,12 @@
     <FxCompile Include="Engine\ShaderFile\Sprite2D.VS.hlsl">
       <Filter>Engine\シェーダー</Filter>
     </FxCompile>
+    <FxCompile Include="Engine\ShaderFile\PointLight.PS.hlsl">
+      <Filter>Engine\シェーダー</Filter>
+    </FxCompile>
+    <FxCompile Include="Engine\ShaderFile\PointLight.VS.hlsl">
+      <Filter>Engine\シェーダー</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\ShaderFile\Object3d.hlsli">
