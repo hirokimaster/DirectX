@@ -1,6 +1,8 @@
 #pragma once
 #include "Matrix4x4.h"
 #include "Vector3.h"
+#include "ImGuiManager/ImGuiManager.h"
+#include <iostream>
 
 // 積
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
@@ -37,3 +39,11 @@ Matrix4x4 MakeIdentityMatrix();
 
 // 正規化
 Vector3 Normalize(const Vector3& v);
+
+Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2);
+
+Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2);
+
+Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
+
+void MatrixScreenPrintf(Matrix4x4 matrix, const char* name);

@@ -40,4 +40,8 @@ public: // メンバ関数
 
 private: // メンバ変数
 
+	Matrix4x4 rotateMatrix;
+	float angle_ = 0.44f;
+	Vector3 axis_ = {};
+
 };

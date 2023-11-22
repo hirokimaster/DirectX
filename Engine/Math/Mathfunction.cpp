@@ -330,3 +330,125 @@ Vector3 Normalize(const Vector3& v) {
 	return result;
 }
 
+// 1. 行列の加法
+Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
+	Matrix4x4 result;
+	result.m[0][0] = m1.m[0][0] + m2.m[0][0];
+	result.m[0][1] = m1.m[0][1] + m2.m[0][1];
+	result.m[0][2] = m1.m[0][2] + m2.m[0][2];
+	result.m[0][3] = m1.m[0][3] + m2.m[0][3];
+	result.m[1][0] = m1.m[1][0] + m2.m[1][0];
+	result.m[1][1] = m1.m[1][1] + m2.m[1][1];
+	result.m[1][2] = m1.m[1][2] + m2.m[1][2];
+	result.m[1][3] = m1.m[1][3] + m2.m[1][3];
+	result.m[2][0] = m1.m[2][0] + m2.m[2][0];
+	result.m[2][1] = m1.m[2][1] + m2.m[2][1];
+	result.m[2][2] = m1.m[2][2] + m2.m[2][2];
+	result.m[2][3] = m1.m[2][3] + m2.m[2][3];
+	result.m[3][0] = m1.m[3][0] + m2.m[3][0];
+	result.m[3][1] = m1.m[3][1] + m2.m[3][1];
+	result.m[3][2] = m1.m[3][2] + m2.m[3][2];
+	result.m[3][3] = m1.m[3][3] + m2.m[3][3];
+	return result;
+}
+
+// 2. 行列の減法
+Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
+	Matrix4x4 result;
+	result.m[0][0] = m1.m[0][0] - m2.m[0][0];
+	result.m[0][1] = m1.m[0][1] - m2.m[0][1];
+	result.m[0][2] = m1.m[0][2] - m2.m[0][2];
+	result.m[0][3] = m1.m[0][3] - m2.m[0][3];
+	result.m[1][0] = m1.m[1][0] - m2.m[1][0];
+	result.m[1][1] = m1.m[1][1] - m2.m[1][1];
+	result.m[1][2] = m1.m[1][2] - m2.m[1][2];
+	result.m[1][3] = m1.m[1][3] - m2.m[1][3];
+	result.m[2][0] = m1.m[2][0] - m2.m[2][0];
+	result.m[2][1] = m1.m[2][1] - m2.m[2][1];
+	result.m[2][2] = m1.m[2][2] - m2.m[2][2];
+	result.m[2][3] = m1.m[2][3] - m2.m[2][3];
+	result.m[3][0] = m1.m[3][0] - m2.m[3][0];
+	result.m[3][1] = m1.m[3][1] - m2.m[3][1];
+	result.m[3][2] = m1.m[3][2] - m2.m[3][2];
+	result.m[3][3] = m1.m[3][3] - m2.m[3][3];
+	return result;
+}
+
+Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle)
+{
+	float cos = std::cos(angle);
+	float cos1 = 1.0f - std::cos(angle);
+	float sin = std::sin(angle);
+	Matrix4x4 result;
+	Matrix4x4 S;
+	Matrix4x4 P;
+	Matrix4x4 C;
+
+	S.m[0][0] = cos;
+	S.m[0][1] = 0.0f;
+	S.m[0][2] = 0.0f;
+	S.m[0][3] = 0.0f;
+	S.m[1][0] = 0.0f;
+	S.m[1][1] = cos;
+	S.m[1][2] = 0.0f;
+	S.m[1][3] = 0.0f;
+	S.m[2][0] = 0.0f;
+	S.m[2][1] = 0.0f;
+	S.m[2][2] = cos;
+	S.m[2][3] = 0.0f;
+	S.m[3][0] = 0.0f;
+	S.m[3][1] = 0.0f;
+	S.m[3][2] = 0.0f;
+	S.m[3][3] = 1.0f;
+
+	P.m[0][0] = axis.x * axis.x * cos1;
+	P.m[0][1] = axis.x * axis.y * cos1;
+	P.m[0][2] = axis.x * axis.z * cos1;
+	P.m[0][3] = 0.0f;
+	P.m[1][0] = axis.x * axis.y * cos1;
+	P.m[1][1] = axis.y * axis.y * cos1;
+	P.m[1][2] = axis.y * axis.z * cos1;
+	P.m[1][3] = 0.0f;
+	P.m[2][0] = axis.x * axis.z * cos1;
+	P.m[2][1] = axis.y * axis.z * cos1;
+	P.m[2][2] = axis.z * axis.z * cos1;
+	P.m[2][3] = 0.0f;
+	P.m[3][0] = 0.0f;
+	P.m[3][1] = 0.0f;
+	P.m[3][2] = 0.0f;
+	P.m[3][3] = 1.0f;
+
+	C.m[0][0] = 0.0f;
+	C.m[0][1] = -axis.z * sin;
+	C.m[0][2] = axis.y * sin;
+	C.m[0][3] = 0.0f;
+	C.m[1][0] = axis.z * sin;
+	C.m[1][1] = 0.0f;
+	C.m[1][2] = -axis.x * sin;
+	C.m[1][3] = 0.0f;
+	C.m[2][0] = -axis.y * sin;
+	C.m[2][1] = axis.x * sin;
+	C.m[2][2] = 0.0f;
+	C.m[2][3] = 0.0f;
+	C.m[3][0] = 0.0f;
+	C.m[3][1] = 0.0f;
+	C.m[3][2] = 0.0f;
+	C.m[3][3] = 1.0f;
+
+	result = Add(S, Subtract(P, C));	
+
+	return result;
+}
+
+void MatrixScreenPrintf(Matrix4x4 matrix, const char* name)
+{
+	ImGui::Begin(name);
+	
+	ImGui::Text("%f %f %f %f\n", matrix.m[0][0], matrix.m[0][1], matrix.m[0][2], matrix.m[0][3]);
+	ImGui::Text("%f %f &f %f\n", matrix.m[1][0], matrix.m[1][1], matrix.m[2][2], matrix.m[2][3]);
+	ImGui::Text("%f %f %f %f\n", matrix.m[3][0], matrix.m[3][1], matrix.m[3][2], matrix.m[3][3]);
+	ImGui::Text("%f %f %f %f\n", matrix.m[4][0], matrix.m[4][1], matrix.m[4][2], matrix.m[4][3]);
+	
+	ImGui::End();
+}
+
