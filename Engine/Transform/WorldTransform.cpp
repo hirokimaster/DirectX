@@ -14,7 +14,7 @@ void WorldTransform::TransferMatrix(Microsoft::WRL::ComPtr<ID3D12Resource>& wvpR
 	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvp));
 	wvp->WVP = matWorld;
 	wvp->World = worldMatrix;
-	wvp->WorldInverseTranspose = InverseTranspose(worldMatrix);
+	//wvp->WorldInverseTranspose = InverseTranspose(worldMatrix);
 
 }
 
