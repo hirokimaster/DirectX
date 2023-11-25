@@ -108,7 +108,7 @@ void ModelSphere::Initialize(Model* state)
 	resource_.cameraResource = CreateResource::CreateBufferResource(sizeof(Camera));
 	Camera* cameraData = nullptr;
 	resource_.cameraResource->Map(0, nullptr, reinterpret_cast<void**>(&cameraData));
-	cameraData->worldPosition = { 0.0f,0.0f,-20.0f };
+	cameraData->worldPosition = { 0.0f,10.0f,-30.0f };
 
 	resource_.wvpResource = CreateResource::CreateBufferResource(sizeof(TransformationMatrix));
 

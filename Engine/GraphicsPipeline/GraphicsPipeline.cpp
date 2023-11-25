@@ -51,6 +51,15 @@ void GraphicsPipeline::SetBlendMode(D3D12_RENDER_TARGET_BLEND_DESC& blendDesc, B
 		blendDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
 		blendDesc.DestBlendAlpha = D3D12_BLEND_ZERO;
 		break;
+
+	case BlendMultiply:
+		blendDesc.BlendEnable = TRUE;
+		blendDesc.SrcBlend = D3D12_BLEND_ZERO;
+		blendDesc.BlendOp = D3D12_BLEND_OP_ADD;
+		blendDesc.DestBlend = D3D12_BLEND_SRC_COLOR;
+		blendDesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+		blendDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+		blendDesc.DestBlendAlpha = D3D12_BLEND_ZERO;
 	}
 	
 }
@@ -453,7 +462,7 @@ Property GraphicsPipeline::CreatePointLight(Microsoft::WRL::ComPtr<ID3D12Device>
 	// BlendState	
 	D3D12_RENDER_TARGET_BLEND_DESC blendDesc{};
 	blendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-	SetBlendMode(blendDesc, BlendNormal);
+	SetBlendMode(blendDesc, BlendMultiply);
 
 	// RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};

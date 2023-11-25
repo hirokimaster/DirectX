@@ -7,8 +7,10 @@ struct ViewProjection {
 #pragma region	ビュー行列の設定
 
 	Vector3 scale = { 1.0f,1.0f,1.0f };
-	Vector3 rotate = { 0,0,0 };
-	Vector3 translate = { 0,0,-10.0f };
+	Vector3 rotate = { 0.28f,0,0 };
+	Vector3 translate = { 0,10.0f,-30.0f };
+
+	Vector3 GetTranslate() {return translate; }
 
 #pragma endregion
 
