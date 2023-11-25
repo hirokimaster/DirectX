@@ -377,8 +377,8 @@ Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle)
 {
 	float cos = std::cos(angle);
-	float cos1 = 1.0f - std::cos(angle);
 	float sin = std::sin(angle);
+
 	Matrix4x4 result;
 	Matrix4x4 S;
 	Matrix4x4 P;
@@ -401,17 +401,17 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle)
 	S.m[3][2] = 0.0f;
 	S.m[3][3] = 1.0f;
 
-	P.m[0][0] = axis.x * axis.x * cos1;
-	P.m[0][1] = axis.x * axis.y * cos1;
-	P.m[0][2] = axis.x * axis.z * cos1;
+	P.m[0][0] = axis.x * axis.x * (1.0f - cos);
+	P.m[0][1] = axis.x * axis.y * (1.0f - cos);
+	P.m[0][2] = axis.x * axis.z * (1.0f - cos);
 	P.m[0][3] = 0.0f;
-	P.m[1][0] = axis.x * axis.y * cos1;
-	P.m[1][1] = axis.y * axis.y * cos1;
-	P.m[1][2] = axis.y * axis.z * cos1;
+	P.m[1][0] = axis.x * axis.y * (1.0f - cos);
+	P.m[1][1] = axis.y * axis.y * (1.0f - cos);
+	P.m[1][2] = axis.y * axis.z * (1.0f - cos);
 	P.m[1][3] = 0.0f;
-	P.m[2][0] = axis.x * axis.z * cos1;
-	P.m[2][1] = axis.y * axis.z * cos1;
-	P.m[2][2] = axis.z * axis.z * cos1;
+	P.m[2][0] = axis.x * axis.z * (1.0f - cos);
+	P.m[2][1] = axis.y * axis.z * (1.0f - cos);
+	P.m[2][2] = axis.z * axis.z * (1.0f - cos);
 	P.m[2][3] = 0.0f;
 	P.m[3][0] = 0.0f;
 	P.m[3][1] = 0.0f;
@@ -445,9 +445,9 @@ void MatrixScreenPrintf(Matrix4x4 matrix, const char* name)
 	ImGui::Begin(name);
 	
 	ImGui::Text("%f %f %f %f\n", matrix.m[0][0], matrix.m[0][1], matrix.m[0][2], matrix.m[0][3]);
-	ImGui::Text("%f %f &f %f\n", matrix.m[1][0], matrix.m[1][1], matrix.m[2][2], matrix.m[2][3]);
+	ImGui::Text("%f %f %f %f\n", matrix.m[1][0], matrix.m[1][1], matrix.m[1][2], matrix.m[1][3]);
+	ImGui::Text("%f %f %f %f\n", matrix.m[2][0], matrix.m[2][1], matrix.m[2][2], matrix.m[2][3]);
 	ImGui::Text("%f %f %f %f\n", matrix.m[3][0], matrix.m[3][1], matrix.m[3][2], matrix.m[3][3]);
-	ImGui::Text("%f %f %f %f\n", matrix.m[4][0], matrix.m[4][1], matrix.m[4][2], matrix.m[4][3]);
 	
 	ImGui::End();
 }
