@@ -122,6 +122,15 @@ void ModelSphere::Initialize(Model* state)
 	directionalLightData->direction = Normalize({ 0.0f, -1.0f, 0.0f });
 	directionalLightData->intensity = 1.0f;
 
+	resource_.pointLightResource = CreateResource::CreateBufferResource(sizeof(PointLight));
+	PointLight* pointLightData = nullptr;
+	resource_.pointLightResource->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData));
+	pointLightData->color = { 1.0f,1.0f,1.0f,1.0f };
+	pointLightData->position = { 0.0f,2.0f,0.0f };
+	pointLightData->intensity = 1.0f;
+	pointLightData->radius = 2.0f;
+	pointLightData->decay = 0.4f;
+
 	state;
 }
 
@@ -153,6 +162,8 @@ void ModelSphere::Draw(WorldTransform worldTransform, ViewProjection viewProject
 	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(3, resource_.directionalLightResource->GetGPUVirtualAddress());
 	// カメラ用
 	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(4, resource_.cameraResource->GetGPUVirtualAddress());
+	// ポイントライト用
+	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(5, resource_.pointLightResource->GetGPUVirtualAddress());
 	// 描画。(DrawCall/ドローコール)。
 	DirectXCommon::GetCommandList()->DrawInstanced(kSubdivision* kSubdivision * 6, 1, 0, 0);
 }

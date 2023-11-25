@@ -17,6 +17,11 @@ void GameScene::Initialize() {
 
 // 更新
 void GameScene::Update() {
+
+	if (Input::GetInstance()->PushKey(DIK_A)) {
+		worldTransform_.translate.x -= 0.1f;
+	}
+
 	view_.UpdateMatrix();
 	worldTransform_.UpdateMatrix();
 }
