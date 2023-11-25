@@ -103,6 +103,12 @@ void ModelSphere::Initialize(Model* state)
 	resource_.materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	materialData->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	materialData->enableLighting = true;
+	materialData->shininess = 10.0f;
+
+	resource_.cameraResource = CreateResource::CreateBufferResource(sizeof(Camera));
+	Camera* cameraData = nullptr;
+	resource_.cameraResource->Map(0, nullptr, reinterpret_cast<void**>(&cameraData));
+	cameraData->worldPosition = { 0.0f,0.0f,-20.0f };
 
 	resource_.wvpResource = CreateResource::CreateBufferResource(sizeof(TransformationMatrix));
 
@@ -145,6 +151,8 @@ void ModelSphere::Draw(WorldTransform worldTransform, ViewProjection viewProject
 	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetGPUHandle(texHandle));
 	// 平行光源
 	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(3, resource_.directionalLightResource->GetGPUVirtualAddress());
+	// カメラ用
+	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(4, resource_.cameraResource->GetGPUVirtualAddress());
 	// 描画。(DrawCall/ドローコール)。
 	DirectXCommon::GetCommandList()->DrawInstanced(kSubdivision* kSubdivision * 6, 1, 0, 0);
 }
