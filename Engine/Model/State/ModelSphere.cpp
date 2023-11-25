@@ -103,7 +103,7 @@ void ModelSphere::Initialize(Model* state)
 	resource_.materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	materialData->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	materialData->enableLighting = true;
-	materialData->shininess = 10.0f;
+	materialData->shininess = 1.0f;
 
 	resource_.cameraResource = CreateResource::CreateBufferResource(sizeof(Camera));
 	Camera* cameraData = nullptr;

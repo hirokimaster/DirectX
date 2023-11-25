@@ -312,6 +312,35 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 
 }
 
+// 転置行列
+Matrix4x4 Transpose(const Matrix4x4& m) {
+	Matrix4x4 result;
+
+	result.m[1][0] = m.m[0][1];
+	result.m[1][2] = m.m[2][1];
+	result.m[1][3] = m.m[3][1];
+	result.m[2][0] = m.m[0][2];
+	result.m[2][1] = m.m[1][2];
+	result.m[2][3] = m.m[3][2];
+	result.m[3][0] = m.m[0][3];
+	result.m[3][1] = m.m[1][3];
+	result.m[3][2] = m.m[2][3];
+
+
+	return result;
+
+}
+
+// 逆転置行列
+Matrix4x4 InverseTranspose(const Matrix4x4& m)
+{
+	Matrix4x4 result;
+	result = Transpose(m);
+	result = Inverse(result);
+
+	return result;
+}
+
 // 単位行列
 Matrix4x4 MakeIdentityMatrix() {
 	static const Matrix4x4 result{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
