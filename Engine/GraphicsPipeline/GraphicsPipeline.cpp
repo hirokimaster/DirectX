@@ -74,7 +74,7 @@ void GraphicsPipeline::CreatePipeline(PipelineState& pso) {
 
 	pso.Object3D = CreateObject3D(device.Get(), L"Object3d");
 	pso.Sprite2D = CreateSprite2D(device.Get(), L"Sprite2D");
-	pso.PointLight = CreatePointLight(device.Get(), L"PointLight");
+	pso.PointLight = CreatePointLight(device.Get(), L"PointLight")	;
 
 }
 
