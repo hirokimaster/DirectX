@@ -53,13 +53,13 @@ PixelShaderOutput main(VertexShaderOutput input)
     /*------------------------
         directionalLight 用
     ---------------------------*/
-    float32_t3 reflectLight = reflect(gDirectionalLight.direction, normalize(input.normal));
+    //float32_t3 reflectLight = reflect(gDirectionalLight.direction, normalize(input.normal));
     float32_t3 halfVector = normalize(-gDirectionalLight.direction + toEye);
     /*------------------------
         PointLightLight 用
     ---------------------------*/
     float32_t3 pointLightDirection = normalize(input.worldPosition - gPointLight.position);
-    float32_t3 pReflectLight = reflect(pointLightDirection, normalize(input.normal));
+    //float32_t3 pReflectLight = reflect(pointLightDirection, normalize(input.normal));
     float32_t3 pHalfVector = normalize(-pointLightDirection + toEye);
    
     if (gMaterial.enableLighting != 0)

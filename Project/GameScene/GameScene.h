@@ -47,4 +47,5 @@ private: // メンバ変数
 	uint32_t tex_ = 0;
 	uint32_t t = 0;
 	bool a = false;
+	//PointLight Light_;
 };

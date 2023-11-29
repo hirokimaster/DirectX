@@ -42,6 +42,7 @@ void Model::InitializeObj(const std::string& filename)
 	resource_.materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	materialData_->enableLighting = true;
+	materialData_->shininess = 70.0f;
 
 	resource_.cameraResource = CreateResource::CreateBufferResource(sizeof(Camera));
 	Camera* cameraData = nullptr;
@@ -55,18 +56,17 @@ void Model::InitializeObj(const std::string& filename)
 
 	// 書き込むためのアドレスを取得
 	resource_.directionalLightResource->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	directionalLightData_->color = { 0.02f,0.0f,0.05f,1.0f };
+	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData_->direction = Normalize({ 0.0f, -1.0f, 0.0f });
-	directionalLightData_->intensity = 1.0f;
+	directionalLightData_->intensity = 0.0f;
 
 	resource_.pointLightResource = CreateResource::CreateBufferResource(sizeof(PointLight));
-	PointLight* pointLightData = nullptr;
-	resource_.pointLightResource->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData));
-	pointLightData->color = { 0.02f,0.0f,0.05f,1.0f };
-	pointLightData->position = { 0.0f,2.0f,0.0f };
-	pointLightData->intensity = 1.0f;
-	pointLightData->radius = 3.0f;
-	pointLightData->decay = 0.6f;
+	resource_.pointLightResource->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
+	pointLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	pointLightData_->position = { 0.0f,2.8f,0.0f };
+	pointLightData_->intensity = 1.0f;
+	pointLightData_->radius = 5.0f;
+	pointLightData_->decay = 0.6f;
 
 }
 

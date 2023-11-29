@@ -462,7 +462,7 @@ Property GraphicsPipeline::CreatePointLight(Microsoft::WRL::ComPtr<ID3D12Device>
 	// BlendState	
 	D3D12_RENDER_TARGET_BLEND_DESC blendDesc{};
 	blendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-	SetBlendMode(blendDesc, BlendMultiply);
+	SetBlendMode(blendDesc, BlendNormal);
 
 	// RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
