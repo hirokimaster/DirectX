@@ -374,6 +374,24 @@ Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return result;
 }
 
+// クロス積
+Vector3 Cross(const Vector3& v1, const Vector3& v2) {
+	Vector3 result;
+	result.x = v1.y * v2.z - v1.z * v2.y;
+	result.y = v1.z * v2.x - v1.x * v2.z;
+	result.z = v1.x * v2.y - v1.y * v2.x;
+
+	return result;
+}
+
+// 長さ（ノルム）
+float Length(const Vector3& v) {
+	float result;
+	result = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+	return result;
+}
+
+
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle)
 {
 	float cos = std::cos(angle);
@@ -440,14 +458,99 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle)
 	return result;
 }
 
+// 内積
+float Dot(const Vector3& v1, const Vector3& v2) {
+	float result;
+	result = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+	return result;
+}
+
+Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to)
+{
+	
+	Vector3 axis = Cross(from, to);
+
+	// 0除算してたら
+	if (axis.x == 0 && axis.y == 0 && axis.z == 0) {
+	    axis.x = from.y;
+		axis.y = -from.x;
+		axis.z = 0.0f;
+	}
+
+	axis = Normalize(axis);
+	Vector3 uv = Cross(from, to);
+	float sin = Length(uv);
+	float cos = Dot(from, to);
+
+	Matrix4x4 result;
+	Matrix4x4 S;
+	Matrix4x4 P;
+	Matrix4x4 C;
+
+	S.m[0][0] = cos;
+	S.m[0][1] = 0.0f;
+	S.m[0][2] = 0.0f;
+	S.m[0][3] = 0.0f;
+	S.m[1][0] = 0.0f;
+	S.m[1][1] = cos;
+	S.m[1][2] = 0.0f;
+	S.m[1][3] = 0.0f;
+	S.m[2][0] = 0.0f;
+	S.m[2][1] = 0.0f;
+	S.m[2][2] = cos;
+	S.m[2][3] = 0.0f;
+	S.m[3][0] = 0.0f;
+	S.m[3][1] = 0.0f;
+	S.m[3][2] = 0.0f;
+	S.m[3][3] = 1.0f;
+
+	P.m[0][0] = axis.x * axis.x * (1.0f - cos);
+	P.m[0][1] = axis.x * axis.y * (1.0f - cos);
+	P.m[0][2] = axis.x * axis.z * (1.0f - cos);
+	P.m[0][3] = 0.0f;
+	P.m[1][0] = axis.x * axis.y * (1.0f - cos);
+	P.m[1][1] = axis.y * axis.y * (1.0f - cos);
+	P.m[1][2] = axis.y * axis.z * (1.0f - cos);
+	P.m[1][3] = 0.0f;
+	P.m[2][0] = axis.x * axis.z * (1.0f - cos);
+	P.m[2][1] = axis.y * axis.z * (1.0f - cos);
+	P.m[2][2] = axis.z * axis.z * (1.0f - cos);
+	P.m[2][3] = 0.0f;
+	P.m[3][0] = 0.0f;
+	P.m[3][1] = 0.0f;
+	P.m[3][2] = 0.0f;
+	P.m[3][3] = 1.0f;
+
+	C.m[0][0] = 0.0f;
+	C.m[0][1] = -axis.z * sin;
+	C.m[0][2] = axis.y * sin;
+	C.m[0][3] = 0.0f;
+	C.m[1][0] = axis.z * sin;
+	C.m[1][1] = 0.0f;
+	C.m[1][2] = -axis.x * sin;
+	C.m[1][3] = 0.0f;
+	C.m[2][0] = -axis.y * sin;
+	C.m[2][1] = axis.x * sin;
+	C.m[2][2] = 0.0f;
+	C.m[2][3] = 0.0f;
+	C.m[3][0] = 0.0f;
+	C.m[3][1] = 0.0f;
+	C.m[3][2] = 0.0f;
+	C.m[3][3] = 1.0f;
+
+	result = Add(S, Subtract(P, C));
+
+	return result;
+}
+
 void MatrixScreenPrintf(Matrix4x4 matrix, const char* name)
 {
 	ImGui::Begin(name);
 	
-	ImGui::Text("%f %f %f %f\n", matrix.m[0][0], matrix.m[0][1], matrix.m[0][2], matrix.m[0][3]);
-	ImGui::Text("%f %f %f %f\n", matrix.m[1][0], matrix.m[1][1], matrix.m[1][2], matrix.m[1][3]);
-	ImGui::Text("%f %f %f %f\n", matrix.m[2][0], matrix.m[2][1], matrix.m[2][2], matrix.m[2][3]);
-	ImGui::Text("%f %f %f %f\n", matrix.m[3][0], matrix.m[3][1], matrix.m[3][2], matrix.m[3][3]);
+	ImGui::Text("%.3f %.3f %.3f %.3f\n", matrix.m[0][0], matrix.m[0][1], matrix.m[0][2], matrix.m[0][3]);
+	ImGui::Text("%.3f %.3f %.3f %.3f\n", matrix.m[1][0], matrix.m[1][1], matrix.m[1][2], matrix.m[1][3]);
+	ImGui::Text("%.3f %.3f %.3f %.3f\n", matrix.m[2][0], matrix.m[2][1], matrix.m[2][2], matrix.m[2][3]);
+	ImGui::Text("%.3f %.3f %.3f %.3f\n", matrix.m[3][0], matrix.m[3][1], matrix.m[3][2], matrix.m[3][3]);
 	
 	ImGui::End();
 }

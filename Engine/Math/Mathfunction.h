@@ -3,6 +3,7 @@
 #include "Vector3.h"
 #include "ImGuiManager/ImGuiManager.h"
 #include <iostream>
+#include <cassert>
 
 // 積
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
@@ -44,6 +45,15 @@ Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2);
 
 Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2);
 
+Vector3 Cross(const Vector3& v1, const Vector3& v2);
+
+float Dot(const Vector3& v1, const Vector3& v2);
+
+// ノルム
+float Length(const Vector3& v);
+
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
+
+Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
 
 void MatrixScreenPrintf(Matrix4x4 matrix, const char* name);
