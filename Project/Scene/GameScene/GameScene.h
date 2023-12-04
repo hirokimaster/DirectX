@@ -5,8 +5,11 @@
 #include "ModelSphere.h"
 #include "ModelCube.h"
 #include "Input.h"
+#include "Inputhandler/InputHandler.h"
 #include "ImGuiManager/ImGuiManager.h"
 #include "IScene/IScene.h"
+#include "Player/Player.h"
+#include "ICommand/ICommand.h"
 
 /// <summary>
 /// ゲームシーン
@@ -40,5 +43,11 @@ public: // メンバ関数
 	void Draw()override;
 
 private: // メンバ変数
+	ViewProjection viewProjection_;
+	std::unique_ptr<Player> player_;
+	std::unique_ptr<Model> modelPlayer_;
+	uint32_t texHandlePlayer_ = 0;
+	InputHandler* inputHandler_ = nullptr;
+	ICommand* command_ = nullptr;
 
 };

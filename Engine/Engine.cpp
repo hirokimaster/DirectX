@@ -14,7 +14,7 @@ void Engine::Initialize(){
 	dxCommon_ = DirectXCommon::GetInstance();
 
 	// ウィンドウの作成
-	win_->CreateGameWindow(L"DirectXGame");
+	win_->CreateGameWindow(L"PG3_04_01");
 	// DirectX初期化
 	dxCommon_->Initialize(win_);
 	Input::Initialize();
@@ -24,7 +24,7 @@ void Engine::Initialize(){
 	// シーンの初期化
 	gameManager_ = std::make_unique<GameManager>();
 	gameManager_->Initialize();
-
+	
 	// ImGuiの初期化
 	imguiManager_ = ImGuiManager::GetInstance();
 	imguiManager_->Initialize(win_, dxCommon_);

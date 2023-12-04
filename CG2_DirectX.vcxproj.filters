@@ -59,14 +59,23 @@
     <Filter Include="Project">
       <UniqueIdentifier>{7b491d41-369f-44f8-8b61-8555b6929829}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Project\GameScene">
-      <UniqueIdentifier>{8116be08-e170-4048-88b7-c1a0eaf9716b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\シェーダー">
       <UniqueIdentifier>{75fe7eba-20ef-41d6-b151-9e25db6dff22}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\TextureManager\TextureReference">
       <UniqueIdentifier>{ea3d1cd7-23b3-47bd-9530-f75ca332881e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\GameManager">
+      <UniqueIdentifier>{fe5de306-3220-4705-8e97-8055de00bd2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Scene">
+      <UniqueIdentifier>{4155f67b-3d7f-4475-ba80-43487338181e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Scene\GameScene">
+      <UniqueIdentifier>{8116be08-e170-4048-88b7-c1a0eaf9716b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Scene\IScene">
+      <UniqueIdentifier>{9721359c-0b84-49b5-a1b0-4de99c030653}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -74,7 +83,7 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Project\Scene\GameScene\GameScene.cpp">
-      <Filter>Project\GameScene</Filter>
+      <Filter>Project\Scene\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Math\Mathfunction.cpp">
       <Filter>Engine\Math</Filter>
@@ -154,10 +163,25 @@
     <ClCompile Include="Engine\TextureManager\TextureReference\TextureReference.cpp">
       <Filter>Engine\TextureManager\TextureReference</Filter>
     </ClCompile>
+    <ClCompile Include="Project\GameManager\GameManager.cpp">
+      <Filter>Project\GameManager</Filter>
+    </ClCompile>
     <ClCompile Include="Project\Scene\IScene\IScene.cpp">
+      <Filter>Project\Scene\IScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\GameObject\Player\Player.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Project\GameManager\GameManager.cpp">
+    <ClCompile Include="Project\InputCommand\ICommand\ICommand.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\InputCommand\InputPlayer\MoveLeftCommand.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\InputCommand\InputPlayer\MoveRightCommand.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Input\Inputhandler\InputHandler.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -166,7 +190,7 @@
       <Filter>Engine\CreateResource</Filter>
     </ClInclude>
     <ClInclude Include="Project\Scene\GameScene\GameScene.h">
-      <Filter>Project\GameScene</Filter>
+      <Filter>Project\Scene\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Sprite\Sprite.h">
       <Filter>Engine\Sprite</Filter>
@@ -264,8 +288,17 @@
     <ClInclude Include="Engine\TextureManager\TextureReference\TextureReference.h">
       <Filter>Engine\TextureManager\TextureReference</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Scene\IScene\IScene.h" />
-    <ClInclude Include="Project\GameManager\GameManager.h" />
+    <ClInclude Include="Project\GameManager\GameManager.h">
+      <Filter>Project\GameManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Scene\IScene\IScene.h">
+      <Filter>Project\Scene\IScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\GameObject\Player\Player.h" />
+    <ClInclude Include="Project\InputCommand\ICommand\ICommand.h" />
+    <ClInclude Include="Engine\Input\Inputhandler\InputHandler.h" />
+    <ClInclude Include="Project\InputCommand\InputPlayer\MoveLeftCommand.h" />
+    <ClInclude Include="Project\InputCommand\InputPlayer\MoveRightCommand.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\ShaderFile\Object3d.PS.hlsl">
