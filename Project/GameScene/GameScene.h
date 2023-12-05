@@ -41,10 +41,11 @@ public: // メンバ関数
 
 private: // メンバ変数
 
-	Particle particles_[10] = {};
+	std::list<Particle> particles_ = {};
 	ViewProjection viewProjection_ = {};
 	std::unique_ptr<ParticleSystem> particle_ = {};
 	uint32_t texHandle_ = 0;
 	const float dt = 1.0f / 60.0f;
-	
+	Emitter emit{};
+	std::mt19937 randomEngine_;
 };

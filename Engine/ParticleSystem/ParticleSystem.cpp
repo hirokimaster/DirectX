@@ -79,7 +79,7 @@ void ParticleSystem::CreateInstancingSrv(){
 /// </summary>
 /// <param name="worldTransform"></param>
 /// <param name="viewprojection"></param>
-void ParticleSystem::Draw(Particle particle[], ViewProjection viewprojection) {
+void ParticleSystem::Draw(std::list<Particle>& particles, const ViewProjection& viewprojection) {
 
 	uint32_t  numInstance = 0; // 描画すべきインスタンス数
 
@@ -92,21 +92,27 @@ void ParticleSystem::Draw(Particle particle[], ViewProjection viewprojection) {
 	billboardMatrix.m[3][1] = 0.0f;
 	billboardMatrix.m[3][2] = 0.0f;
 
-	for (uint32_t index = 0; index < kNumMaxInstance_; ++index) {
-		if (particle[index].lifeTime <= particle[index].currentTime) {
+	for (std::list<Particle>::iterator particleItr = particles.begin(); particleItr != particles.end();) {
+		if ((*particleItr).lifeTime <= (*particleItr).currentTime) {
+			particleItr = particles.erase(particleItr);
 			continue;
 		}
 
-		Matrix4x4 worldMatrix = MakeBiilboardWorldMatrix(particle[index].worldTransform.scale,billboardMatrix,
-			particle[index].worldTransform.translate);
-		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix,Multiply(viewprojection.matView,viewprojection.matProjection));
-		particle[index].currentTime += 1.0f / 60.0f;
-		float alpha = 1.0f - (particle[index].currentTime / particle[index].lifeTime);
-		instancingData_[index].WVP = worldViewProjectionMatrix;
-		instancingData_[index].World = worldMatrix;
-		instancingData_[index].color = particle[index].color;
-		instancingData_[numInstance].color.w = alpha;
-		++numInstance;
+		Matrix4x4 worldMatrix = MakeBiilboardWorldMatrix((*particleItr).worldTransform.scale, billboardMatrix,
+			(*particleItr).worldTransform.translate);
+		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewprojection.matView, viewprojection.matProjection));
+		(*particleItr).currentTime += 1.0f / 60.0f;
+		float alpha = 1.0f - ((*particleItr).currentTime / (*particleItr).lifeTime);
+
+		if (numInstance < kNumMaxInstance_) {
+			instancingData_[numInstance].WVP = worldViewProjectionMatrix;
+			//instancingData_[numInstance].World = worldMatrix;
+			instancingData_[numInstance].color = (*particleItr).color;
+			instancingData_[numInstance].color.w = alpha;
+			++numInstance;
+		}
+	
+		++particleItr;
 	}
 
 	Property property = GraphicsPipeline::GetInstance()->GetPSO().Particle;
@@ -145,4 +151,22 @@ Particle ParticleSystem::MakeNewParticle(std::mt19937& randomEngine) {
 	particle.lifeTime = distTime(randomEngine);
 	particle.currentTime = 0;
 	return particle;
+}
+
+std::list<Particle> ParticleSystem::Emission(const Emitter& emitter, std::mt19937& randomEngine){
+	std::list<Particle> particles;
+	for (uint32_t count = 0; count < emitter.count; ++count) {
+		particles.push_back(MakeNewParticle(randomEngine));
+	}
+
+	return particles;
+
+}
+
+std::mt19937 ParticleSystem::random()
+{
+	std::random_device seed;
+	std::mt19937 randomEngine(seed());
+
+	return randomEngine;
 }

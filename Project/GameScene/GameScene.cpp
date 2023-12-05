@@ -10,18 +10,17 @@ GameScene::~GameScene() {
 void GameScene::Initialize() {
 
 	// 乱数生成器
-	std::random_device seed;
-	std::mt19937 randomEngine(seed());
+	randomEngine_ = particle_->random();
+	
+	emit.count = 3;
+	emit.frequency = 0.5f;
+	emit.frequencyTime = 0.0f;
 	
 	texHandle_ = TextureManager::Load("resources/circle.png");
 	particle_ = std::make_unique<ParticleSystem>();
 	particle_->Initialize("plane.obj");
 	particle_->SetTexHandle(texHandle_);
 
-	for (uint32_t index = 0; index < 10; index++) {
-		particles_[index] = ParticleSystem::MakeNewParticle(randomEngine);
-	}
-	
 	viewProjection_.Initialize();
 	
 }
@@ -36,17 +35,31 @@ void GameScene::Update() {
 	ImGui::DragFloat3("rotate", &viewProjection_.rotate.x, 0.01f, -100.0f, 100.0f);
 	ImGui::End();
 	
-	for (uint32_t index = 0; index < 10; index++) {
-		particles_[index].worldTransform.translate = Add(particles_[index].worldTransform.translate, Multiply(dt, particles_[index].velocity));
-		particles_[index].worldTransform.UpdateMatrix();
+	emit.frequencyTime += dt;
+	if (emit.frequency <= emit.frequencyTime) {
+		particles_.splice(particles_.end(), particle_->Emission(emit, randomEngine_));
+		emit.frequencyTime -= emit.frequency;
+	}
+
+	for (std::list<Particle>::iterator particleItr = particles_.begin();
+		particleItr != particles_.end(); ++particleItr) {
+		(*particleItr).worldTransform.translate = Add((*particleItr).worldTransform.translate, Multiply(dt, (*particleItr).velocity));
+		(*particleItr).worldTransform.UpdateMatrix();
 		
 	}
+
+
+	ImGui::Begin("Particle");
+	if (ImGui::Button("Add Particle")) {
+		particles_.splice(particles_.end(), particle_->Emission(emit, randomEngine_));
+	}
+	ImGui::End();
 	
 }
 
 // 描画
 void GameScene::Draw(){
-	
-	particle_->Draw(particles_, viewProjection_);
 
+	particle_->Draw(particles_, viewProjection_);
+	
 }

@@ -23,6 +23,13 @@ struct Particle {
 	float currentTime;
 };
 
+struct Emitter {
+	WorldTransform worldransform; //!<エミッタのtransform
+	uint32_t count; //!< 発生数
+	float frequency; //!< 発生頻度
+	float frequencyTime; //!< 頻度用時刻
+};
+
 class ParticleSystem{
 public:
 
@@ -47,7 +54,7 @@ public:
 	/// </summary>
 	/// <param name="worldTransform"></param>
 	/// <param name="viewprojection"></param>
-	void Draw(Particle partcle[], ViewProjection viewprojection);
+	void Draw(std::list<Particle>& partcles, const ViewProjection& viewprojection);
 
 #pragma region setter
 
@@ -64,9 +71,19 @@ public:
 	/// <returns></returns>
 	static Particle MakeNewParticle(std::mt19937& randomEngine);
 
+	/// <summary>
+	/// emit関数
+	/// </summary>
+	/// <param name="emitter"></param>
+	/// <param name="randomEngine"></param>
+	/// <returns></returns>
+	std::list<Particle> Emission(const Emitter& emitter, std::mt19937& randomEngine);
+
+	std::mt19937 random();
+
 private:
 	Resource resource_ = {};
-	uint32_t kNumMaxInstance_ = 10;
+	uint32_t kNumMaxInstance_ = 100;
 	descSize size_ = {};
 	ModelData modelData_;
 	Model* model_;
