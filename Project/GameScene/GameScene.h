@@ -39,8 +39,10 @@ public: // メンバ関数
 	void Draw();
 
 private: // メンバ変数
-
-	Matrix4x4 rotateMatrix0_;
-	Matrix4x4 rotateMatrix1_;
-	Matrix4x4 rotateMatrix2_;
+	Quaternion identity_;
+	Quaternion conj_;
+	Quaternion inv_;
+	Quaternion normal_;
+	Quaternion mul1_;
+	Quaternion mul2_;
 };

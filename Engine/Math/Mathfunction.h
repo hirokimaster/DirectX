@@ -4,6 +4,12 @@
 #include "ImGuiManager/ImGuiManager.h"
 #include <iostream>
 #include <cassert>
+#include "Vector4.h"
+
+struct Quaternion {
+	Vector3 vec;
+	float w;
+};
 
 // 積
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
@@ -49,11 +55,44 @@ Vector3 Cross(const Vector3& v1, const Vector3& v2);
 
 float Dot(const Vector3& v1, const Vector3& v2);
 
-// ノルム
+// ノルム		  
 float Length(const Vector3& v);
 
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
 
 Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
 
+// quaternionの積
+Quaternion Multiply(const Quaternion& lhs, const Quaternion& rhs);
+// 単位quaternion
+Quaternion IdentityQuaternion();
+// 共役quaternion
+Quaternion Conjugate(const Quaternion& quaternion);
+// quaternionのnorm
+float Norm(const Quaternion& quaternion);
+// 正規化したquaternion
+Quaternion QNormalize(const Quaternion& quaternion);
+// 逆quaternion
+Quaternion QInverse(const Quaternion& quaternion);
+
 void MatrixScreenPrintf(Matrix4x4 matrix, const char* name);
+
+void QuaternionScreenPrint(Quaternion q, const char* name);
+
+Vector3 operator+(const Vector3& a, const Vector3& b);
+
+Vector3 operator+(const Vector3& a, const float& b);
+
+Vector3 operator-(const Vector3& a, const Vector3& b);
+
+Vector3 operator-(const Vector3& a, const float& b);
+
+Vector3 operator*(const Vector3& a, const Vector3& b);
+
+Vector3 operator*(const float& a, const Vector3& b);
+
+Vector3 operator/(const Vector3& a, const float& b);
+
+Quaternion operator/(const Quaternion& q, const float& a);
+
+Vector3 operator*(const Vector3& vec, const Matrix4x4& mat);
