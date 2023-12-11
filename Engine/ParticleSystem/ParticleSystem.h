@@ -30,6 +30,11 @@ struct Emitter {
 	float frequencyTime; //!< 頻度用時刻
 };
 
+struct AccelerationField {
+	Vector3 acceleration; //!< 加速度
+	AABB area; //!< 範囲
+};
+
 class ParticleSystem{
 public:
 
@@ -78,6 +83,8 @@ public:
 	/// <param name="randomEngine"></param>
 	/// <returns></returns>
 	std::list<Particle> Emission(const Emitter& emitter, std::mt19937& randomEngine);
+
+	bool IsCollision(const AABB& aabb, const Vector3& point);
 
 	std::mt19937 random();
 

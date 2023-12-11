@@ -47,5 +47,6 @@ private: // メンバ変数
 	uint32_t texHandle_ = 0;
 	const float dt = 1.0f / 60.0f;
 	Emitter emit{};
+	AccelerationField accelerationField{};
 	std::mt19937 randomEngine_;
 };

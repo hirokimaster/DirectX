@@ -20,7 +20,9 @@ void GameScene::Initialize() {
 	particle_ = std::make_unique<ParticleSystem>();
 	particle_->Initialize("plane.obj");
 	particle_->SetTexHandle(texHandle_);
-
+	accelerationField.acceleration = { 15.0f, 0.0f,0.0f };
+	accelerationField.area.min = { -1.0f,-1.0f,-1.0f };
+	accelerationField.area.max = { 1.0f,1.0f,1.0f };
 	viewProjection_.Initialize();
 	
 }
@@ -43,11 +45,17 @@ void GameScene::Update() {
 
 	for (std::list<Particle>::iterator particleItr = particles_.begin();
 		particleItr != particles_.end(); ++particleItr) {
+
+		if (particle_->IsCollision(accelerationField.area, (*particleItr).worldTransform.translate)) {
+			(*particleItr).velocity = Add((*particleItr).velocity, Multiply(dt, accelerationField.acceleration));
+		}
+	
 		(*particleItr).worldTransform.translate = Add((*particleItr).worldTransform.translate, Multiply(dt, (*particleItr).velocity));
 		(*particleItr).worldTransform.UpdateMatrix();
 		
 	}
 
+	
 
 	ImGui::Begin("Particle");
 	if (ImGui::Button("Add Particle")) {

@@ -3,6 +3,11 @@
 #include "Vector3.h"
 #include <cassert>
 
+struct AABB {
+	Vector3 min; // 最小点
+	Vector3 max; // 最大点
+};
+
 // 積
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
 // 拡大縮小行列
