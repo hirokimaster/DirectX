@@ -10,7 +10,7 @@ GameScene::~GameScene() {
 void GameScene::Initialize() {
 
 	// 乱数生成器
-	randomEngine_ = particle_->random();
+	/*randomEngine_ = particle_->random();
 	
 	emit.count = 3;
 	emit.frequency = 0.5f;
@@ -28,13 +28,13 @@ void GameScene::Initialize() {
 	accelerationField.area.min = { -1.0f,-1.0f,-1.0f };
 	accelerationField.area.max = { 1.0f,1.0f,1.0f };
 	viewProjection_.Initialize();
-	
+	*/
 }
 
 // 更新
 void GameScene::Update() {
 
-	viewProjection_.UpdateMatrix();
+	/*viewProjection_.UpdateMatrix();
 
 	ImGui::Begin("camera");
 	ImGui::DragFloat3("translate", &viewProjection_.translate.x, 0.01f, -100.0f, 100.0f);
@@ -79,14 +79,14 @@ void GameScene::Update() {
 	if (ImGui::Button("Add Particle")) {
 		particles_.splice(particles_.end(), particle_->Emission(emit, randomEngine_));
 	}
-	ImGui::End();
+	ImGui::End();*/
 	
 }
 
 // 描画
 void GameScene::Draw(){
 
-	particle_->Draw(particles_, viewProjection_);
-	particle2_->Draw(particles2_, viewProjection_);
-	
+	//particle_->Draw(particles_, viewProjection_);
+	//particle2_->Draw(particles2_, viewProjection_);
+	//
 }

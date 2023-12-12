@@ -41,15 +41,15 @@ public: // メンバ関数
 
 private: // メンバ変数
 
-	std::list<Particle> particles_ = {};
-	std::list<Particle> particles2_ = {};
-	ViewProjection viewProjection_ = {};
-	std::unique_ptr<ParticleSystem> particle_ = {};
-	std::unique_ptr<ParticleSystem> particle2_ = {};
-	uint32_t texHandle_ = 0;
-	uint32_t texHandle2_ = 0;
-	const float dt = 1.0f / 60.0f;
-	Emitter emit{};
-	AccelerationField accelerationField{};
-	std::mt19937 randomEngine_;
+	//std::list<Particle> particles_ = {};
+	//std::list<Particle> particles2_ = {};
+	//ViewProjection viewProjection_ = {};
+	//std::unique_ptr<ParticleSystem> particle_ = {};
+	//std::unique_ptr<ParticleSystem> particle2_ = {};
+	//uint32_t texHandle_ = 0;
+	//uint32_t texHandle2_ = 0;
+	//const float dt = 1.0f / 60.0f;
+	//Emitter emit{};
+	//AccelerationField accelerationField{};
+	//std::mt19937 randomEngine_;
 };
