@@ -31,6 +31,7 @@ public:
 
 	// get
 	static uint32_t GetIndex() { return TextureManager::GetInstance()->index_; }
+	static uint32_t SetIndex(uint32_t index) { return TextureManager::GetInstance()->index_ = index; }
 	static D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	static D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle(uint32_t texHandle);
@@ -62,7 +63,7 @@ private:
 
 private: // メンバ変数
 
-	uint32_t index_ = 0;
+	uint32_t index_;
 
 	descSize size = {};
 

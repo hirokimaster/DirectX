@@ -96,7 +96,9 @@ private:
 	Model* model_;
 	D3D12_VERTEX_BUFFER_VIEW VertexBufferView_{};
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_;
+	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_;
 	uint32_t texHandle_ = 0;
 	ParticleForGPU* instancingData_ = nullptr;
+	uint32_t index_ = 0;
 };
 

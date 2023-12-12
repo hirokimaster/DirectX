@@ -60,6 +60,11 @@ void ParticleSystem::CreateResource(ModelData modelData){
 /// instancing用のSRV作成
 /// </summary>
 void ParticleSystem::CreateInstancingSrv(){
+	// srvの位置をtextureのsrvの位置から設定する
+	index_ = TextureManager::GetInstance()->GetIndex();
+	index_++;
+	TextureManager::GetInstance()->SetIndex(index_);
+
 	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
 	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -68,9 +73,9 @@ void ParticleSystem::CreateInstancingSrv(){
 	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 	instancingSrvDesc.Buffer.NumElements = kNumMaxInstance_;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
-	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = TextureManager::GetCPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 3);
-	instancingSrvHandleGPU_ = TextureManager::GetGPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, 3);
-	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(resource_.instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU);
+	instancingSrvHandleCPU_ = TextureManager::GetCPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, index_ + 1);
+	instancingSrvHandleGPU_ = TextureManager::GetGPUDescriptorHandle(DirectXCommon::GetInstance()->GetSRV(), size_.SRV, index_ + 1);
+	DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(resource_.instancingResource.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
 
 }
 
