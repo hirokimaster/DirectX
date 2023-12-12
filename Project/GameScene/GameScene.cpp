@@ -17,6 +17,10 @@ void GameScene::Initialize() {
 	emit.frequencyTime = 0.0f;
 	
 	texHandle_ = TextureManager::Load("resources/circle.png");
+	texHandle2_ = TextureManager::Load("resources/uvChecker.png");
+	particle2_ = std::make_unique<ParticleSystem>();
+	particle2_->Initialize("cube.obj");
+	particle2_->SetTexHandle(texHandle2_);
 	particle_ = std::make_unique<ParticleSystem>();
 	particle_->Initialize("plane.obj");
 	particle_->SetTexHandle(texHandle_);
@@ -40,8 +44,10 @@ void GameScene::Update() {
 	emit.frequencyTime += dt;
 	if (emit.frequency <= emit.frequencyTime) {
 		particles_.splice(particles_.end(), particle_->Emission(emit, randomEngine_));
+		particles2_.splice(particles2_.end(), particle2_->Emission(emit, randomEngine_));
 		emit.frequencyTime -= emit.frequency;
 	}
+
 
 	for (std::list<Particle>::iterator particleItr = particles_.begin();
 		particleItr != particles_.end(); ++particleItr) {
@@ -53,6 +59,18 @@ void GameScene::Update() {
 		(*particleItr).worldTransform.translate = Add((*particleItr).worldTransform.translate, Multiply(dt, (*particleItr).velocity));
 		(*particleItr).worldTransform.UpdateMatrix();
 		
+	}
+
+	for (std::list<Particle>::iterator particleItr2 = particles2_.begin();
+		particleItr2 != particles2_.end(); ++particleItr2) {
+
+		if (particle2_->IsCollision(accelerationField.area, (*particleItr2).worldTransform.translate)) {
+			(*particleItr2).velocity = Add((*particleItr2).velocity, Multiply(dt, accelerationField.acceleration));
+		}
+
+		(*particleItr2).worldTransform.translate = Add((*particleItr2).worldTransform.translate, Multiply(dt, (*particleItr2).velocity));
+		(*particleItr2).worldTransform.UpdateMatrix();
+
 	}
 
 	
@@ -69,5 +87,6 @@ void GameScene::Update() {
 void GameScene::Draw(){
 
 	particle_->Draw(particles_, viewProjection_);
+	particle2_->Draw(particles2_, viewProjection_);
 	
 }
