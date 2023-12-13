@@ -10,6 +10,7 @@ Player::~Player()
 
 void Player::Initialize(Model* model, uint32_t texHandle)
 {
+	assert(model);
 	model_ = model;
 	model_->SetTexHandle(texHandle);
 	worldTransform_.Initialize();
@@ -47,15 +48,23 @@ void Player::Update()
 		(*bulletsItr_)->Update();
 	}
 
+	// デスフラグの立ったやつを消す
+	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
+		if (bullet->IsDead()) {
+			return true;
+		}
+		return false;
+	});
+
 	// 移動限界
 	const float kMoveLimitX = 23.0f;
 	const float kMoveLimitY = 12.5f;
 
 	// 範囲を超えない処理
 	worldTransform_.translate.x = max(worldTransform_.translate.x, -kMoveLimitX);
-	worldTransform_.translate.x = min(worldTransform_.translate.x, kMoveLimitX);
+	worldTransform_.translate.x = std::min(worldTransform_.translate.x, kMoveLimitX);
 	worldTransform_.translate.y = max(worldTransform_.translate.y, -kMoveLimitY);
-	worldTransform_.translate.y = min(worldTransform_.translate.y, kMoveLimitY);
+	worldTransform_.translate.y = std::min(worldTransform_.translate.y, kMoveLimitY);
 
 	// ImGui
 	ImGui::Begin("Player");
@@ -86,13 +95,16 @@ void Player::Attack() {
 
 	// 処理
 	if (Input::GetInstance()->PressedKey(DIK_SPACE)) {
+		// 弾の速度
+		const float kBulletSpeed = 1.0f;
+		Vector3 velocity = { 0,0,kBulletSpeed };
+		// プレイヤーの向きに速度を合わせる
+		velocity = TransformNormal(velocity, worldTransform_.matWorld);
 		// 弾を生成し、初期化
-		unique_ptr<PlayerBullet> bullet = make_unique<PlayerBullet>();
-		bulletModel_ = make_unique<Model>();
-		bulletModel_.reset(Model::CreateObj("cube.obj"));
-		bullet->Initialize(bulletModel_.get(), worldTransform_.translate);
+		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
+		bullet->Initialize(worldTransform_.translate, velocity);
 		// 弾をセット
-		bullets_.push_back(bullet);
+		bullets_.push_back(std::move(bullet));
 	}
 }
 

@@ -1,8 +1,7 @@
 #include "Model/Model.h"
 #include <cassert>
 #include "Input.h"
-#include "PlayerBullet.h"
-using namespace std;
+#include "Player/PlayerBullet.h"
 
 class Player {
 public:
@@ -23,10 +22,9 @@ public:
 private:
 
 	Model* model_ = nullptr;
-	unique_ptr<Model> bulletModel_;
 	WorldTransform worldTransform_ = {};
 	const float moveSpeed = 0.2f;
-	list<unique_ptr<PlayerBullet>> bullets_;
-	list<unique_ptr<PlayerBullet>>::iterator bulletsItr_;
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
+	std::list<std::unique_ptr<PlayerBullet>>::iterator bulletsItr_;
 
 };
