@@ -6,6 +6,9 @@
 #include <sstream>
 #include "ImGuiManager/ImGuiManager.h"
 #include "Camera/Camera.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 struct MaterialData {
 	std::string textureFilePath;
@@ -59,16 +62,13 @@ public:
 	// 色のsetter
 	Vector4 SetColor(Vector4 color) { return materialData_->color = color; }
 
-
-private:
-
 	/// <summary>
 	/// Objファイルを読む
 	/// </summary>
 	/// <param name="directoryPath"></param>
 	/// <param name="filename"></param>
 	/// <returns></returns>
-	static ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
+	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 
 	/// <summary>
 	/// mtlファイルを読む
@@ -76,7 +76,7 @@ private:
 	/// <param name="directoryPath"></param>
 	/// <param name="filename"></param>
 	/// <returns></returns>
-	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
+	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
 
 private: // メンバ変数
 

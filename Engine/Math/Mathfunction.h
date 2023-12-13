@@ -1,6 +1,12 @@
 #pragma once
 #include "Matrix4x4.h"
 #include "Vector3.h"
+#include <cassert>
+
+struct AABB {
+	Vector3 min; // 最小点
+	Vector3 max; // 最大点
+};
 
 // 積
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
@@ -23,6 +29,9 @@ Matrix4x4 MakeRotateZMatrix(float radian);
 // アフィン変換
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vector3& translate);
 
+// ビルボード用のワールド行列作成
+Matrix4x4 MakeBiilboardWorldMatrix(const Vector3& scale, const Matrix4x4& billboard, const Vector3& translate);
+
 // 透視投影行列
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);
 
@@ -38,6 +47,12 @@ Matrix4x4 MakeIdentityMatrix();
 // 正規化
 Vector3 Normalize(const Vector3& v);
 
+// 変換
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
+
+// ノルム
+float Length(const Vector3& v);
+
 // 加法
 Vector3 Add(const Vector3& v1, const Vector3& v2);
 
@@ -47,3 +62,32 @@ Vector3 Subtract(const Vector3& v1, const Vector3& v2);
 // スカラー倍
 Vector3 Multiply(float scalar, const Vector3& v);
 
+// クロス積
+Vector3 Cross(const Vector3& v1, const Vector3& v2);
+
+// 加算
+Vector3 Add(const Vector3& v1, const Vector3& v2);
+
+// 減算
+Vector3 Subtract(const Vector3& v1, const Vector3& v2);
+
+// 内積
+float Dot(const Vector3& v1, const Vector3& v2);
+
+//Vector3 operator-(const Vector3& v) { return { -v.x, -v.y, -v.z }; }
+//
+//Vector3 operator+(const Vector3& v) { return v; }
+//
+//Vector3 operator+(const Vector3& a, const Vector3& b);
+//
+//Vector3 operator+(const Vector3& a, const float& b);
+//
+//Vector3 operator-(const Vector3& a, const Vector3& b);
+//
+//Vector3 operator-(const Vector3& a, const float& b);
+//
+//Vector3 operator*(const Vector3& a, const float& b);
+//
+//Vector3 operator/(const Vector3& a, const Vector3& b);
+//
+//Vector3 operator/(const Vector3& a, const float& b);

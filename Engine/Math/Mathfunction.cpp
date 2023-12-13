@@ -194,6 +194,19 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vecto
 	return Transform;
 }
 
+// ビルボード用のワールド行列
+Matrix4x4 MakeBiilboardWorldMatrix(const Vector3& scale, const Matrix4x4& billboard, const Vector3& translate) {
+	// スケーリング行列
+	Matrix4x4 Scale = MakeScaleMatrix(scale);
+	// 平行移動行列
+	Matrix4x4 Translate = MakeTranslateMatrix(translate);
+	// ワールド行列
+	Matrix4x4 worldMatrix = Multiply(Scale, Multiply(billboard, Translate));
+
+	return worldMatrix;
+
+}
+
 // 透視投影行列
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
 	Matrix4x4 result;
@@ -330,13 +343,39 @@ Vector3 Normalize(const Vector3& v) {
 	return result;
 }
 
+// 変換
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
+	Vector3 result;
+	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] +
+		1.0f * matrix.m[3][0];
+	result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] +
+		1.0f * matrix.m[3][1];
+	result.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] +
+		1.0f * matrix.m[3][2];
+	float w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] +
+		1.0f * matrix.m[3][3];
+	assert(w != 0.0f);
+	result.x /= w;
+	result.y /= w;
+	result.z /= w;
+
+	return result;
+}
+
+// 長さ（ノルム）
+float Length(const Vector3& v) {
+	float result;
+	result = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+	return result;
+}
+
 // ベクトルの加法
+
 Vector3 Add(const Vector3& v1, const Vector3& v2) {
 	Vector3 result;
 	result.x = v1.x + v2.x;
 	result.y = v1.y + v2.y;
 	result.z = v1.z + v2.z;
-
 	return result;
 }
 
@@ -358,4 +397,62 @@ Vector3 Multiply(float scalar, const Vector3& v) {
 	return result;
 }
 
+// クロス積
+Vector3 Cross(const Vector3& v1, const Vector3& v2) {
+	Vector3 result;
+	result.x = v1.y * v2.z - v1.z * v2.y;
+	result.y = v1.z * v2.x - v1.x * v2.z;
+	result.z = v1.x * v2.y - v1.y * v2.x;
+	return result;
+}
 
+// 内積
+float Dot(const Vector3& v1, const Vector3& v2) {
+	float result;
+	result = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+	return result;
+}
+
+//Vector3 operator+(const Vector3& a, const Vector3& b) {
+//	Vector3 c = { a.x + b.x,a.y + b.y ,a.z + b.z };
+//
+//	return c;
+//}
+//
+//Vector3 operator+(const Vector3& a, const float& b) {
+//	Vector3 c = { a.x + b,a.y + b,a.z + b };
+//
+//	return c;
+//}
+//
+//Vector3 operator-(const Vector3& a, const Vector3& b) {
+//	Vector3 c = { a.x - b.x,a.y - b.y,a.z - b.z };
+//
+//	return c;
+//}
+//
+//Vector3 operator-(const Vector3& a, const float& b) {
+//	Vector3 c = { a.x - b,a.y - b,a.z - b };
+//
+//	return c;
+//}
+//
+//Vector3 operator*(const Vector3& a, const float& b) {
+//	Vector3 c = { a.x * b, a.y * b, a.z * b };
+//
+//	return c;
+//}
+//
+//Vector3 operator/(const Vector3& a, const float& b)
+//{
+//	Vector3 c = { a.x / b , a.y / b, a.z / b };
+//
+//	return c;
+//}
+//
+//Vector3 operator/(const Vector3& a, const Vector3& b)
+//{
+//	Vector3 c = { a.x / b.x, a.y / b.y, a.z / b.z };
+//
+//	return c;
+//}
