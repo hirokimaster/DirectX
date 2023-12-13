@@ -109,6 +109,7 @@ copy "$(WindowsSdkdir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Project\GameObject\Enemy\EnemyBullet.cpp" />
     <ClCompile Include="Project\GameObject\Enemy\PhaseState\EnemyStateLeave.cpp" />
     <ClCompile Include="Project\GameObject\Enemy\PhaseState\EnemyStateApproach.cpp" />
     <ClCompile Include="Project\GameObject\Enemy\PhaseState\IState\IPhaseStateEnemy.cpp" />
@@ -149,6 +150,7 @@ copy "$(WindowsSdkdir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Scene\IScene\IScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Project\GameObject\Enemy\EnemyBullet.h" />
     <ClInclude Include="Project\GameObject\Enemy\PhaseState\EnemyStateLeave.h" />
     <ClInclude Include="Project\GameObject\Enemy\PhaseState\EnemyStateApproach.h" />
     <ClInclude Include="Project\GameObject\Enemy\PhaseState\IState\IPhaseStateEnemy.h" />

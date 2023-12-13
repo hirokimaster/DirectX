@@ -47,6 +47,7 @@
     <ClCompile Include="Project\GameObject\Enemy\PhaseState\IState\IPhaseStateEnemy.cpp" />
     <ClCompile Include="Project\GameObject\Enemy\PhaseState\EnemyStateApproach.cpp" />
     <ClCompile Include="Project\GameObject\Enemy\PhaseState\EnemyStateLeave.cpp" />
+    <ClCompile Include="Project\GameObject\Enemy\EnemyBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\Audio.h" />
@@ -93,6 +94,7 @@
     <ClInclude Include="Project\GameObject\Enemy\PhaseState\IState\IPhaseStateEnemy.h" />
     <ClInclude Include="Project\GameObject\Enemy\PhaseState\EnemyStateApproach.h" />
     <ClInclude Include="Project\GameObject\Enemy\PhaseState\EnemyStateLeave.h" />
+    <ClInclude Include="Project\GameObject\Enemy\EnemyBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\ShaderFile\Object3d.hlsli" />

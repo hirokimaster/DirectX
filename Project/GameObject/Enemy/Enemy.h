@@ -1,6 +1,7 @@
 #pragma once
 #include "Model.h"
 #include "Enemy/PhaseState/EnemyStateApproach.h"
+#include "Enemy/EnemyBullet.h"
 
 // 行動フェーズ
 enum class Phase {
@@ -30,6 +31,9 @@ public:
 	// 移動
 	void Move();
 
+	// 攻撃
+	void Fire();
+
 	// 状態変更
 	void changeState(IPhaseStateEnemy* newState);
 
@@ -43,6 +47,9 @@ public:
 private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
+	std::list<std::unique_ptr<EnemyBullet>> bullets_;
+	std::list<std::unique_ptr<EnemyBullet>>::iterator bulletsItr_;
+	int32_t shotTimer_ = 0;
 	Vector3 velocity_{};
 	IPhaseStateEnemy* phaseState_;
 
