@@ -330,6 +330,25 @@ Vector3 Normalize(const Vector3& v) {
 	return result;
 }
 
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix)
+{
+	Vector3 result;
+	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] +
+		1.0f * matrix.m[3][0];
+	result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] +
+		1.0f * matrix.m[3][1];
+	result.z = vector.x * matrix.m[0][2] + vector.y * matrix.m[1][2] + vector.z * matrix.m[2][2] +
+		1.0f * matrix.m[3][2];
+	float w = vector.x * matrix.m[0][3] + vector.y * matrix.m[1][3] + vector.z * matrix.m[2][3] +
+		1.0f * matrix.m[3][3];
+	assert(w != 0.0f);
+	result.x /= w;
+	result.y /= w;
+	result.z /= w;
+
+	return result;
+}
+
 // 1. 行列の加法
 Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result;
@@ -596,6 +615,65 @@ Quaternion QInverse(const Quaternion& quaternion)
 	return result;
 }
 
+Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle)
+{
+	Quaternion result{};
+	float cos = std::cos(angle / 2.0f);
+	float sin = std::sin(angle / 2.0f);
+	Vector3 n = Normalize(axis);
+
+	result.vec.x = sin * n.x;
+	result.vec.y = sin * n.y;
+	result.vec.z = sin * n.z;
+	result.w = cos;
+
+	return result;
+}
+
+Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion)
+{
+	Vector3 result{};
+	Quaternion r{};
+	Quaternion q2{};
+	r.vec.x = vector.x;
+	r.vec.y = vector.y;
+	r.vec.z = vector.z;
+	r.w = 0.0f;
+	q2 = Multiply(quaternion,Multiply(r, Conjugate(quaternion)));
+	result.x = q2.vec.x;
+	result.y = q2.vec.y;
+	result.z = q2.vec.z;
+
+	return result;
+}
+
+Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion)
+{
+	Matrix4x4 result{};
+	
+	result.m[0][0] = (quaternion.w * quaternion.w) + (quaternion.vec.x * quaternion.vec.x)
+		- (quaternion.vec.y * quaternion.vec.y) - (quaternion.vec.z * quaternion.vec.z);
+	result.m[0][1] = 2.0f * ((quaternion.vec.x * quaternion.vec.y) + (quaternion.w * quaternion.vec.z));
+	result.m[0][2] = 2.0f * ((quaternion.vec.x * quaternion.vec.z) - (quaternion.w * quaternion.vec.y));
+	result.m[0][3] = 0.0f;
+	result.m[1][0] = 2.0f * ((quaternion.vec.x * quaternion.vec.y) - (quaternion.w * quaternion.vec.z));
+	result.m[1][1] = (quaternion.w * quaternion.w) - (quaternion.vec.x * quaternion.vec.x)
+		+ (quaternion.vec.y * quaternion.vec.y) - (quaternion.vec.z * quaternion.vec.z);
+	result.m[1][2] = 2.0f * ((quaternion.vec.y * quaternion.vec.z) + (quaternion.w * quaternion.vec.x));
+	result.m[1][3] = 0.0f;
+	result.m[2][0] = 2.0f * ((quaternion.vec.x * quaternion.vec.z) + (quaternion.w * quaternion.vec.y));
+	result.m[2][1] = 2.0f * ((quaternion.vec.y * quaternion.vec.z) - (quaternion.w * quaternion.vec.x));
+	result.m[2][2] = (quaternion.w * quaternion.w) - (quaternion.vec.x * quaternion.vec.x)
+		- (quaternion.vec.y * quaternion.vec.y) + (quaternion.vec.z * quaternion.vec.z);
+	result.m[2][3] = 0.0f;
+	result.m[3][0] = 0.0f;
+	result.m[3][1] = 0.0f;
+	result.m[3][2] = 0.0f;
+	result.m[3][3] = 1.0f;
+
+	return result;
+}
+
 void MatrixScreenPrintf(Matrix4x4 matrix, const char* name)
 {
 	ImGui::Begin(name);
@@ -612,6 +690,13 @@ void QuaternionScreenPrint(Quaternion q, const char* name)
 {
 	ImGui::Begin(name);
 	ImGui::Text("%.3f %.3f %.3f %.3f\n", q.vec.x, q.vec.y, q.vec.z, q.w);
+	ImGui::End();
+}
+
+void Vector3ScreenPrint(Vector3 v, const char* name)
+{
+	ImGui::Begin(name);
+	ImGui::Text("%.3f %.3f %.3f\n", v.x, v.y, v.z);
 	ImGui::End();
 }
 
@@ -635,12 +720,6 @@ Vector3 operator-(const Vector3& a, const Vector3& b) {
 
 Vector3 operator-(const Vector3& a, const float& b) {
 	Vector3 c = { a.x - b,a.y - b,a.z - b };
-
-	return c;
-}
-
-Vector3 operator*(const Vector3& a, const Vector3& b) {
-	Vector3 c = { a.x * b.x, a.y * b.y, a.z * b.z };
 
 	return c;
 }

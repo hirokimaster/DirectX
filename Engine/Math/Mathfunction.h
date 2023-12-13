@@ -47,6 +47,9 @@ Matrix4x4 MakeIdentityMatrix();
 // 正規化
 Vector3 Normalize(const Vector3& v);
 
+// 変換
+Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
+
 Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2);
 
 Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2);
@@ -74,10 +77,18 @@ float Norm(const Quaternion& quaternion);
 Quaternion QNormalize(const Quaternion& quaternion);
 // 逆quaternion
 Quaternion QInverse(const Quaternion& quaternion);
+// 任意軸回転を表すquaternionの生成
+Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle);
+// ベクトルをquaternionで回転させた結果のベクトルを求める
+Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion);
+// quaternionから回転行列を求める
+Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion);
 
 void MatrixScreenPrintf(Matrix4x4 matrix, const char* name);
 
 void QuaternionScreenPrint(Quaternion q, const char* name);
+
+void Vector3ScreenPrint(Vector3 v, const char* name);
 
 Vector3 operator+(const Vector3& a, const Vector3& b);
 
@@ -86,8 +97,6 @@ Vector3 operator+(const Vector3& a, const float& b);
 Vector3 operator-(const Vector3& a, const Vector3& b);
 
 Vector3 operator-(const Vector3& a, const float& b);
-
-Vector3 operator*(const Vector3& a, const Vector3& b);
 
 Vector3 operator*(const float& a, const Vector3& b);
 
