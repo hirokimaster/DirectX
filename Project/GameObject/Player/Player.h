@@ -7,7 +7,7 @@ public:
 	/// 初期化
 	/// </summary>
 	/// <param name="models"></param>
-	void Initialize(const std::vector<Model*>& models, uint32_t texHandle)override;
+	void Initialize(Model* model, uint32_t texHandle)override;
 
 	/// <summary>
 	/// 更新
@@ -21,5 +21,5 @@ public:
 	void Draw(const Camera& camera)override;
 
 private:
-	WorldTransform worldTransform_;
+
 };

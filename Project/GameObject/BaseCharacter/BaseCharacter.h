@@ -8,7 +8,7 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="models"></param>
-	virtual void Initialize(const std::vector<Model*>& models, uint32_t texHandle);
+	virtual void Initialize(Model* model, uint32_t texHandle);
 
 	/// <summary>
 	/// 更新
@@ -32,7 +32,6 @@ public: // メンバ関数
 
 
 protected:
-	std::vector<Model*> models_; // モデルデータの配列
-	std::vector<Model*>::iterator modelsItr_;
+	Model* model_;
 	WorldTransform worldTransform_;
 };

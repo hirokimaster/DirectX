@@ -43,5 +43,6 @@ public: // メンバ関数
 private: // メンバ変数
 	uint32_t texHandlePlayer_ = 0;
 	std::unique_ptr<Player> player_;
+	std::unique_ptr<Model> modelPlayer_;
 	Camera camera_;
 };
