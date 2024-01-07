@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseCharacter/BaseCharacter.h"
+#include "Input/Input.h"
 
 class Player : public BaseCharacter {
 public:
@@ -20,6 +21,19 @@ public:
 	/// <param name="camera"></param>
 	void Draw(const Camera& camera)override;
 
-private:
+	/// <summary>
+	/// 移動処理
+	/// </summary>
+	void Move();
 
+	/// <summary>
+	/// カメラのセッター
+	/// </summary>
+	/// <param name="camera"></param>
+	void SetCamera(const Camera* camera) {
+		camera_ = camera;
+	}
+
+private:
+	const Camera* camera_ = nullptr;
 };

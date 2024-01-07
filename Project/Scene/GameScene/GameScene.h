@@ -8,6 +8,8 @@
 #include "ImGuiManager/ImGuiManager.h"
 #include "IScene/IScene.h"
 #include "Player/Player.h"
+#include "Skydome/Skydome.h"
+#include "FollowCamera/FollowCamera.h"
 
 /// <summary>
 /// ゲームシーン
@@ -42,7 +44,12 @@ public: // メンバ関数
 
 private: // メンバ変数
 	uint32_t texHandlePlayer_ = 0;
+	uint32_t texHandleEnemy_ = 0;
+	uint32_t texHandleSkydome_ = 0;
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Model> modelPlayer_;
+	std::unique_ptr<Skydome> skydome_;
+	std::unique_ptr<Model> modelSkydome_;
+	std::unique_ptr<FollowCamera> followCamera_;
 	Camera camera_;
 };

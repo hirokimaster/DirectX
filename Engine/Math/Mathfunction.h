@@ -26,6 +26,10 @@ Matrix4x4 MakeRotateYMatrix(float radian);
 // Z軸
 Matrix4x4 MakeRotateZMatrix(float radian);
 
+Matrix4x4 MakeRotateMatrix(const Vector3& radian);
+
+Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
+
 // アフィン変換
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vector3& translate);
 

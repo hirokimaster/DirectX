@@ -181,6 +181,9 @@
     <ClCompile Include="Project\GameObject\Ground\Ground.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Project\GameObject\FollowCamera\FollowCamera.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\CreateResource\CreateResource.h">
@@ -294,6 +297,7 @@
     <ClInclude Include="Project\GameObject\Enemy\Enemy.h" />
     <ClInclude Include="Project\GameObject\Skydome\Skydome.h" />
     <ClInclude Include="Project\GameObject\Ground\Ground.h" />
+    <ClInclude Include="Project\GameObject\FollowCamera\FollowCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\ShaderFile\Object3d.PS.hlsl">
