@@ -23,10 +23,17 @@ void GameScene::Initialize() {
 	/*------------------------
 			天球
 	--------------------------*/
-	texHandleSkydome_ = TextureManager::Load("resources/uvChecker.png");
+	texHandleSkydome_ = TextureManager::Load("resources/skydome.jpg");
 	modelSkydome_.reset(Model::CreateObj("skydome.obj"));
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize(modelSkydome_.get(), texHandleSkydome_);
+	/*------------------------
+			地面
+	--------------------------*/
+	texHandleGround_ = TextureManager::Load("resources/uvChecker.png");
+	modelGround_.reset(Model::CreateObj("cube.obj"));
+	ground_ = std::make_unique<Ground>();
+	ground_->Initialize(modelGround_.get(), texHandleGround_);
 	/*------------------------
 			追従カメラ
 	--------------------------*/
@@ -39,6 +46,7 @@ void GameScene::Initialize() {
 
 // 更新
 void GameScene::Update() {
+	ground_->Update();
 	player_->Update();
 	followCamera_->Update();
 	camera_.matView = followCamera_->GetCamera().matView;
@@ -50,5 +58,6 @@ void GameScene::Update() {
 // 描画						  
 void GameScene::Draw(){
 	player_->Draw(camera_);
-	skydome_->Draw(camera_);	
+	skydome_->Draw(camera_);
+	ground_->Draw(camera_);
 }

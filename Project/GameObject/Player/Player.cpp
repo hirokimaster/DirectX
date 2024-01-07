@@ -34,7 +34,7 @@ void Player::Move()
 	}
 
 	if (Input::GetInstance()->GetJoystickState(joyState)) {
-		worldTransform_.rotate.y += (float)joyState.Gamepad.sThumbRX / SHRT_MAX * 0.1f;
+		worldTransform_.rotate.y += (float)joyState.Gamepad.sThumbRX / SHRT_MAX * 0.03f;
 	}
 
 	move = TransformNormal(move, worldTransform_.matWorld);

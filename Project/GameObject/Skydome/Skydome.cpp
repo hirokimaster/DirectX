@@ -12,7 +12,7 @@ void Skydome::Initialize(Model* model, uint32_t texHandle) {
 
 	// 敵の初期座標
 	worldTransform_.translate = { 0.0f, 0.0f, 0.0f };
-	worldTransform_.scale = { 50.0f, 50.0f, 50.0f };
+	worldTransform_.scale = { 500.0f, 500.0f, 500.0f };
 
 };
 
@@ -29,6 +29,6 @@ void Skydome::Update() {
 /// <summary>
 /// 描画
 /// </summary>
-void Skydome::Draw(Camera camera) {
+void Skydome::Draw(const Camera& camera) {
 	model_->Draw(worldTransform_, camera);
 };

@@ -10,7 +10,7 @@ void FollowCamera::Update()
 	// 追従する対象がいたら
 	if (target_) {
 		// 追従対象からカメラまでのオフセット
-		Vector3 offset = { 0.0f,2.0f,-40.0f };
+		Vector3 offset = { 0.0f,2.0f,-20.0f };
 
 		//カメラの角度から回転行列を計算
 		Matrix4x4 rotateMatrix = MakeRotateMatrix(camera_.rotate);
@@ -24,7 +24,7 @@ void FollowCamera::Update()
 
 	XINPUT_STATE joyState;
 	if (Input::GetInstance()->GetJoystickState(joyState)) {
-		float kRotateSpeed = 0.1f;
+		float kRotateSpeed = 0.03f;
 		camera_.rotate.y += (float)joyState.Gamepad.sThumbRX / SHRT_MAX * kRotateSpeed;
 	}
 
