@@ -14,26 +14,39 @@ void GameScene::Initialize() {
 	texHandlePlayer_ = TextureManager::Load("resources/uvChecker.png");
 	texHandleEnemy_ = TextureManager::Load("resources/circle.png");
 	/*----------------------------
+		 レールカメラ
+	------------------------------*/
+	railCamera_ = std::make_unique<RailCamera>();
+	railCamera_->Initialize({ 0,0,0 }, { 0,0,0 });
+	/*----------------------------
 		      プレイヤー
 	------------------------------*/
 	modelPlayer_.reset(Model::CreateObj("cube.obj"));
 	player_ = std::make_unique<Player>();
-	player_->Initialize(modelPlayer_.get(), texHandlePlayer_);
+	Vector3 playerPos = { 0,0,0 };
+	player_->Initialize(modelPlayer_.get(),playerPos, texHandlePlayer_);
+	player_->SetParent(&railCamera_->GetWorldTransform());
 	/*----------------------------
 			   エネミー
 	------------------------------*/
+	std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>();
 	modelEnemy_.reset(Model::CreateObj("cube.obj"));
-	enemy_ = std::make_unique<Enemy>();
-	enemy_->Initialize(modelEnemy_.get(), texHandleEnemy_);
-	enemy_->SetPlayer(player_.get());
+	enemy->Initialize(modelEnemy_.get(), texHandleEnemy_);
+	enemy->SetPlayer(player_.get());
+	enemys_.push_back(std::move(enemy));
 }
 
 // 更新
 void GameScene::Update() {
 	
-	player_->Update();
-	enemy_->Update();
+	player_->Update(camera_);
+
+	for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
+		(*enemysItr_)->Update();
+	}
+	
 	CheckAllCollisions();
+	railCamera_->Update();
 	camera_.UpdateMatrix();
 
 }
@@ -42,8 +55,12 @@ void GameScene::Update() {
 void GameScene::Draw(){
 	
 	player_->Draw(camera_);
-	enemy_->Draw(camera_);
 
+	for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
+		(*enemysItr_)->Draw(camera_);
+	}
+
+	player_->DrawUI(camera_);
 }
 
 void GameScene::CheckAllCollisions()
@@ -60,75 +77,11 @@ void GameScene::CheckAllCollisions()
 	posA = player_->GetWorldPosition();
 
 	// 自キャラと敵弾すべての当たり判定
-	for (auto enemyBulletsItr = enemy_->GetBullets().begin();
-		enemyBulletsItr != enemy_->GetBullets().end(); ++enemyBulletsItr) {
+	for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
 
-		// 敵弾の座標
-		posB = (*enemyBulletsItr)->GetWorldPosition();
+		for (auto enemyBulletsItr = (*enemysItr_)->GetBullets().begin();
+			enemyBulletsItr != (*enemysItr_)->GetBullets().end(); ++enemyBulletsItr) {
 
-		// AとBの距離
-		float distance = (posB.x - posA.x) * (posB.x - posA.x) +
-			(posB.y - posA.y) * (posB.y - posA.y) +
-			(posB.z - posA.z) * (posB.z - posA.z);
-
-		// 半径
-		float R1 = 1.0f;
-		float R2 = 1.0f;
-
-
-		// 球と球の交差判定
-		if (distance <= (R1 + R2) * (R1 + R2)) {
-			// 自キャラの衝突時コールバックを呼び出す
-			player_->OnCollision();
-			// 敵弾の衝突時コールバックを呼び出す
-			(*enemyBulletsItr)->OnCollision();
-		}
-	}
-
-#pragma endregion
-
-#pragma region 自弾とすべての敵キャラの当たり判定
-
-	// 自キャラの座標
-	posA = enemy_->GetWorldPosition();
-
-	// 自弾と敵すべての当たり判定
-	for (auto playerBulletsItr = player_->GetBullets().begin();
-		playerBulletsItr != player_->GetBullets().end(); ++playerBulletsItr) {
-		// 自弾の座標
-		posB = (*playerBulletsItr)->GetWorldPosition();
-
-		// AとBの距離
-		float distance = (posB.x - posA.x) * (posB.x - posA.x) +
-			(posB.y - posA.y) * (posB.y - posA.y) +
-			(posB.z - posA.z) * (posB.z - posA.z);
-
-		// 半径
-		float R1 = 1.0f;
-		float R2 = 1.0f;
-
-		// 球と球の交差判定
-		if (distance <= (R1 + R2) * (R1 + R2)) {
-			// 敵キャラの衝突時コールバックを呼び出す
-			enemy_->OnCollision();
-			// 自弾の衝突時コールバックを呼び出す
-			(*playerBulletsItr)->OnCollision();
-		}
-	}
-
-
-#pragma endregion
-
-#pragma region 自弾と敵弾の当たり判定
-
-	// 自弾と敵すべての当たり判定
-	for (auto playerBulletsItr = player_->GetBullets().begin();
-		playerBulletsItr != player_->GetBullets().end(); ++playerBulletsItr) {
-		// 自キャラの座標
-		posA = (*playerBulletsItr)->GetWorldPosition();
-
-		for (auto enemyBulletsItr = enemy_->GetBullets().begin();
-			enemyBulletsItr != enemy_->GetBullets().end(); ++enemyBulletsItr) {
 			// 敵弾の座標
 			posB = (*enemyBulletsItr)->GetWorldPosition();
 
@@ -141,16 +94,88 @@ void GameScene::CheckAllCollisions()
 			float R1 = 1.0f;
 			float R2 = 1.0f;
 
+
 			// 球と球の交差判定
 			if (distance <= (R1 + R2) * (R1 + R2)) {
 				// 自キャラの衝突時コールバックを呼び出す
-				(*playerBulletsItr)->OnCollision();
+				player_->OnCollision();
 				// 敵弾の衝突時コールバックを呼び出す
 				(*enemyBulletsItr)->OnCollision();
 			}
 		}
 	}
+	
+#pragma endregion
 
+#pragma region 自弾とすべての敵キャラの当たり判定
+
+	// 敵キャラの座標
+	for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
+		posA = (*enemysItr_)->GetWorldPosition();
+
+		// 自弾と敵すべての当たり判定
+		for (auto playerBulletsItr = player_->GetBullets().begin();
+			playerBulletsItr != player_->GetBullets().end(); ++playerBulletsItr) {
+			// 自弾の座標
+			posB = (*playerBulletsItr)->GetWorldPosition();
+
+			// AとBの距離
+			float distance = (posB.x - posA.x) * (posB.x - posA.x) +
+				(posB.y - posA.y) * (posB.y - posA.y) +
+				(posB.z - posA.z) * (posB.z - posA.z);
+
+			// 半径
+			float R1 = 1.0f;
+			float R2 = 1.0f;
+
+			// 球と球の交差判定
+			if (distance <= (R1 + R2) * (R1 + R2)) {
+				// 敵キャラの衝突時コールバックを呼び出す
+				(*enemysItr_)->OnCollision();
+				// 自弾の衝突時コールバックを呼び出す
+				(*playerBulletsItr)->OnCollision();
+			}
+		}
+	}
+
+#pragma endregion
+
+#pragma region 自弾と敵弾の当たり判定
+
+	// 自弾と敵すべての当たり判定
+	for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
+
+		for (auto playerBulletsItr = player_->GetBullets().begin();
+			playerBulletsItr != player_->GetBullets().end(); ++playerBulletsItr) {
+			// 自キャラの座標
+			posA = (*playerBulletsItr)->GetWorldPosition();
+
+			for (auto enemyBulletsItr = (*enemysItr_)->GetBullets().begin();
+				enemyBulletsItr != (*enemysItr_)->GetBullets().end(); ++enemyBulletsItr) {
+				// 敵弾の座標
+				posB = (*enemyBulletsItr)->GetWorldPosition();
+
+				// AとBの距離
+				float distance = (posB.x - posA.x) * (posB.x - posA.x) +
+					(posB.y - posA.y) * (posB.y - posA.y) +
+					(posB.z - posA.z) * (posB.z - posA.z);
+
+				// 半径
+				float R1 = 1.0f;
+				float R2 = 1.0f;
+
+				// 球と球の交差判定
+				if (distance <= (R1 + R2) * (R1 + R2)) {
+					// 自キャラの衝突時コールバックを呼び出す
+					(*playerBulletsItr)->OnCollision();
+					// 敵弾の衝突時コールバックを呼び出す
+					(*enemyBulletsItr)->OnCollision();
+				}
+			}
+		}
+
+	}
+	
 
 #pragma endregion
 
