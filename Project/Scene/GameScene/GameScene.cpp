@@ -13,6 +13,7 @@ void GameScene::Initialize() {
 	------------------------------*/
 	texHandlePlayer_ = TextureManager::Load("resources/uvChecker.png");
 	texHandleEnemy_ = TextureManager::Load("resources/circle.png");
+	texHandleSkydome_ = TextureManager::Load("resources/skydome.jpg");
 	/*----------------------------
 		 レールカメラ
 	------------------------------*/
@@ -34,6 +35,12 @@ void GameScene::Initialize() {
 	enemy->Initialize(modelEnemy_.get(), texHandleEnemy_);
 	enemy->SetPlayer(player_.get());
 	enemys_.push_back(std::move(enemy));
+	/*------------------------
+			天球
+	--------------------------*/
+	modelSkydome_.reset(Model::CreateObj("skydome.obj"));
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize(modelSkydome_.get(), texHandleSkydome_);
 }
 
 // 更新

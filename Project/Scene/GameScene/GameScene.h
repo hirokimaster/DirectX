@@ -7,6 +7,7 @@
 #include "Player/Player.h"
 #include "Enemy/Enemy.h"
 #include "RailCamera/RailCamera.h"
+#include "Skydome/Skydome.h"
 
 /// <summary>
 /// ゲームシーン
@@ -41,7 +42,6 @@ public: // メンバ関数
 
 	void CheckAllCollisions();
 
-
 private: // メンバ変数
 	Camera camera_ = {};
 	std::unique_ptr<Model> modelPlayer_;
@@ -50,8 +50,11 @@ private: // メンバ変数
 	std::list<std::unique_ptr<Enemy>> enemys_;
 	std::list<std::unique_ptr<Enemy>>::iterator enemysItr_;
 	std::list<std::unique_ptr<EnemyBullet>> enemyBullets_;
+	std::unique_ptr<Skydome> skydome_;
+	std::unique_ptr<Model> modelSkydome_;
+	std::unique_ptr<RailCamera> railCamera_;
 	uint32_t texHandlePlayer_ = 0;
 	uint32_t texHandleEnemy_ = 0;
-	std::unique_ptr<RailCamera> railCamera_;
+	uint32_t texHandleSkydome_ = 0;
 
 };
