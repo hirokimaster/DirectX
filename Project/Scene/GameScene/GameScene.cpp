@@ -15,6 +15,7 @@ void GameScene::Initialize() {
 	texHandleEnemy_ = TextureManager::Load("resources/black2.png");
 	texHandleSkydome_ = TextureManager::Load("resources/bg.jpg");
 	texHandleUi_ = TextureManager::Load("resources/ui.png");
+	texHandleHp_ = TextureManager::Load("resources/heart.jpg");
 	/*----------------------------
 		 レールカメラ
 	------------------------------*/
@@ -106,17 +107,17 @@ void GameScene::Draw(){
 
 	if (playerLife_ == 3) {
 		for (int i = 0; i < 3; ++i) {
-			hp_[i]->Draw(camera_, texHandlePlayer_);
+			hp_[i]->Draw(camera_, texHandleHp_);
 		}
 	}
 	else if (playerLife_ == 2) {
 		for (int i = 0; i < 2; ++i) {
-			hp_[i]->Draw(camera_, texHandlePlayer_);
+			hp_[i]->Draw(camera_, texHandleHp_);
 		}
 	}
 	else {
 		for (int i = 0; i < 1; ++i) {
-			hp_[i]->Draw(camera_, texHandlePlayer_);
+			hp_[i]->Draw(camera_, texHandleHp_);
 		}
 	}
 	
