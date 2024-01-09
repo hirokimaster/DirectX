@@ -19,7 +19,7 @@ void EnemyStateApproach::Update(Enemy* pEnemy)
 	}
 
 	// 規定の位置に到達したら離脱
-	if (pEnemy->GetPosition().z < 20.0f) {
+	if (pEnemy->GetPosition().z < 0.0f) {
 		pEnemy->changeState(new EnemyStateLeave);
 	}
 
