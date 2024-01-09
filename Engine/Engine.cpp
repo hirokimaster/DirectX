@@ -14,7 +14,7 @@ void Engine::Initialize(){
 	dxCommon_ = DirectXCommon::GetInstance();
 
 	// ウィンドウの作成
-	win_->CreateGameWindow(L"DirectXGame");
+	win_->CreateGameWindow(L"LE2B_15_ニヘイ_リュウダイ");
 	// DirectX初期化
 	dxCommon_->Initialize(win_);
 	Input::Initialize();
