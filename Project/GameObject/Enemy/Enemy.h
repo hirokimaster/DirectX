@@ -22,7 +22,7 @@ public:
 	~Enemy();
 
 	// 初期化
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Vector3 pos, uint32_t textureHandle);
 
 	// 更新
 	void Update();
@@ -55,16 +55,18 @@ public:
 	// Playerを借りる
 	void SetPlayer(Player* player) { player_ = player; }
 
+	bool IsDead() const { return isDead_; }
+
 
 private:
 	WorldTransform worldTransform_;
-	Model* model_ = nullptr;
+	std::unique_ptr<Model> model_;
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 	std::list<std::unique_ptr<EnemyBullet>>::iterator bulletsItr_;
 	int32_t shotTimer_ = 0;
 	Vector3 velocity_{};
 	IPhaseStateEnemy* phaseState_;
 	Player* player_ = nullptr;
-
+	bool isDead_ = false;
 };
 

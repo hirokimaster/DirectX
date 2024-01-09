@@ -30,11 +30,11 @@ void GameScene::Initialize() {
 	/*----------------------------
 			   エネミー
 	------------------------------*/
-	std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>();
-	modelEnemy_.reset(Model::CreateObj("cube.obj"));
-	enemy->Initialize(modelEnemy_.get(), texHandleEnemy_);
+	//std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>();
+	
+	/*enemy->Initialize(modelEnemy_.get(), {0,0,50.0f}, texHandleEnemy_);
 	enemy->SetPlayer(player_.get());
-	enemys_.push_back(std::move(enemy));
+	enemys_.push_back(std::move(enemy));*/
 	/*------------------------
 			天球
 	--------------------------*/
@@ -48,9 +48,18 @@ void GameScene::Update() {
 	
 	player_->Update(camera_);
 
+	RandomSpawn();
 	for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
 		(*enemysItr_)->Update();
 	}
+
+	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) {
+		if (enemy->IsDead()) {
+			enemy.reset();
+			return true;
+		}
+		return false;
+		});
 	
 	CheckAllCollisions();
 	skydome_->Update();
@@ -189,5 +198,24 @@ void GameScene::CheckAllCollisions()
 
 #pragma endregion
 
+}
+
+void GameScene::RandomSpawn()
+{
+	spawnTimer_++;
+	std::random_device seed;
+
+	if (spawnTimer_ >= 90) {
+		std::mt19937 randomEngine(seed());
+		std::uniform_real_distribution<float>distribution(-20.0f, 20.0f);
+		std::unique_ptr<Enemy> enemy = nullptr;
+		enemy = std::make_unique<Enemy>();
+		enemy->Initialize(
+			{ float(distribution(randomEngine)), float(distribution(randomEngine)), 50.0f }, texHandleEnemy_);
+		enemy->SetPlayer(player_.get());
+		enemys_.push_back(std::move(enemy));
+		spawnTimer_ = 0;
+	}
+		
 }
 

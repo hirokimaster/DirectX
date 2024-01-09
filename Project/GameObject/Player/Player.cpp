@@ -130,7 +130,15 @@ void Player::Rotate() {
 void Player::Attack() {
 
 	// 処理
-	if (Input::GetInstance()->PressedKey(DIK_SPACE)) {
+	XINPUT_STATE joyState;
+
+	// ゲームパッド未接続なら何もせず抜ける
+	if (!Input::GetInstance()->GetJoystickState(joyState)) {
+		return;
+	}
+
+	// Rトリガーを押していたら
+	if (joyState.Gamepad.wButtons& XINPUT_GAMEPAD_RIGHT_SHOULDER) {
 		// 弾の速度
 		const float kBulletSpeed = 1.0f;
 		Vector3 velocity = { 0,0,kBulletSpeed };

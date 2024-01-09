@@ -8,6 +8,7 @@
 #include "Enemy/Enemy.h"
 #include "RailCamera/RailCamera.h"
 #include "Skydome/Skydome.h"
+#include <random>
 
 /// <summary>
 /// ゲームシーン
@@ -42,6 +43,8 @@ public: // メンバ関数
 
 	void CheckAllCollisions();
 
+	void RandomSpawn();
+
 private: // メンバ変数
 	Camera camera_ = {};
 	std::unique_ptr<Model> modelPlayer_;
@@ -56,5 +59,5 @@ private: // メンバ変数
 	uint32_t texHandlePlayer_ = 0;
 	uint32_t texHandleEnemy_ = 0;
 	uint32_t texHandleSkydome_ = 0;
-
+	uint32_t spawnTimer_ = 0;
 };

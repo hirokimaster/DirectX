@@ -5,14 +5,13 @@ Enemy::Enemy(){}
 
 Enemy::~Enemy(){}
 
-void Enemy::Initialize(Model* model, uint32_t textureHandle)
+void Enemy::Initialize(Vector3 pos, uint32_t textureHandle)
 {
-	assert(model);
-	model_ = model;
+	model_.reset(Model::CreateObj("cube.obj"));
 	model_->SetTexHandle(textureHandle);
 	worldTransform_.Initialize();
 	// 敵の初期座標
-	worldTransform_.translate = { 0.0f, 5.0f, 50.0f };
+	worldTransform_.translate = pos;
 	// 最初の状態
 	phaseState_ = new EnemyStateApproach();
 
@@ -81,6 +80,7 @@ void Enemy::changeState(IPhaseStateEnemy* newState)
 
 void Enemy::OnCollision()
 {
+	isDead_ = true;
 }
 
 Vector3 Enemy::GetWorldPosition()
