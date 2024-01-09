@@ -14,7 +14,7 @@ void Engine::Initialize(){
 
 
 	// ウィンドウの作成
-	win_->CreateGameWindow(L"DirectXGame");
+	win_->CreateGameWindow(L"LE2B_15_ニヘイ_リュウダイ_AL4評価課題");
 	// DirectX初期化
 	dxCommon_->Initialize(win_);
 	Input::Initialize();
