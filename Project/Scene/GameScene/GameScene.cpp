@@ -52,6 +52,31 @@ void GameScene::Update() {
 		}
 		return false;
 		});
+
+	if (playerLife_ <= 0) {
+
+		for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
+			(*enemysItr_)->OnCollision();
+		}
+
+		for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
+
+			for (auto enemyBulletsItr = (*enemysItr_)->GetBullets().begin();
+				enemyBulletsItr != (*enemysItr_)->GetBullets().end(); ++enemyBulletsItr) {
+
+				(*enemyBulletsItr)->OnCollision();
+			}
+		}
+
+		for (auto playerBulletsItr = player_->GetBullets().begin();
+			playerBulletsItr != player_->GetBullets().end(); ++playerBulletsItr) {
+
+			(*playerBulletsItr)->OnCollision();
+		}
+		sceneNo_ = GAMEOVER;
+		playerLife_ = 3;
+		
+	}
 	
 	CheckAllCollisions();
 	skydome_->Update();
@@ -110,6 +135,7 @@ void GameScene::CheckAllCollisions()
 			if (distance <= (R1 + R2) * (R1 + R2)) {
 				// 自キャラの衝突時コールバックを呼び出す
 				player_->OnCollision();
+				playerLife_ -= 1;
 				// 敵弾の衝突時コールバックを呼び出す
 				(*enemyBulletsItr)->OnCollision();
 			}

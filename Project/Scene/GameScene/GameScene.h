@@ -60,4 +60,5 @@ private: // メンバ変数
 	uint32_t texHandleEnemy_ = 0;
 	uint32_t texHandleSkydome_ = 0;
 	uint32_t spawnTimer_ = 0;
+	uint32_t playerLife_ = 3;
 };
