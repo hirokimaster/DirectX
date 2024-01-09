@@ -14,6 +14,7 @@ void GameScene::Initialize() {
 	texHandlePlayer_ = TextureManager::Load("resources/block2.png");
 	texHandleEnemy_ = TextureManager::Load("resources/black2.png");
 	texHandleSkydome_ = TextureManager::Load("resources/bg.jpg");
+	texHandleUi_ = TextureManager::Load("resources/ui.png");
 	/*----------------------------
 		 レールカメラ
 	------------------------------*/
@@ -30,7 +31,7 @@ void GameScene::Initialize() {
 	for (int i = 0; i < 3; ++i) {
 		hp_[i].reset(Sprite::Create({1000.0f + i * 60.0f, 30.0f}, {50.0f,50.0f}, {0.5f,0.5f}));
 	}
-
+	Ui_.reset(Sprite::Create({ 1100.0f, 780.0f }, { 1280.0f,720.0f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,0.9f }));
 	playerLife_ = 3;
 	
 	/*------------------------
@@ -119,6 +120,7 @@ void GameScene::Draw(){
 		}
 	}
 	
+	Ui_->Draw(camera_, texHandleUi_);
 
 }
 
