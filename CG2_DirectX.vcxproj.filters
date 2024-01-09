@@ -52,6 +52,7 @@
     <ClCompile Include="Project\GameObject\RailCamera\RailCamera.cpp" />
     <ClCompile Include="Project\GameObject\Skydome\Skydome.cpp" />
     <ClCompile Include="Project\Scene\TitleScene\TitleScene.cpp" />
+    <ClCompile Include="Project\Scene\GameOver\GameOverScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\Audio.h" />
@@ -103,6 +104,7 @@
     <ClInclude Include="Project\GameObject\RailCamera\RailCamera.h" />
     <ClInclude Include="Project\GameObject\Skydome\Skydome.h" />
     <ClInclude Include="Project\Scene\TitleScene\TitleScene.h" />
+    <ClInclude Include="Project\Scene\GameOver\GameOverScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\ShaderFile\Object3d.hlsli" />

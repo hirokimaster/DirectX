@@ -131,6 +131,7 @@ copy "$(WindowsSdkdir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\GameObject\Player\PlayerBullet.cpp" />
     <ClCompile Include="Project\GameObject\RailCamera\RailCamera.cpp" />
     <ClCompile Include="Project\GameObject\Skydome\Skydome.cpp" />
+    <ClCompile Include="Project\Scene\GameOver\GameOverScene.cpp" />
     <ClCompile Include="Project\Scene\GameScene\GameScene.cpp" />
     <ClCompile Include="Engine\GraphicsPipeline\GraphicsPipeline.cpp" />
     <ClCompile Include="Engine\Utility\ImGuiManager\ImGuiManager.cpp" />
@@ -177,6 +178,7 @@ copy "$(WindowsSdkdir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\GameObject\Player\PlayerBullet.h" />
     <ClInclude Include="Project\GameObject\RailCamera\RailCamera.h" />
     <ClInclude Include="Project\GameObject\Skydome\Skydome.h" />
+    <ClInclude Include="Project\Scene\GameOver\GameOverScene.h" />
     <ClInclude Include="Project\Scene\GameScene\GameScene.h" />
     <ClInclude Include="Engine\GraphicsPipeline\GraphicsPipeline.h" />
     <ClInclude Include="Engine\Utility\ImGuiManager\ImGuiManager.h" />

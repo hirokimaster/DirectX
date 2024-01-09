@@ -11,8 +11,8 @@ void GameScene::Initialize() {
 	/*----------------------------
 		 テクスチャ読み込み
 	------------------------------*/
-	texHandlePlayer_ = TextureManager::Load("resources/uvChecker.png");
-	texHandleEnemy_ = TextureManager::Load("resources/circle.png");
+	texHandlePlayer_ = TextureManager::Load("resources/block2.png");
+	texHandleEnemy_ = TextureManager::Load("resources/black2.png");
 	texHandleSkydome_ = TextureManager::Load("resources/bg.jpg");
 	/*----------------------------
 		 レールカメラ

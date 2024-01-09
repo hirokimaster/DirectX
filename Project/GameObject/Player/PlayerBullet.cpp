@@ -4,7 +4,7 @@ void PlayerBullet::Initialize(const Vector3& position, const Vector3& velocity) 
 
 	worldTransform_.Initialize();
 	model_.reset(Model::CreateObj("cube.obj"));
-	uint32_t texHandle = TextureManager::Load("resources/monsterBall.png");
+	uint32_t texHandle = TextureManager::Load("resources/block2.png");
 	model_->SetTexHandle(texHandle);
 
 	// 初期座標をセット
