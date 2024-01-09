@@ -17,19 +17,22 @@ GameManager::~GameManager() {}
 
 void GameManager::Run() {
 
-	sceneArr_[currentSceneNo_]->Update();
+	// シーンのチェック
+	prevSceneNo_ = currentSceneNo_;
+	currentSceneNo_ = sceneArr_[currentSceneNo_]->GetSceneNo();
+	
 	// シ－ン変更のチェック
 	if (prevSceneNo_ != currentSceneNo_) {
 		sceneArr_[currentSceneNo_]->Initialize();
 
 	}
+
+	sceneArr_[currentSceneNo_]->Update();
 }
 
 void GameManager::Initialize()
 {
-	// シーンのチェック
-	prevSceneNo_ = currentSceneNo_;
-	currentSceneNo_ = sceneArr_[currentSceneNo_]->GetSceneNo();
+	
 	sceneArr_[currentSceneNo_]->Initialize();
 
 }

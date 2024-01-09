@@ -20,9 +20,14 @@ void TitleScene::Update()
 {
 	// ゲームパッドの状態を得る変数(XINPUT)
 	XINPUT_STATE joyState{};
+	if (Input::GetInstance()->GetJoystickState(joyState)) {
 
-	if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
-		sceneNo_ = GAME;
+		Input::GetInstance()->UpdateButtonState(a_, joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A);
+
+		if (a_.isPressed && !a_.wasPressed) {
+			sceneNo_ = GAME;
+		}
+
 	}
 
 	camera_.UpdateMatrix();

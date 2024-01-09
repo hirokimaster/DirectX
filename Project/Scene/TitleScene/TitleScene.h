@@ -19,4 +19,5 @@ private:
 	WorldTransform worldTransform_;
 	std::unique_ptr<Sprite> sprite_;
 	uint32_t texHandle_ = 0;
+	Input::ButtonState a_{};
 };
