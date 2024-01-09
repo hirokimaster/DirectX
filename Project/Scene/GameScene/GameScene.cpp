@@ -27,6 +27,12 @@ void GameScene::Initialize() {
 	Vector3 playerPos = { 0,0,0 };
 	player_->Initialize(modelPlayer_.get(),playerPos, texHandlePlayer_);
 	player_->SetParent(&railCamera_->GetWorldTransform());
+	for (int i = 0; i < 3; ++i) {
+		hp_[i].reset(Sprite::Create({1000.0f + i * 60.0f, 30.0f}, {50.0f,50.0f}, {0.5f,0.5f}));
+	}
+
+	playerLife_ = 3;
+	
 	/*------------------------
 			天球
 	--------------------------*/
@@ -74,10 +80,9 @@ void GameScene::Update() {
 			(*playerBulletsItr)->OnCollision();
 		}
 		sceneNo_ = GAMEOVER;
-		playerLife_ = 3;
-		
+
 	}
-	
+
 	CheckAllCollisions();
 	skydome_->Update();
 	railCamera_->Update();
@@ -97,6 +102,24 @@ void GameScene::Draw(){
 	skydome_->Draw(camera_);
 
 	player_->DrawUI(camera_);
+
+	if (playerLife_ == 3) {
+		for (int i = 0; i < 3; ++i) {
+			hp_[i]->Draw(camera_, texHandlePlayer_);
+		}
+	}
+	else if (playerLife_ == 2) {
+		for (int i = 0; i < 2; ++i) {
+			hp_[i]->Draw(camera_, texHandlePlayer_);
+		}
+	}
+	else {
+		for (int i = 0; i < 1; ++i) {
+			hp_[i]->Draw(camera_, texHandlePlayer_);
+		}
+	}
+	
+
 }
 
 void GameScene::CheckAllCollisions()

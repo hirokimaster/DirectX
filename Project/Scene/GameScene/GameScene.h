@@ -56,6 +56,7 @@ private: // メンバ変数
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<Model> modelSkydome_;
 	std::unique_ptr<RailCamera> railCamera_;
+	std::unique_ptr<Sprite> hp_[3];
 	uint32_t texHandlePlayer_ = 0;
 	uint32_t texHandleEnemy_ = 0;
 	uint32_t texHandleSkydome_ = 0;
