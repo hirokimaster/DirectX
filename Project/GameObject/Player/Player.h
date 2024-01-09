@@ -33,6 +33,8 @@ public:
 
 	void SetParent(const WorldTransform* parent);
 
+	void Reticle(const Camera& camera, const Vector2& pos);
+
 private:
 
 	Model* model_ = nullptr;
