@@ -19,6 +19,13 @@ public:
 
 	void Attack();
 
+	void OnCollision();
+
+	// 弾リストを取得
+	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() const { return bullets_; }
+
+	Vector3 GetWorldPosition();
+
 private:
 
 	Model* model_ = nullptr;

@@ -15,6 +15,10 @@ public:
 	// 弾のデスフラグ
 	bool IsDead() const { return isDead_; }
 
+	void OnCollision();
+
+	Vector3 GetWorldPosition();
+
 private:
 	WorldTransform worldTransform_;
 	std::unique_ptr<Model> model_;

@@ -10,6 +10,8 @@ enum class Phase {
 
 };
 
+class Player;
+
 class Enemy{
 public:
 
@@ -37,12 +39,22 @@ public:
 	// 状態変更
 	void changeState(IPhaseStateEnemy* newState);
 
+	void OnCollision();
+
+	// 弾リストを取得
+	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() const { return bullets_; }
+
 	// getter
 	Vector3 GetVelocity() { return velocity_; }
 	Vector3 GetPosition() { return worldTransform_.translate; }
+	Vector3 GetWorldPosition();
+
 
 	// setter
 	void SetVelocity(Vector3 velocity) {velocity_ = velocity; }
+	// Playerを借りる
+	void SetPlayer(Player* player) { player_ = player; }
+
 
 private:
 	WorldTransform worldTransform_;
@@ -52,6 +64,7 @@ private:
 	int32_t shotTimer_ = 0;
 	Vector3 velocity_{};
 	IPhaseStateEnemy* phaseState_;
+	Player* player_ = nullptr;
 
 };
 
