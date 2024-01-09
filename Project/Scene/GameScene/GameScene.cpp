@@ -13,7 +13,7 @@ void GameScene::Initialize() {
 	------------------------------*/
 	texHandlePlayer_ = TextureManager::Load("resources/uvChecker.png");
 	texHandleEnemy_ = TextureManager::Load("resources/circle.png");
-	texHandleSkydome_ = TextureManager::Load("resources/skydome.jpg");
+	texHandleSkydome_ = TextureManager::Load("resources/bg.jpg");
 	/*----------------------------
 		 レールカメラ
 	------------------------------*/
@@ -53,6 +53,7 @@ void GameScene::Update() {
 	}
 	
 	CheckAllCollisions();
+	skydome_->Update();
 	railCamera_->Update();
 	camera_.UpdateMatrix();
 
@@ -66,6 +67,8 @@ void GameScene::Draw(){
 	for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
 		(*enemysItr_)->Draw(camera_);
 	}
+
+	skydome_->Draw(camera_);
 
 	player_->DrawUI(camera_);
 }
