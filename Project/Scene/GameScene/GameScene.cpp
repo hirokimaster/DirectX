@@ -27,14 +27,6 @@ void GameScene::Initialize() {
 	Vector3 playerPos = { 0,0,0 };
 	player_->Initialize(modelPlayer_.get(),playerPos, texHandlePlayer_);
 	player_->SetParent(&railCamera_->GetWorldTransform());
-	/*----------------------------
-			   エネミー
-	------------------------------*/
-	//std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>();
-	
-	/*enemy->Initialize(modelEnemy_.get(), {0,0,50.0f}, texHandleEnemy_);
-	enemy->SetPlayer(player_.get());
-	enemys_.push_back(std::move(enemy));*/
 	/*------------------------
 			天球
 	--------------------------*/

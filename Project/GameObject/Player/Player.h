@@ -45,4 +45,5 @@ private:
 	WorldTransform worldTransform3DReticle_;
     std::unique_ptr<Sprite> sprite2DReticle_;
 	uint32_t textureReticle_ = 0;
+	Input::ButtonState r_{};
 };

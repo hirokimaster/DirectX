@@ -101,14 +101,6 @@ void Player::Update(const Camera& camera)
 	// レティクル
 	Reticle(camera, Vector2((float)spritePosition.x, (float)spritePosition.y));
 
-	
-	// ImGui
-	ImGui::Begin("Player");
-	ImGui::Text(
-		"Player X[%.03f].Y[%.03f].Z[%.03f]", worldTransform_.translate.x,
-		worldTransform_.translate.y, worldTransform_.translate.z);
-	ImGui::End();
-
 	worldTransform_.UpdateMatrix();
 }
 
@@ -137,24 +129,29 @@ void Player::Attack() {
 		return;
 	}
 
-	// Rトリガーを押していたら
-	if (joyState.Gamepad.wButtons& XINPUT_GAMEPAD_RIGHT_SHOULDER) {
-		// 弾の速度
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity = { 0,0,kBulletSpeed };
-		// 自機から照準オブジェクトのベクトル
-		Vector3 WorldPos = GetWorldPosition();
-		Vector3 ReticleWorldPos = GetWorldPosition3DReticle();
-		velocity = Subtract(ReticleWorldPos, WorldPos);
-		velocity = Normalize(velocity);
-		velocity = Multiply(kBulletSpeed, velocity);
-		// プレイヤーの向きに速度を合わせる
-		velocity = TransformNormal(velocity, worldTransform_.matWorld);
-		// 弾を生成し、初期化
-		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
-		bullet->Initialize(worldTransform_.translate, velocity);
-		// 弾をセット
-		bullets_.push_back(std::move(bullet));
+	// ゲームパッドの状態を得る変数(XINPUT)
+	if (Input::GetInstance()->GetJoystickState(joyState)) {
+
+		Input::GetInstance()->UpdateButtonState(r_, joyState.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER);
+
+		if (r_.isPressed && !r_.wasPressed) {
+			// 弾の速度
+			const float kBulletSpeed = 1.0f;
+			Vector3 velocity = { 0,0,kBulletSpeed };
+			// 自機から照準オブジェクトのベクトル
+			Vector3 WorldPos = GetWorldPosition();
+			Vector3 ReticleWorldPos = GetWorldPosition3DReticle();
+			velocity = Subtract(ReticleWorldPos, WorldPos);
+			velocity = Normalize(velocity);
+			velocity = Multiply(kBulletSpeed, velocity);
+			// プレイヤーの向きに速度を合わせる
+			velocity = TransformNormal(velocity, worldTransform_.matWorld);
+			// 弾を生成し、初期化
+			std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
+			bullet->Initialize(worldTransform_.translate, velocity);
+			// 弾をセット
+			bullets_.push_back(std::move(bullet));
+		}
 	}
 }
 
