@@ -7,7 +7,9 @@
 #include "Vector4.h"
 
 struct Quaternion {
-	Vector3 vec;
+	float x;
+	float y;
+	float z;
 	float w;
 };
 
@@ -87,12 +89,8 @@ Vector3 operator-(const Vector3& a, const Vector3& b);
 
 Vector3 operator-(const Vector3& a, const float& b);
 
-Vector3 operator*(const Vector3& a, const Vector3& b);
-
 Vector3 operator*(const float& a, const Vector3& b);
 
 Vector3 operator/(const Vector3& a, const float& b);
-
-Quaternion operator/(const Quaternion& q, const float& a);
 
 Vector3 operator*(const Vector3& vec, const Matrix4x4& mat);

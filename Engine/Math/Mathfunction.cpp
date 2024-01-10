@@ -546,8 +546,10 @@ Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to)
 Quaternion Multiply(const Quaternion& lhs, const Quaternion& rhs)
 {
 	Quaternion result{};
-	result.w = (lhs.w * rhs.w) - (Dot(lhs.vec, rhs.vec));
-	result.vec = (Cross(lhs.vec, rhs.vec)) + (rhs.w * lhs.vec) + (lhs.w * rhs.vec);
+	result.w = lhs.w * rhs.w - lhs.x * rhs.x - rhs.y * lhs.y - lhs.z * rhs.z;
+	result.x = lhs.y * rhs.z - lhs.z * rhs.y + rhs.w * lhs.x + lhs.w * rhs.x;
+	result.y = lhs.z * rhs.x - lhs.x * rhs.z + rhs.w * lhs.y + lhs.w * rhs.y;
+	result.z = lhs.x * rhs.y - lhs.y * rhs.x + rhs.w * lhs.z + lhs.w * rhs.z;
 	return result;
 }
 
@@ -555,25 +557,28 @@ Quaternion IdentityQuaternion()
 {
 	Quaternion result{};
 	result.w = 1.0f;
-	result.vec = 0.0f * result.vec;
-
+	result.x = 0.0f;
+	result.y = 0.0f;
+	result.z = 0.0f;
 	return result;
 }
 
 Quaternion Conjugate(const Quaternion& quaternion)
 {
 	Quaternion result{};
-	result.vec = -1.0f * quaternion.vec;
 	result.w = 1.0f;
+	result.x = quaternion.x * -1.0f;
+	result.y = quaternion.y * -1.0f;
+	result.z = quaternion.z * -1.0f;
 	return result;
 }
 
 float Norm(const Quaternion& quaternion)
 {
 	float result{};
-	result = sqrtf(quaternion.vec.x * quaternion.vec.x +
-		quaternion.vec.y * quaternion.vec.y + 
-		quaternion.vec.z * quaternion.vec.z + 
+	result = sqrtf(quaternion.x * quaternion.x +
+		quaternion.y * quaternion.y + 
+		quaternion.z * quaternion.z + 
 	quaternion.w * quaternion.w);
 	return result;
 }
@@ -581,17 +586,23 @@ float Norm(const Quaternion& quaternion)
 Quaternion QNormalize(const Quaternion& quaternion)
 {
 	Quaternion result{};
-	result.vec = quaternion.vec / Norm(quaternion);
 	result.w = quaternion.w / Norm(quaternion);
-
+	result.x = quaternion.x / Norm(quaternion);
+	result.y = quaternion.y / Norm(quaternion);
+	result.z = quaternion.z / Norm(quaternion);
 	return result;
 }
 
 Quaternion QInverse(const Quaternion& quaternion)
 {
 	Quaternion result{};
+	Quaternion q{};
 	float n = Norm(quaternion) * Norm(quaternion);
-	result = Conjugate(quaternion) / n;
+	q = Conjugate(quaternion);
+	result.w = q.w / n;
+	result.x = q.x / n;
+	result.y = q.y / n;
+	result.z = q.z / n;
 
 	return result;
 }
@@ -611,7 +622,7 @@ void MatrixScreenPrintf(Matrix4x4 matrix, const char* name)
 void QuaternionScreenPrint(Quaternion q, const char* name)
 {
 	ImGui::Begin(name);
-	ImGui::Text("%.3f %.3f %.3f %.3f\n", q.vec.x, q.vec.y, q.vec.z, q.w);
+	ImGui::Text("%.3f %.3f %.3f %.3f\n", q.x, q.y, q.z, q.w);
 	ImGui::End();
 }
 
@@ -639,12 +650,6 @@ Vector3 operator-(const Vector3& a, const float& b) {
 	return c;
 }
 
-Vector3 operator*(const Vector3& a, const Vector3& b) {
-	Vector3 c = { a.x * b.x, a.y * b.y, a.z * b.z };
-
-	return c;
-}
-
 Vector3 operator*(const float& a, const Vector3& b) {
 	Vector3 c = { a * b.x,a * b.y,a * b.z };
 
@@ -656,14 +661,6 @@ Vector3 operator/(const Vector3& a, const float& b)
 	Vector3 c = { a.x / b , a.y / b, a.z / b };
 
 	return c;
-}
-
-Quaternion operator/(const Quaternion& q, const float& a)
-{
-	Quaternion result{};
-	result.vec = q.vec / a;
-	result.w = q.w / a;
-	return result;
 }
 
 Vector3 operator*(const Vector3& vec, const Matrix4x4& mat) {
