@@ -39,13 +39,13 @@ public: // メンバ関数
 	void Draw();
 
 private: // メンバ変数
-	std::unique_ptr<Model> model_;
+	/*std::unique_ptr<Model> model_;
 	std::unique_ptr<Model> model;
 	ViewProjection view_{};
 	WorldTransform worldTransform_{};
 	WorldTransform w{};
 	uint32_t tex_ = 0;
 	uint32_t t = 0;
-	bool a = false;
+	bool a = false;*/
 	//PointLight Light_;
 };

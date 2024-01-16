@@ -60,9 +60,6 @@ public:
 	// lightの設定
 	PointLight SetPointLightProperty(PointLight pointLight) { return *pointLightData_ = pointLight; }
 
-	PointLight Light_;
-
-
 private:
 
 	/// <summary>
