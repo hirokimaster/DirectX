@@ -85,6 +85,8 @@ Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle);
 Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion);
 // quaternionから回転行列を求める
 Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion);
+// 球面線形補間
+Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);
 
 void MatrixScreenPrintf(Matrix4x4 matrix, const char* name);
 

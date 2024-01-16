@@ -686,6 +686,32 @@ Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion)
 	return result;
 }
 
+Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t)
+{
+	Quaternion result{};
+	Vector3 q0Vec = { q0.x,q0.y,q0.z };
+	Vector3 q1Vec = { q1.x,q1.y,q1.z };
+	float q0W = q0.w;
+	float dot = Dot(q0Vec, q1Vec) + q0.w * q1.w;
+	if (dot < 0) {
+		q0Vec = -1.0f * q0Vec;
+		q0W = -1.0f * q0W;
+		dot = -1.0f * dot;
+	}
+	
+	float theta = std::acos(dot);
+
+	float scale0 = std::sin((1.0f - t) * theta) / std::sin(theta);
+	float scale1 = std::sin(t * theta) / std::sin(theta);
+
+	result.x = scale0 * q0Vec.x + scale1 * q1Vec.x;
+	result.y = scale0 * q0Vec.y + scale1 * q1Vec.y;
+	result.z = scale0 * q0Vec.z + scale1 * q1Vec.z;
+	result.w = scale0 * q0W + scale1 * q1.w;
+
+	return 	result;
+}
+
 void MatrixScreenPrintf(Matrix4x4 matrix, const char* name)
 {
 	ImGui::Begin(name);
