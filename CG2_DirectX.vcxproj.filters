@@ -290,6 +290,8 @@
     </FxCompile>
     <FxCompile Include="Engine\ShaderFile\Particle.VS.hlsl" />
     <FxCompile Include="Engine\ShaderFile\Particle.PS.hlsl" />
+    <FxCompile Include="Engine\ShaderFile\PointLight.VS.hlsl" />
+    <FxCompile Include="Engine\ShaderFile\PointLight.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\ShaderFile\Object3d.hlsli">

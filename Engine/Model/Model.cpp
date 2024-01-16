@@ -17,13 +17,13 @@ void Model::Initialize(IModelState* state)
 
 void Model::InitializeObj(const std::string& filename)
 {
-	modelData_ = LoadObjFile("resources",filename);
+	modelData_ = LoadObjFile("resources", filename);
 
 	// VertexResource
 	resource_.vertexResource = CreateResource::CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 	// VertexBufferView
 	// 頂点バッファビューを作成する
-	
+
 	// リソースの先頭のアドレスから使う
 	objVertexBufferView_.BufferLocation = resource_.vertexResource->GetGPUVirtualAddress();
 	// 使用するリソースのサイズは頂点サイズ
@@ -42,6 +42,11 @@ void Model::InitializeObj(const std::string& filename)
 	resource_.materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	materialData_->enableLighting = false;
+	materialData_->shininess = 70.0f;
+
+	resource_.cameraResource = CreateResource::CreateBufferResource(sizeof(Camera));
+	resource_.cameraResource->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
+	cameraData_->worldPosition = { 0.0f,10.0f,-40.0f };
 
 	resource_.wvpResource = CreateResource::CreateBufferResource(sizeof(TransformationMatrix));
 
@@ -53,6 +58,15 @@ void Model::InitializeObj(const std::string& filename)
 	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData_->direction = Normalize({ 0.0f, -1.0f, 0.0f });
 	directionalLightData_->intensity = 1.0f;
+
+	resource_.pointLightResource = CreateResource::CreateBufferResource(sizeof(PointLight));
+	resource_.pointLightResource->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
+	pointLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	pointLightData_->position = { 0.0f,10.0f,0.0f };
+	pointLightData_->intensity = 1.0f;
+	pointLightData_->radius = 12.0f;
+	pointLightData_->decay = 0.6f;
+
 
 }
 
