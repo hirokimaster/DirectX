@@ -14,7 +14,7 @@ void GameScene::Initialize() {
 // 更新
 void GameScene::Update() {
 	Quaternion rotation0_ = MakeRotateAxisAngleQuaternion({ 0.71f,0.71f,0.0f }, 0.3f);
-	Quaternion rotation1_ = MakeRotateAxisAngleQuaternion({ 0.71f,0.0f,0.71f }, 3.141592f);
+	Quaternion rotation1_ = { -rotation0_.x,-rotation0_.y,-rotation0_.z,-rotation0_.w };
 	Quaternion interpolate0 = Slerp(rotation0_, rotation1_, 0.0f);
 	Quaternion interpolate1 = Slerp(rotation0_, rotation1_, 0.3f);
 	Quaternion interpolate2 = Slerp(rotation0_, rotation1_, 0.5f);

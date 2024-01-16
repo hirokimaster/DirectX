@@ -704,10 +704,18 @@ Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t)
 	float scale0 = std::sin((1.0f - t) * theta) / std::sin(theta);
 	float scale1 = std::sin(t * theta) / std::sin(theta);
 
-	result.x = scale0 * q0Vec.x + scale1 * q1Vec.x;
-	result.y = scale0 * q0Vec.y + scale1 * q1Vec.y;
-	result.z = scale0 * q0Vec.z + scale1 * q1Vec.z;
-	result.w = scale0 * q0W + scale1 * q1.w;
+	if (dot >= 1.0f - std::numeric_limits<float>::epsilon()) {
+		result.x = (1.0f - t) * q0Vec.x + t * q1Vec.x;
+		result.y = (1.0f - t) * q0Vec.y + t * q1Vec.y;
+		result.z = (1.0f - t) * q0Vec.z + t * q1Vec.z;
+		result.w = (1.0f - t) * q0W + t * q1.w;
+	}
+	else {
+		result.x = scale0 * q0Vec.x + scale1 * q1Vec.x;
+		result.y = scale0 * q0Vec.y + scale1 * q1Vec.y;
+		result.z = scale0 * q0Vec.z + scale1 * q1Vec.z;
+		result.w = scale0 * q0W + scale1 * q1.w;
+	}
 
 	return 	result;
 }
