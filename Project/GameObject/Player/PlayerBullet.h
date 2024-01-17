@@ -1,7 +1,8 @@
 #pragma once
 #include "Model/Model.h"
+#include "CollisionManager/Collider/Collider.h"
 
-class PlayerBullet{
+class PlayerBullet : public Collider{
 public:
 
 	void Initialize(const Vector3& position, const Vector3& velocity);
@@ -11,6 +12,10 @@ public:
 	void Draw(const Camera& camera);
 
 	bool IsDead() const { return isDead_; }
+
+	Vector3 GetWorldPosition()override;
+
+	void OnCollision()override;
 
 private:
 

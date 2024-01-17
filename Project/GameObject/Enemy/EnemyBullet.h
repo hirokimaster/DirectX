@@ -1,7 +1,10 @@
 #pragma once
 #include "Model/Model.h"
+#include "CollisionManager/Collider/Collider.h"
 
-class EnemyBullet{
+class Player;
+
+class EnemyBullet : public Collider{
 public:
 	// 初期化
 	void Initialize(const Vector3& position, const Vector3& velocity);
@@ -15,6 +18,14 @@ public:
 	// 弾のデスフラグ
 	bool IsDead() const { return isDead_; }
 
+	void OnCollision()override;
+
+	//setter
+	void SetPlayer(Player* player) { player_ = player; }
+
+	// getter
+	Vector3 GetWorldPosition()override;
+
 private:
 	WorldTransform worldTransform_;
 	std::unique_ptr<Model> model_;
@@ -25,5 +36,6 @@ private:
 	int32_t deathTimer_ = kLifeTime;
 	// デスフラグ
 	bool isDead_ = false;
+	Player* player_ = nullptr;
 };
 

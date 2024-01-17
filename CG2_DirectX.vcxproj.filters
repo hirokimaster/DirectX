@@ -49,6 +49,9 @@
     <ClCompile Include="Project\GameObject\Enemy\PhaseState\EnemyStateLeave.cpp" />
     <ClCompile Include="Project\GameObject\Enemy\EnemyBullet.cpp" />
     <ClCompile Include="Project\TimedCall\TimedCall.cpp" />
+    <ClCompile Include="Engine\Utility\CollisionManager\CollisionManager.cpp" />
+    <ClCompile Include="Project\GameObject\RailCamera\RailCamera.cpp" />
+    <ClCompile Include="Project\GameObject\Skydome\Skydome.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\Audio.h" />
@@ -97,6 +100,11 @@
     <ClInclude Include="Project\GameObject\Enemy\PhaseState\EnemyStateLeave.h" />
     <ClInclude Include="Project\GameObject\Enemy\EnemyBullet.h" />
     <ClInclude Include="Project\TimedCall\TimedCall.h" />
+    <ClInclude Include="Engine\Utility\CollisionManager\Collider\Collider.h" />
+    <ClInclude Include="Engine\Utility\CollisionManager\Collider\ColliderConfig.h" />
+    <ClInclude Include="Engine\Utility\CollisionManager\CollisionManager.h" />
+    <ClInclude Include="Project\GameObject\RailCamera\RailCamera.h" />
+    <ClInclude Include="Project\GameObject\Skydome\Skydome.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\ShaderFile\Object3d.hlsli" />

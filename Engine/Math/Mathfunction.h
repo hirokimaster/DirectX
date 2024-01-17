@@ -77,6 +77,14 @@ float Dot(const Vector3& v1, const Vector3& v2);
 // ベクトル変換
 Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
+// Lerp
+Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t);
+
+// SLerp
+Vector3 SLerp(const Vector3& v1, const Vector3& v2, float t);
+
+Vector3 TransformMove(const Vector3& translate, const Vector3& move);
+
 //Vector3 operator-(const Vector3& v) { return { -v.x, -v.y, -v.z }; }
 //
 //Vector3 operator+(const Vector3& v) { return v; }

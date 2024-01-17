@@ -8,12 +8,15 @@ Player::~Player()
 {
 }
 
-void Player::Initialize(Model* model, uint32_t texHandle)
+void Player::Initialize(Model* model, Vector3 position, uint32_t texHandle)
 {
 	assert(model);
 	model_ = model;
 	model_->SetTexHandle(texHandle);
 	worldTransform_.Initialize();
+	worldTransform_.translate = position;
+	SetCollosionAttribute(kCollisionAttributePlayer);
+	SetCollisionMask(kCollisionAttributeEnemy);
 
 }
 
@@ -102,10 +105,26 @@ void Player::Attack() {
 		velocity = TransformNormal(velocity, worldTransform_.matWorld);
 		// 弾を生成し、初期化
 		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
-		bullet->Initialize(worldTransform_.translate, velocity);
+		bullet->Initialize(GetWorldPosition(), velocity);
 		// 弾をセット
 		bullets_.push_back(std::move(bullet));
 	}
+}
+
+void Player::OnCollision()
+{
+}
+
+Vector3 Player::GetWorldPosition()
+{
+	// ワールド座標を入れる変数
+	Vector3 worldPos;
+	// ワールド行列の平行移動成分を取得（ワールド座標）
+	worldPos.x = worldTransform_.matWorld.m[3][0];
+	worldPos.y = worldTransform_.matWorld.m[3][1];
+	worldPos.z = worldTransform_.matWorld.m[3][2];
+
+	return worldPos;
 }
 
 void Player::Draw(const Camera& camera)
