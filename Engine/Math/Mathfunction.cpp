@@ -470,6 +470,30 @@ Vector3 TransformMove(const Vector3& translate, const Vector3& move)
 	return result;
 }
 
+Vector3 CatmullRom(const std::vector<Vector3>& points, float t) {
+	int numPoints = static_cast<int>(points.size());
+
+	float t2 = t * t;
+	float t3 = t2 * t;
+
+	int p0 = (static_cast<int>(t) - 1 + numPoints) % numPoints;
+	int p1 = (static_cast<int>(t) + numPoints) % numPoints;
+	int p2 = (static_cast<int>(t) + 1 + numPoints) % numPoints;
+	int p3 = (static_cast<int>(t) + 2 + numPoints) % numPoints;
+
+	float b0 = 0.5 * (-t3 + 2 * t2 - t);
+	float b1 = 0.5 * (3 * t3 - 5 * t2 + 2);
+	float b2 = 0.5 * (-3 * t3 + 4 * t2 + t);
+	float b3 = 0.5 * (t3 - t2);
+
+	float x = points[p0].x * b0 + points[p1].x * b1 + points[p2].x * b2 + points[p3].x * b3;
+	float y = points[p0].y * b0 + points[p1].y * b1 + points[p2].y * b2 + points[p3].y * b3;
+	float z = points[p0].z * b0 + points[p1].z * b1 + points[p2].z * b2 + points[p3].z * b3;
+
+	return Vector3(x, y, z);
+}
+
+
 //Vector3 operator+(const Vector3& a, const Vector3& b) {
 //	Vector3 c = { a.x + b.x,a.y + b.y ,a.z + b.z };
 //

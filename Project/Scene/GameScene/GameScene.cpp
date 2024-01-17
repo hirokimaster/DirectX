@@ -45,6 +45,14 @@ void GameScene::Initialize() {
 	------------------------------*/
 	railCamera_ = std::make_unique<RailCamera>();
 	railCamera_->Initialize({ 0,0,0 }, { 0,0,0 });
+	controlPoints_ = {
+		{0,0,0},
+		{10.0f,10.0f,0},
+		{10.0f,15.0f,0},
+		{20.0f,15.0f,0},
+		{20.0f,0,0},
+		{30.0f,0,0}
+	};
 }
 
 // 更新
@@ -67,6 +75,15 @@ void GameScene::Draw(){
 	player_->Draw(camera_);
 	enemy_->Draw(camera_);
 	skydome_->Draw(camera_);
+
+	std::vector<Vector3> pointsDrawing;
+	const size_t segmentCount = 100;
+	for (size_t i = 0; i < segmentCount + 1; ++i) {
+		float t = 1.0f / segmentCount * i;
+		Vector3 pos = CatmullRom(controlPoints_, t);
+		pointsDrawing.push_back(pos);
+	}
+
 
 	ImGui::Begin("Camera2");
 	ImGui::SliderFloat3("CmeraTranslation2 ", &camera_.translate.x, -50.0f, 50.0f);

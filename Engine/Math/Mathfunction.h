@@ -2,6 +2,7 @@
 #include "Matrix4x4.h"
 #include "Vector3.h"
 #include <cassert>
+#include <vector>
 
 struct AABB {
 	Vector3 min; // 最小点
@@ -84,6 +85,8 @@ Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t);
 Vector3 SLerp(const Vector3& v1, const Vector3& v2, float t);
 
 Vector3 TransformMove(const Vector3& translate, const Vector3& move);
+
+Vector3 CatmullRom(const std::vector<Vector3>& points, float t);
 
 //Vector3 operator-(const Vector3& v) { return { -v.x, -v.y, -v.z }; }
 //

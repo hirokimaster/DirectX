@@ -56,4 +56,5 @@ private: // メンバ変数
 	uint32_t texHandlePlayer_ = 0;
 	uint32_t texHandleEnemy_ = 0;
 	uint32_t texHandleSkydome_ = 0;
+	std::vector<Vector3> controlPoints_;
 };
