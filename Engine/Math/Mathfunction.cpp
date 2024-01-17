@@ -412,6 +412,11 @@ float Dot(const Vector3& v1, const Vector3& v2) {
 	return result;
 }
 
+std::pair<Vector3, Vector3> ComputeCollisionVelocities(float mass1, const Vector3& velo1, float mass2, const Vector3& velo2, float coefficient0fRestitution, const Vector3& normal)
+{
+	Vector3 project1 =
+}
+
 //Vector3 operator+(const Vector3& a, const Vector3& b) {
 //	Vector3 c = { a.x + b.x,a.y + b.y ,a.z + b.z };
 //

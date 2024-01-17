@@ -71,6 +71,11 @@ Vector3 Subtract(const Vector3& v1, const Vector3& v2);
 // 内積
 float Dot(const Vector3& v1, const Vector3& v2);
 
+
+
+std::pair<Vector3, Vector3> ComputeCollisionVelocities(float mass1, const Vector3& velo1, float mass2, const Vector3& velo2,
+	float coefficient0fRestitution, const Vector3& normal);
+
 //Vector3 operator-(const Vector3& v) { return { -v.x, -v.y, -v.z }; }
 //
 //Vector3 operator+(const Vector3& v) { return v; }
