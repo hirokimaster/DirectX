@@ -10,6 +10,12 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+struct Node {
+	Matrix4x4 localMatrix;
+	std::string name;
+	std::vector<Node> children;
+};
+
 struct MaterialData {
 	std::string textureFilePath;
 };
@@ -17,6 +23,7 @@ struct MaterialData {
 struct ModelData {
 	std::vector<VertexData> vertices;
 	MaterialData material;
+	Node rootNode;
 };
 
 class Model {
@@ -31,6 +38,8 @@ public:
 
 	void InitializeObj(const std::string& filename);
 
+	void InitializeGLTF(const std::string& filename);
+
 	/// <summary>
 	/// モデル生成
 	/// </summary>
@@ -44,6 +53,10 @@ public:
 	/// <returns></returns>
 	static Model* CreateObj(const std::string& filename);
 
+	static Model* CreateGFTF(const std::string& filename);
+
+	Node ReadNode(aiNode* node);
+
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -53,6 +66,8 @@ public:
 	/// Objの描画
 	/// </summary>
 	void Draw(WorldTransform worldTransform, Camera camera);
+
+	void DrawGLTF(WorldTransform worldTransform, Camera camera);
 
 	// setter
 	void SetTexHandle(uint32_t texHandle) { texHandle_ = texHandle; }
@@ -74,6 +89,14 @@ public:
 	/// <param name="filename"></param>
 	/// <returns></returns>
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
+
+	/// <summary>
+	/// GLTFファイルを読む
+	/// </summary>
+	/// <param name="directoryPath"></param>
+	/// <param name="filename"></param>
+	/// <returns></returns>
+	ModelData LoadGLTFFile(const std::string& directoryPath, const std::string& filename);
 
 	/// <summary>
 	/// mtlファイルを読む
