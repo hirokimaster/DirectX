@@ -26,6 +26,8 @@ Matrix4x4 MakeRotateYMatrix(float radian);
 // Z軸
 Matrix4x4 MakeRotateZMatrix(float radian);
 
+Matrix4x4 MakeRotateMatrix(const Vector3& rotate);
+
 // アフィン変換
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vector3& translate);
 
@@ -70,6 +72,8 @@ Vector3 Subtract(const Vector3& v1, const Vector3& v2);
 
 // 内積
 float Dot(const Vector3& v1, const Vector3& v2);
+
+Matrix4x4 operator*(const Matrix4x4& other, const Matrix4x4& other2);
 
 //Vector3 operator-(const Vector3& v) { return { -v.x, -v.y, -v.z }; }
 //

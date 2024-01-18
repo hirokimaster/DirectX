@@ -5,7 +5,6 @@
 #include "Mathfunction.h"
 #include "CreateResource.h"
 #include "Camera/Camera.h"
-#include "Model/Model.h"
 
 
 struct TransformationMatrix {
@@ -31,7 +30,7 @@ struct WorldTransform {
 
 	void STransferMatrix(Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, Camera& camera);
 
-	void GLTFTransferMatrix(Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, ModelData& modelData, Camera& camera);
+	//void GLTFTransferMatrix(Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, ModelData& modelData, Camera& camera);
 
 	void UpdateMatrix();
 	

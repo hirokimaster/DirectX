@@ -205,7 +205,7 @@ void Model::Draw(WorldTransform worldTransform, Camera camera)
 
 void Model::DrawGLTF(WorldTransform worldTransform, Camera camera)
 {
-	worldTransform.GLTFTransferMatrix(resource_.wvpResource, modelData_, camera);
+	worldTransform.TransferMatrix(resource_.wvpResource, camera);
 
 	Property property = GraphicsPipeline::GetInstance()->GetPSO().Object3D;
 
@@ -317,6 +317,69 @@ ModelData Model::LoadGLTFFile(const std::string& directoryPath, const std::strin
 	modelData.rootNode = ReadNode(scene->mRootNode);
 
 	return modelData;
+}
+
+void Model::InitializeAnimation(const aiAnimation* animation)
+{
+	animationData_.keyframeTransforms.clear();
+	animationData_.animationDuration = static_cast<float>(animation->mDuration);
+	animationData_.currentTime = 0.0f;
+
+	for (uint32_t boneIndex = 0; boneIndex < animation->mNumChannels; ++boneIndex) {
+		const aiNodeAnim* channel = animation->mChannels[boneIndex];
+		std::vector<Matrix4x4> keyframeTransforms;
+
+		for (uint32_t keyframeIndex = 0; keyframeIndex < channel->mNumPositionKeys; ++keyframeIndex) {
+			const aiVectorKey& positionKey = channel->mPositionKeys[keyframeIndex];
+			const aiQuatKey& rotationKey = channel->mRotationKeys[keyframeIndex];
+			const aiVectorKey& scalingKey = channel->mScalingKeys[keyframeIndex];
+
+			Matrix4x4 transform{};
+			transform = MakeTranslateMatrix({ positionKey.mValue.x, positionKey.mValue.y, positionKey.mValue.z });
+			transform = MakeRotateMatrix({ rotationKey.mValue.x, rotationKey.mValue.y, rotationKey.mValue.z });
+			transform = MakeScaleMatrix({ scalingKey.mValue.x, scalingKey.mValue.y, scalingKey.mValue.z });
+
+			keyframeTransforms.push_back(transform);
+		}
+
+		animationData_.keyframeTransforms.push_back(keyframeTransforms);
+	}
+}
+
+void Model::UpdateAnimation(float deltaTime)
+{
+	animationData_.currentTime += deltaTime;
+
+	if (animationData_.currentTime > animationData_.animationDuration) {
+		animationData_.currentTime = fmod(animationData_.currentTime, animationData_.animationDuration);
+	}
+
+	for (uint32_t boneIndex = 0; boneIndex < animationData_.keyframeTransforms.size(); ++boneIndex) {
+		uint32_t keyframeIndex = static_cast<uint32_t>(animationData_.currentTime / animationData_.animationDuration * animationData_.keyframeTransforms[boneIndex].size());
+		keyframeIndex = std::min(keyframeIndex, static_cast<uint32_t>(animationData_.keyframeTransforms[boneIndex].size()) - 1);
+
+		Matrix4x4 transform = animationData_.keyframeTransforms[boneIndex][keyframeIndex];
+	}
+
+}
+
+void Model::UpdateBoneTransform(const aiNode* node, const Matrix4x4& parentTransform)
+{
+	// ボーンの名前を元にボーンを検索
+	auto it = std::find_if(bones_.begin(), bones_.end(), [&](const Bone& bone) {
+		return bone.name == node->mName.C_Str();
+		});
+
+	if (it != bones_.end()) {
+		// ボーンが見つかった場合、変換行列を更新
+		Bone& bone = *it;
+		bone.currentTransfrom = parentTransform * node->mTransformation * bone.offsetMatrix;
+	}
+
+	// 子ノードに再帰的に適用
+	for (uint32_t i = 0; i < node->mNumChildren; ++i) {
+		UpdateBoneTransform(node->mChildren[i], parentTransform);
+	}
 }
 
 MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename)

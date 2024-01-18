@@ -9,6 +9,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+	
 
 struct Node {
 	Matrix4x4 localMatrix;
@@ -24,6 +25,18 @@ struct ModelData {
 	std::vector<VertexData> vertices;
 	MaterialData material;
 	Node rootNode;
+};
+
+struct AnimationData {
+	std::vector<std::vector<Matrix4x4>> keyframeTransforms;
+	float animationDuration;
+	float currentTime;
+};
+
+struct Bone {
+	std::string name;
+	Matrix4x4 offsetMatrix;
+	Matrix4x4 currentTransfrom;
 };
 
 class Model {
@@ -98,6 +111,12 @@ public:
 	/// <returns></returns>
 	ModelData LoadGLTFFile(const std::string& directoryPath, const std::string& filename);
 
+	void InitializeAnimation(const aiAnimation* animation);
+
+	void UpdateAnimation(float deltaTime);
+
+	void UpdateBoneTransform(const aiNode* node, const Matrix4x4& parentTransform);
+
 	/// <summary>
 	/// mtlファイルを読む
 	/// </summary>
@@ -105,6 +124,10 @@ public:
 	/// <param name="filename"></param>
 	/// <returns></returns>
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
+
+	AnimationData animationData_;
+
+	std::vector<Bone> bones_;
 
 private: // メンバ変数
 

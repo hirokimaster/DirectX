@@ -171,6 +171,19 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
 	return result;
 }
 
+Matrix4x4 MakeRotateMatrix(const Vector3& rotate)
+{
+	Matrix4x4 result{};
+	Matrix4x4 rotateX = MakeRotateXMatrix(rotate.x);
+	Matrix4x4 rotateY = MakeRotateYMatrix(rotate.y);
+	Matrix4x4 rotateZ = MakeRotateZMatrix(rotate.z);
+
+	result = Multiply(Multiply(rotateX, rotateY),rotateZ);
+
+	return result;
+
+}
+
 // アフィン変換
 Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vector3& translate) {
 
@@ -411,6 +424,20 @@ float Dot(const Vector3& v1, const Vector3& v2) {
 	result = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 	return result;
 }
+
+ Matrix4x4 operator*(const Matrix4x4& other, const Matrix4x4& other2)	{
+	 Matrix4x4 result;
+	 for (int i = 0; i < 4; ++i) {
+		 for (int j = 0; j < 4; ++j) {
+			 result.m[i][j] = 0.0f;
+			 for (int k = 0; k < 4; ++k) {
+				 result.m[i][j] += other2.m[i][k] * other.m[k][j];
+			 }
+		 }
+	 }
+	 return result;
+}
+
 
 //Vector3 operator+(const Vector3& a, const Vector3& b) {
 //	Vector3 c = { a.x + b.x,a.y + b.y ,a.z + b.z };

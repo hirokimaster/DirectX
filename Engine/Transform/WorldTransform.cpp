@@ -25,14 +25,14 @@ void WorldTransform::STransferMatrix(Microsoft::WRL::ComPtr<ID3D12Resource>& wvp
 	wvp->World = worldMatrix;
 }
 
-void WorldTransform::GLTFTransferMatrix(Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, ModelData& modelData, Camera& camera)
-{
-	TransformationMatrix* wvp = {};
-	matWorld = Multiply(matWorld, Multiply(camera.matView, camera.matProjection));
-	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvp));
-	wvp->WVP = Multiply(modelData.rootNode.localMatrix, matWorld);
-	wvp->World = Multiply(modelData.rootNode.localMatrix, worldMatrix);
-}
+//void WorldTransform::GLTFTransferMatrix(Microsoft::WRL::ComPtr<ID3D12Resource>& wvpResource, ModelData& modelData, Camera& camera)
+//{
+//	TransformationMatrix* wvp = {};
+//	matWorld = Multiply(matWorld, Multiply(camera.matView, camera.matProjection));
+//	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvp));
+//	wvp->WVP = Multiply(modelData.rootNode.localMatrix, matWorld);
+//	wvp->World = Multiply(modelData.rootNode.localMatrix, worldMatrix);
+//}
 
 void WorldTransform::UpdateMatrix(){
 
