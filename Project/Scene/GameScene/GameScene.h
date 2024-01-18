@@ -40,5 +40,8 @@ public: // メンバ関数
 	void Draw()override;
 
 private: // メンバ変数
-
+	WorldTransform w;
+	Camera c;
+	std::unique_ptr<Model> m;
+	uint32_t t;
 };
