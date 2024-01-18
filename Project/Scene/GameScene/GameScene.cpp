@@ -9,7 +9,7 @@ GameScene::~GameScene() {
 // 初期化
 void GameScene::Initialize() {
 	t = TextureManager::Load("resources/AnimatedCube_BaseColor.png");
-	m.reset(Model::CreateGFTF("AnimatedCube.gltf"));
+	//m.reset(Model::CreateGFTF("AnimatedCube.gltf"));
 	m->SetTexHandle(t);
 	w.Initialize();
 	c.Initialize();
@@ -24,5 +24,5 @@ void GameScene::Update() {
 
 // 描画						  
 void GameScene::Draw(){
-	m->DrawGLTF(w, c);
+	//m->DrawGLTF(w, c);
 }
