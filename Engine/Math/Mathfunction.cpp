@@ -470,6 +470,14 @@ Vector3 TransformMove(const Vector3& translate, const Vector3& move)
 	return result;
 }
 
+Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, float t)
+{
+	float t2 = t * t;
+	float t3 = t2 * t;
+
+	Vector3 e3 = p0 * -1.0f 
+}
+
 Vector3 CatmullRom(const std::vector<Vector3>& points, float t) {
 	int numPoints = static_cast<int>(points.size());
 
@@ -494,35 +502,35 @@ Vector3 CatmullRom(const std::vector<Vector3>& points, float t) {
 }
 
 
-//Vector3 operator+(const Vector3& a, const Vector3& b) {
-//	Vector3 c = { a.x + b.x,a.y + b.y ,a.z + b.z };
-//
-//	return c;
-//}
-//
-//Vector3 operator+(const Vector3& a, const float& b) {
-//	Vector3 c = { a.x + b,a.y + b,a.z + b };
-//
-//	return c;
-//}
-//
-//Vector3 operator-(const Vector3& a, const Vector3& b) {
-//	Vector3 c = { a.x - b.x,a.y - b.y,a.z - b.z };
-//
-//	return c;
-//}
-//
-//Vector3 operator-(const Vector3& a, const float& b) {
-//	Vector3 c = { a.x - b,a.y - b,a.z - b };
-//
-//	return c;
-//}
-//
-//Vector3 operator*(const Vector3& a, const float& b) {
-//	Vector3 c = { a.x * b, a.y * b, a.z * b };
-//
-//	return c;
-//}
+Vector3 operator+(const Vector3& a, const Vector3& b) {
+	Vector3 c = { a.x + b.x,a.y + b.y ,a.z + b.z };
+
+	return c;
+}
+
+Vector3 operator+(const Vector3& a, const float& b) {
+	Vector3 c = { a.x + b,a.y + b,a.z + b };
+
+	return c;
+}
+
+Vector3 operator-(const Vector3& a, const Vector3& b) {
+	Vector3 c = { a.x - b.x,a.y - b.y,a.z - b.z };
+
+	return c;
+}
+
+Vector3 operator-(const Vector3& a, const float& b) {
+	Vector3 c = { a.x - b,a.y - b,a.z - b };
+
+	return c;
+}
+
+Vector3 operator*(const Vector3& a, const float& b) {
+	Vector3 c = { a.x * b, a.y * b, a.z * b };
+
+	return c;
+}
 //
 //Vector3 operator/(const Vector3& a, const float& b)
 //{
