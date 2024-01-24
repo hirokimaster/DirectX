@@ -472,65 +472,93 @@ Vector3 TransformMove(const Vector3& translate, const Vector3& move)
 
 Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, float t)
 {
+	Vector3 result{};
+	const float s = 5.0f;
 	float t2 = t * t;
 	float t3 = t2 * t;
 
-	Vector3 e3 = p0 * -1.0f 
+	Vector3 e3{};
+	e3.x = -p0.x + 3.0f * p1.x - 3 * p2.x + p3.x;
+	e3.y = -p0.y + 3.0f * p1.y - 3 * p2.y + p3.y;
+	e3.z = -p0.z + 3.0f * p1.z - 3 * p2.z + p3.z;
+	Vector3 e2{};
+	e2.x = 2.0f * p0.x - 5.0f * p1.x + 4.0f * p2.x - p3.x;
+	e2.y = 2.0f * p0.y - 5.0f * p1.y + 4.0f * p2.y - p3.y;
+	e2.z = 2.0f * p0.z - 5.0f * p1.z + 4.0f * p2.z - p3.z;
+	Vector3 e1{};
+	e1 = { p0.x + p2.x,p0.y + p2.y,p0.z + p2.z };
+	Vector3 e0{};
+	e0 = { p1.x * 2.0f, p1.y * 2.0f, p1.z * 2.0f };
+
+	result.x = s * e3.x * t3 + e2.x * t2 + e1.x * t + e0.x;
+	result.y = s * e3.y * t3 + e2.y * t2 + e1.y * t + e0.y;
+	result.z = s * e3.z * t3 + e2.z * t2 + e1.z * t + e0.z;
+
+	return result;
 }
 
-Vector3 CatmullRom(const std::vector<Vector3>& points, float t) {
-	int numPoints = static_cast<int>(points.size());
+Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t) {
+	assert(points.size() >= 4 && "制御点は4点以上必要です");
+	size_t division = points.size() - 1;
+	float areaWidth = 1.0f / division;
+	
+	float t_2 = std::fmod(t, areaWidth) * division;
+	t_2 = std::clamp(t_2, 00.0f, 1.0f);
 
-	float t2 = t * t;
-	float t3 = t2 * t;
+	size_t index = static_cast<size_t>(t / areaWidth);
+	index = index = std::min(index, points.size() - 2);
 
-	int p0 = (static_cast<int>(t) - 1 + numPoints) % numPoints;
-	int p1 = (static_cast<int>(t) + numPoints) % numPoints;
-	int p2 = (static_cast<int>(t) + 1 + numPoints) % numPoints;
-	int p3 = (static_cast<int>(t) + 2 + numPoints) % numPoints;
+	size_t index0 = index - 1;
+	size_t index1 = index;
+	size_t index2 = index + 1;
+	size_t index3 = index + 2;
 
-	float b0 = 0.5f * (-t3 + 2.0f * t2 - t);
-	float b1 = 0.5f * (3.0f * t3 - 5.0f * t2 + 2.0f);
-	float b2 = 0.5f * (-3.0f * t3 + 4.0f * t2 + t);
-	float b3 = 0.5f * (t3 - t2);
+	if (index == 0) {
+		index0 = index1;
+	}
 
-	float x = points[p0].x * b0 + points[p1].x * b1 + points[p2].x * b2 + points[p3].x * b3;
-	float y = points[p0].y * b0 + points[p1].y * b1 + points[p2].y * b2 + points[p3].y * b3;
-	float z = points[p0].z * b0 + points[p1].z * b1 + points[p2].z * b2 + points[p3].z * b3;
+	if (index3 >= points.size()) {
+		index3 = index2;
+	}
 
-	return Vector3(x, y, z);
+	const Vector3& p0 = points[index0];
+	const Vector3& p1 = points[index1];
+	const Vector3& p2 = points[index2];
+	const Vector3& p3 = points[index3];
+
+	return CatmullRomInterpolation(p0, p1, p2, p3, t_2);
 }
 
 
-Vector3 operator+(const Vector3& a, const Vector3& b) {
-	Vector3 c = { a.x + b.x,a.y + b.y ,a.z + b.z };
-
-	return c;
-}
-
-Vector3 operator+(const Vector3& a, const float& b) {
-	Vector3 c = { a.x + b,a.y + b,a.z + b };
-
-	return c;
-}
-
-Vector3 operator-(const Vector3& a, const Vector3& b) {
-	Vector3 c = { a.x - b.x,a.y - b.y,a.z - b.z };
-
-	return c;
-}
-
-Vector3 operator-(const Vector3& a, const float& b) {
-	Vector3 c = { a.x - b,a.y - b,a.z - b };
-
-	return c;
-}
-
-Vector3 operator*(const Vector3& a, const float& b) {
-	Vector3 c = { a.x * b, a.y * b, a.z * b };
-
-	return c;
-}
+//Vector3 operator+(const Vector3& a, const Vector3& b) {
+//	Vector3 c = { a.x + b.x,a.y + b.y ,a.z + b.z };
+//
+//	return c;
+//}
+//
+//Vector3 operator+(const Vector3& a, const float& b) {
+//	Vector3 c = { a.x + b,a.y + b,a.z + b };
+//
+//	return c;
+//}
+//
+//Vector3 operator-(const Vector3& a, const Vector3& b) {
+//	Vector3 c = { a.x - b.x,a.y - b.y,a.z - b.z };
+//
+//	return c;
+//}
+//
+//Vector3 operator-(const Vector3& a, const float& b) {
+//	Vector3 c = { a.x - b,a.y - b,a.z - b };
+//
+//	return c;
+//}
+//
+//Vector3 operator*(const Vector3& a, const float& b) {
+//	Vector3 c = { a.x * b, a.y * b, a.z * b };
+//
+//	return c;
+//}
 //
 //Vector3 operator/(const Vector3& a, const float& b)
 //{

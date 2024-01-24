@@ -9,6 +9,7 @@
 #include "RailCamera/RailCamera.h"
 #include "Skydome/Skydome.h"
 #include "Utility/CollisionManager/CollisionManager.h"
+#include "ShapeRender/Line.h"
 
 /// <summary>
 /// ゲームシーン
@@ -57,4 +58,6 @@ private: // メンバ変数
 	uint32_t texHandleEnemy_ = 0;
 	uint32_t texHandleSkydome_ = 0;
 	std::vector<Vector3> controlPoints_;
+	Line* line_;
+	WorldTransform w_;
 };

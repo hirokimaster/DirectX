@@ -8,26 +8,14 @@ Line::~Line()
 {
 }
 
-void Line::Initialize(const Vector3& startPos, const Vector3& endPos)
+void Line::Initialize()
 {
 
 	resource_.vertexResource = CreateResource::CreateBufferResource(sizeof(VertexData) * 2);
 
 	VBV = CreateResource::CreateVertexBufferView(resource_.vertexResource, sizeof(VertexData) * 2, 2);
 
-#pragma region	頂点データ
 
-	// 頂点リソースにデータを書き込む
-	VertexData* vertexData = nullptr;
-	// 書き込むためのアドレスを取得
-	resource_.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-
-	vertexData[0].position = { startPos.x,startPos.y, startPos.z,1.0f };
-	vertexData[0].texcoord = { 0.0f,1.0f };
-	vertexData[1].position = { endPos.x,endPos.y,endPos.z,1.0f };
-	vertexData[1].texcoord = { 1.0f,0.0f };
-
-#pragma endregion
 
 	resource_.materialResource = CreateResource::CreateBufferResource(sizeof(Vector4));
 	// データを書き込む
@@ -41,8 +29,22 @@ void Line::Initialize(const Vector3& startPos, const Vector3& endPos)
 
 }
 
-void Line::DrawLine(WorldTransform worldTransform, Camera camera)
+void Line::DrawLine(const Vector3& startPos, const Vector3& endPos, WorldTransform worldTransform, Camera camera)
 {
+#pragma region	頂点データ
+
+	// 頂点リソースにデータを書き込む
+	VertexData* vertexData = nullptr;
+	// 書き込むためのアドレスを取得
+	resource_.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+
+	vertexData[0].position = { start_.x,start_.y, start_.z,1.0f };
+	vertexData[1].position = { end_.x,end_.y,end_.z,1.0f };
+
+#pragma endregion
+
+	SetStartPos(startPos);
+	SetEndPos(endPos);
 	worldTransform.TransferMatrix(resource_.wvpResource, camera);
 	
 	Property property = GraphicsPipeline::GetInstance()->GetPSO().Line;

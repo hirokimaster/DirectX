@@ -3,6 +3,7 @@
 #include "Vector3.h"
 #include <cassert>
 #include <vector>
+#include <algorithm>
 
 struct AABB {
 	Vector3 min; // 最小点
@@ -88,21 +89,21 @@ Vector3 TransformMove(const Vector3& translate, const Vector3& move);
 
 Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, float t);
 
-Vector3 CatmullRom(const std::vector<Vector3>& points, float t);
+Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t);
 
-Vector3 operator-(const Vector3& v) { return { -v.x, -v.y, -v.z }; }
-
-Vector3 operator+(const Vector3& v) { return v; }
-
-Vector3 operator+(const Vector3& a, const Vector3& b);
-
-Vector3 operator+(const Vector3& a, const float& b);
-
-Vector3 operator-(const Vector3& a, const Vector3& b);
-
-Vector3 operator-(const Vector3& a, const float& b);
-
-Vector3 operator*(const Vector3& a, const float& b);
+//Vector3 operator-(const Vector3& v) { return { -v.x, -v.y, -v.z }; }
+//
+//Vector3 operator+(const Vector3& v) { return v; }
+//
+//Vector3 operator+(const Vector3& a, const Vector3& b);
+//
+//Vector3 operator+(const Vector3& a, const float& b);
+//
+//Vector3 operator-(const Vector3& a, const Vector3& b);
+//
+//Vector3 operator-(const Vector3& a, const float& b);
+//
+//Vector3 operator*(const Vector3& a, const float& b);
 //
 //Vector3 operator/(const Vector3& a, const Vector3& b);
 //

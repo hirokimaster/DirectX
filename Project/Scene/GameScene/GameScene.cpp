@@ -53,6 +53,10 @@ void GameScene::Initialize() {
 		{20.0f,0,0},
 		{30.0f,0,0}
 	};
+
+	line_ = new Line;
+	line_->Initialize();
+	w_.Initialize();
 }
 
 // 更新
@@ -66,6 +70,7 @@ void GameScene::Update() {
 	camera_.matView = railCamera_->GetCamera().matView;
 	camera_.matProjection = railCamera_->GetCamera().matProjection;
 	camera_.UpdateMatrix();
+	w_.UpdateMatrix();
 
 }
 
@@ -74,15 +79,24 @@ void GameScene::Draw(){
 	
 	player_->Draw(camera_);
 	enemy_->Draw(camera_);
-	skydome_->Draw(camera_);
+	//skydome_->Draw(camera_);
 
 	std::vector<Vector3> pointsDrawing;
 	const size_t segmentCount = 100;
 	for (size_t i = 0; i < segmentCount + 1; ++i) {
 		float t = 1.0f / segmentCount * i;
-		Vector3 pos = CatmullRom(controlPoints_, t);
+		Vector3 pos = CatmullRomPosition(controlPoints_, t);
 		pointsDrawing.push_back(pos);
 	}
+
+	// 先頭から二点ずつ取り出してライン描画
+	for (size_t i = 0; i < pointsDrawing.size() - 1; ++i) {
+
+		line_->DrawLine({ pointsDrawing[i] }, { pointsDrawing[i + 1] }, w_, camera_);
+	}
+
+	
+	line_->DrawLine({ 0,0,0 }, { 10.0f,10.0f,0.0f }, w_, camera_);
 
 
 	ImGui::Begin("Camera2");

@@ -10,12 +10,15 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(const Vector3& startPos, const Vector3& endPos);
+	void Initialize();
 
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void DrawLine(WorldTransform worldTransform, Camera camera);
+	void DrawLine(const Vector3& startPos, const Vector3& endPos, WorldTransform worldTransform, Camera camera);
+
+	void SetStartPos(Vector3 pos) { start_ = pos; }
+	void SetEndPos(Vector3 pos) { end_ = pos; }
 
 private:
 	Vector3 start_{};
