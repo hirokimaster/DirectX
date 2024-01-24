@@ -7,6 +7,8 @@
     <FxCompile Include="Engine\ShaderFile\Particle.VS.hlsl" />
     <FxCompile Include="Engine\ShaderFile\Sprite2D.PS.hlsl" />
     <FxCompile Include="Engine\ShaderFile\Sprite2D.VS.hlsl" />
+    <FxCompile Include="Engine\ShaderFile\Line.VS.hlsl" />
+    <FxCompile Include="Engine\ShaderFile\Line.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Audio\Audio.cpp" />
@@ -52,6 +54,8 @@
     <ClCompile Include="Engine\Utility\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Project\GameObject\RailCamera\RailCamera.cpp" />
     <ClCompile Include="Project\GameObject\Skydome\Skydome.cpp" />
+    <ClCompile Include="Engine\ShapeRender\Line.cpp" />
+    <ClCompile Include="Engine\ShapeRender\IShape\IShape.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio\Audio.h" />
@@ -105,6 +109,8 @@
     <ClInclude Include="Engine\Utility\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Project\GameObject\RailCamera\RailCamera.h" />
     <ClInclude Include="Project\GameObject\Skydome\Skydome.h" />
+    <ClInclude Include="Engine\ShapeRender\IShape\IShape.h" />
+    <ClInclude Include="Engine\ShapeRender\Line.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\ShaderFile\Object3d.hlsli" />

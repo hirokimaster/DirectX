@@ -481,10 +481,10 @@ Vector3 CatmullRom(const std::vector<Vector3>& points, float t) {
 	int p2 = (static_cast<int>(t) + 1 + numPoints) % numPoints;
 	int p3 = (static_cast<int>(t) + 2 + numPoints) % numPoints;
 
-	float b0 = 0.5 * (-t3 + 2 * t2 - t);
-	float b1 = 0.5 * (3 * t3 - 5 * t2 + 2);
-	float b2 = 0.5 * (-3 * t3 + 4 * t2 + t);
-	float b3 = 0.5 * (t3 - t2);
+	float b0 = 0.5f * (-t3 + 2.0f * t2 - t);
+	float b1 = 0.5f * (3.0f * t3 - 5.0f * t2 + 2.0f);
+	float b2 = 0.5f * (-3.0f * t3 + 4.0f * t2 + t);
+	float b3 = 0.5f * (t3 - t2);
 
 	float x = points[p0].x * b0 + points[p1].x * b1 + points[p2].x * b2 + points[p3].x * b3;
 	float y = points[p0].y * b0 + points[p1].y * b1 + points[p2].y * b2 + points[p3].y * b3;
