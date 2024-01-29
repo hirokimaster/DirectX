@@ -23,7 +23,7 @@ void Line::Initialize()
 	// アドレスを取得
 	resource_.materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	// 赤
-	*materialData = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	*materialData = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
 
 	resource_.wvpResource = CreateResource::CreateBufferResource(sizeof(TransformationMatrix));
 

@@ -58,6 +58,6 @@ private: // メンバ変数
 	uint32_t texHandleEnemy_ = 0;
 	uint32_t texHandleSkydome_ = 0;
 	std::vector<Vector3> controlPoints_;
-	Line* line_;
-	WorldTransform w_;
+	std::unique_ptr<Line> line_[100];
+	WorldTransform worldTransformLine_[100];
 };

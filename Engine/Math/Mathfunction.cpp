@@ -473,14 +473,14 @@ Vector3 TransformMove(const Vector3& translate, const Vector3& move)
 Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vector3& p2, const Vector3& p3, float t)
 {
 	Vector3 result{};
-	const float s = 5.0f;
+	const float s = 0.5f;
 	float t2 = t * t;
 	float t3 = t2 * t;
 
 	Vector3 e3{};
-	e3.x = -p0.x + 3.0f * p1.x - 3 * p2.x + p3.x;
-	e3.y = -p0.y + 3.0f * p1.y - 3 * p2.y + p3.y;
-	e3.z = -p0.z + 3.0f * p1.z - 3 * p2.z + p3.z;
+	e3.x = -p0.x + 3.0f * p1.x - 3.0f * p2.x + p3.x;
+	e3.y = -p0.y + 3.0f * p1.y - 3.0f * p2.y + p3.y;
+	e3.z = -p0.z + 3.0f * p1.z - 3.0f * p2.z + p3.z;
 	Vector3 e2{};
 	e2.x = 2.0f * p0.x - 5.0f * p1.x + 4.0f * p2.x - p3.x;
 	e2.y = 2.0f * p0.y - 5.0f * p1.y + 4.0f * p2.y - p3.y;
@@ -503,7 +503,7 @@ Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t) {
 	float areaWidth = 1.0f / division;
 	
 	float t_2 = std::fmod(t, areaWidth) * division;
-	t_2 = std::clamp(t_2, 00.0f, 1.0f);
+	t_2 = std::clamp(t_2, 0.0f, 1.0f);
 
 	size_t index = static_cast<size_t>(t / areaWidth);
 	index = index = std::min(index, points.size() - 2);

@@ -54,14 +54,26 @@ void GameScene::Initialize() {
 		{30.0f,0,0}
 	};
 
-	line_ = new Line;
-	line_->Initialize();
-	w_.Initialize();
+	/*----------------------------
+		  レールカメラ用の曲線
+	-------------------------------*/
+	for (int i = 0; i < 100; ++i) {
+		line_[i] = std::make_unique<Line>();
+		line_[i]->Initialize();
+		worldTransformLine_[i].Initialize();
+		worldTransformLine_[i].scale = { 0.3f,0.3f,0.3f };
+	}
+	
+	
 }
 
 // 更新
 void GameScene::Update() {
-	
+
+	for (int i = 0; i < 100; ++i) {
+		worldTransformLine_[i].UpdateMatrix();
+	}
+
 	player_->Update();
 	enemy_->Update();
 	Collision();
@@ -70,7 +82,6 @@ void GameScene::Update() {
 	camera_.matView = railCamera_->GetCamera().matView;
 	camera_.matProjection = railCamera_->GetCamera().matProjection;
 	camera_.UpdateMatrix();
-	w_.UpdateMatrix();
 
 }
 
@@ -79,7 +90,7 @@ void GameScene::Draw(){
 	
 	player_->Draw(camera_);
 	enemy_->Draw(camera_);
-	//skydome_->Draw(camera_);
+	skydome_->Draw(camera_);
 
 	std::vector<Vector3> pointsDrawing;
 	const size_t segmentCount = 100;
@@ -92,11 +103,8 @@ void GameScene::Draw(){
 	// 先頭から二点ずつ取り出してライン描画
 	for (size_t i = 0; i < pointsDrawing.size() - 1; ++i) {
 
-		line_->DrawLine({ pointsDrawing[i] }, { pointsDrawing[i + 1] }, w_, camera_);
+		line_[i]->DrawLine({ pointsDrawing[i] }, { pointsDrawing[i + 1] }, worldTransformLine_[i], camera_);
 	}
-
-	
-	line_->DrawLine({ 0,0,0 }, { 10.0f,10.0f,0.0f }, w_, camera_);
 
 
 	ImGui::Begin("Camera2");
