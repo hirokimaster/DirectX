@@ -27,7 +27,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="position"></param>
 	/// <returns></returns>
-	static Sprite* Create(Vector2 position, Vector2 size, Vector4 color = { 1,1,1,1 });
+	static Sprite* Create(Vector2 position, Vector2 size, Vector2 anchorPoint, Vector4 color = { 1,1,1,1 });
 
 #pragma region Getter
 	// 座標の取得
@@ -44,6 +44,8 @@ public: // メンバ関数
 	void SetColor(const Vector4& color) { *materialData_ = color; }
 	// サイズの指定
 	void SetSize(const Vector2& size) { size_ = size; }
+	// アンカーポイントの設定
+	void SetAnchorPoint(const Vector2& a) { anchorPoint_ = a; }
 #pragma endregion
 
 	/// <summary>
@@ -61,4 +63,5 @@ private: // メンバ変数
 	Vector2 position_ = {};
 	Vector4* materialData_ = nullptr;
 	Vector2 size_ = {};
+	Vector2 anchorPoint_ = {};
 };

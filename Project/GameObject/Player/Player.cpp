@@ -42,6 +42,16 @@ void Player::Update(const Camera& camera)
 		move.y -= moveSpeed;
 	}
 
+	// ゲームパッドの状態を得る変数(XINPUT)
+	XINPUT_STATE joyState;
+
+	// ゲームパッド状態取得
+	if (Input::GetInstance()->GetJoystickState(joyState)) {
+		move.x += (float)joyState.Gamepad.sThumbLX / SHRT_MAX * moveSpeed;
+		move.y += (float)joyState.Gamepad.sThumbLY / SHRT_MAX * moveSpeed;
+	}
+
+
 	// 移動
 	worldTransform_.translate = Add(worldTransform_.translate, move);
 	// 旋回
@@ -72,9 +82,6 @@ void Player::Update(const Camera& camera)
 	worldTransform_.translate.x = std::min(worldTransform_.translate.x, kMoveLimitX);
 	worldTransform_.translate.y = max(worldTransform_.translate.y, -kMoveLimitY);
 	worldTransform_.translate.y = std::min(worldTransform_.translate.y, kMoveLimitY);
-
-	// ゲームパッドの状態を得る変数(XINPUT)
-	XINPUT_STATE joyState;
 
 	POINT mousePosition;
 	// マウス座標(スクリーン座標)を取得する
@@ -126,7 +133,7 @@ void Player::Rotate() {
 // 攻撃
 void Player::Attack() {
 
-	XINPUT_STATE joyState;
+	XINPUT_STATE joyState{};
 
 	// 処理
 	if (Input::GetInstance()->PressedKey(DIK_SPACE)) {

@@ -24,7 +24,7 @@ public:
 	~Enemy();
 
 	// 初期化
-	void Initialize(Model* model, uint32_t textureHandle);
+	void Initialize(Vector3 pos, uint32_t textureHandle);
 
 	// 更新
 	void Update();
@@ -60,12 +60,8 @@ public:
 	void SetVelocity(Vector3 velocity) {velocity_ = velocity; }
 	void SetPlayer(Player* player) { player_ = player; }
 
-	// 発射間隔
-	static const int kFireInterval_ = 60;
-
 private:
 	WorldTransform worldTransform_;
-	Model* model_ = nullptr;
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 	std::list<std::unique_ptr<EnemyBullet>>::iterator bulletsItr_;
 	int32_t shotTimer_ = 0;
@@ -75,6 +71,6 @@ private:
 	bool isDead_ = false;
 	std::list<std::unique_ptr<TimedCall>> timedCalls_;
 	std::list<std::unique_ptr<TimedCall>>::iterator timedItr_;
-
+	std::unique_ptr<Model> model_;
 };
 

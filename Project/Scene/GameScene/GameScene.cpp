@@ -21,17 +21,8 @@ void GameScene::Initialize() {
 	------------------------------*/
 	modelPlayer_.reset(Model::CreateObj("cube.obj"));
 	player_ = std::make_unique<Player>();
-	Vector3 playerPos = { 0,0,50.0f };
+	Vector3 playerPos = { 0,0,40.0f };
 	player_->Initialize(modelPlayer_.get(), playerPos, texHandlePlayer_);
-	
-	/*----------------------------
-			   エネミー
-	------------------------------*/
-	modelEnemy_.reset(Model::CreateObj("cube.obj"));
-	enemy_ = std::make_unique<Enemy>();
-	enemy_->Initialize(modelEnemy_.get(), texHandleEnemy_);
-	enemy_->SetPlayer(player_.get());
-	enemy_->ResetTimerAfterShot();
 	/*------------------------
 			   天球
 	--------------------------*/
@@ -79,7 +70,21 @@ void GameScene::Update() {
 	}
 
 	player_->Update(camera_);
-	enemy_->Update();
+
+	EnemyRandomSpawn();
+	for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
+		(*enemysItr_)->Update();
+	}
+
+
+	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) {
+		if (enemy->IsDead()) {
+			enemy.reset();
+			return true;
+		}
+		return false;
+		});
+
 	Collision();
 	skydome_->Update();
 	if (activeRailCamera_) {
@@ -96,8 +101,12 @@ void GameScene::Update() {
 void GameScene::Draw(){
 	
 	player_->Draw(camera_);
-	enemy_->Draw(camera_);
+	for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
+		(*enemysItr_)->Draw(camera_);
+	}
+
 	skydome_->Draw(camera_);
+	player_->DrawUI(camera_);
 
 	std::vector<Vector3> pointsDrawing;
 	const size_t segmentCount = 100;
@@ -125,16 +134,41 @@ void GameScene::Collision()
 	collisionManager_->ColliderClear();
 
 	collisionManager_->ColliderPush(player_.get());
-	collisionManager_->ColliderPush(enemy_.get());
+
+	for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
+		collisionManager_->ColliderPush((*enemysItr_).get());
+
+		for (auto enemyBulletsItr = (*enemysItr_)->GetBullets().begin();
+			enemyBulletsItr != (*enemysItr_)->GetBullets().end(); ++enemyBulletsItr) {
+			collisionManager_->ColliderPush((*enemyBulletsItr).get());
+		}
+	}
+
 	for (auto playerBulletsItr = player_->GetBullets().begin();
 		playerBulletsItr != player_->GetBullets().end(); ++playerBulletsItr) {
 		collisionManager_->ColliderPush((*playerBulletsItr).get());
 	}
 
-	for (auto enemyBulletsItr = enemy_->GetBullets().begin();
-		enemyBulletsItr != enemy_->GetBullets().end(); ++enemyBulletsItr) {
-		collisionManager_->ColliderPush((*enemyBulletsItr).get());
-	}
+	
 
 	collisionManager_->CheckAllCollision();
 }
+
+void GameScene::EnemyRandomSpawn()
+{
+	spawnTimer_++;
+	std::random_device seed;
+
+	if (spawnTimer_ >= 90) {
+		std::mt19937 randomEngine(seed());
+		std::uniform_real_distribution<float>distribution(-20.0f, 20.0f);
+		std::unique_ptr<Enemy> enemy = nullptr;
+		enemy = std::make_unique<Enemy>();
+		enemy->Initialize(
+			{ float(distribution(randomEngine)), float(distribution(randomEngine)), 50.0f }, texHandleEnemy_);
+		enemy->SetPlayer(player_.get());
+		enemys_.push_back(std::move(enemy));
+		spawnTimer_ = 0;
+	}
+}
+
