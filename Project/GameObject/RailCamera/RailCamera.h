@@ -33,5 +33,10 @@ private:
 	Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
 	// 角度
 	Vector3 rotate_ = { 0.0f, 0.0f, 0.0f };
+	// 曲線レールカメラ用の点
+	std::vector<Vector3> controlPoints_;
+	Vector3 eye_{};
+	Vector3 target_{};
+	Vector3 forward_{};
 
 };

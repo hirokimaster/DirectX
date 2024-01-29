@@ -3,7 +3,7 @@
 
 class TimedCall{
 public:
-	TimedCall();
+	TimedCall(std::function<void(void)> func, uint32_t time);
 
 	void Update();
 
@@ -11,6 +11,8 @@ public:
 
 private:
 
+	// コールバック
+	std::function<void(void)> func_;
 	//残り時間
 	uint32_t time_;
 	// 完了フラグ

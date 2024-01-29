@@ -8,19 +8,9 @@ void EnemyStateApproach::Update(Enemy* pEnemy)
 	// 移動処理
 	pEnemy->Move();
 
-	//発射タイマーをデクリメント
-	--fireTimer_;
-
-	if (fireTimer_ <= 0) {
-		// 弾を発射
-		pEnemy->Fire();
-		// 発射タイマーの初期化
-		fireTimer_ = kFireInterval_;
-	}
-
 	// 規定の位置に到達したら離脱
 	if (pEnemy->GetPosition().z < 20.0f) {
-		pEnemy->changeState(new EnemyStateLeave);
+		pEnemy->ChangeState(std::make_unique<EnemyStateLeave>());
 	}
 
 }

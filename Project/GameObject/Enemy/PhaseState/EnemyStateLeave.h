@@ -3,7 +3,6 @@
 
 class EnemyStateLeave : public IPhaseStateEnemy{
 public:
-
 	void Update(Enemy* pEnemy)override;
 };
 

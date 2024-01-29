@@ -452,9 +452,15 @@ Vector3 SLerp(const Vector3& v1, const Vector3& v2, float t)
 	float Ps = std::sin(angle * (1 - t));
 	float Pe = std::sin(angle * t);
 
-	p.x = (Ps * s.x + Pe * e.x) / Sin;
-	p.y = (Ps * s.y + Pe * e.y) / Sin;
-	p.z = (Ps * s.z + Pe * e.z) / Sin;
+	if (Sin < 0.00001) {
+		p = s;
+	}
+	else {
+		p.x = (Ps * s.x + Pe * e.x) / Sin;
+		p.y = (Ps * s.y + Pe * e.y) / Sin;
+		p.z = (Ps * s.z + Pe * e.z) / Sin;
+	}
+
 
 	p = Normalize(p);
 

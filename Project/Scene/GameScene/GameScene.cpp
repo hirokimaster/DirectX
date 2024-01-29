@@ -30,6 +30,7 @@ void GameScene::Initialize() {
 	enemy_ = std::make_unique<Enemy>();
 	enemy_->Initialize(modelEnemy_.get(), texHandleEnemy_);
 	enemy_->SetPlayer(player_.get());
+	enemy_->ResetTimerAfterShot();
 	/*------------------------
 			   天球
 	--------------------------*/

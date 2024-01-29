@@ -1,8 +1,12 @@
 #include "TimedCall.h"
 
+TimedCall::TimedCall(std::function<void(void)> func, uint32_t time) : func_(func), time_(time)
+{
+}
+
 void TimedCall::Update()
 {
-	if (comp_) {
+	if (comp_) {	
 		return;
 	}
 
@@ -10,5 +14,6 @@ void TimedCall::Update()
 
 	if (time_ <= 0) {
 		comp_ = true;
+		func_();
 	}
 }

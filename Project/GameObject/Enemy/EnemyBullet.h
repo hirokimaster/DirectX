@@ -29,7 +29,7 @@ public:
 private:
 	WorldTransform worldTransform_;
 	std::unique_ptr<Model> model_;
-	Vector3 velocity_;
+	Vector3 velocity_{};
 	// 弾の寿命
 	static const int32_t kLifeTime = 60 * 5;
 	// デスタイマー

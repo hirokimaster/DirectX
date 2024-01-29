@@ -14,7 +14,7 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle)
 	// 敵の初期座標
 	worldTransform_.translate = { 0.0f, 5.0f, 80.0f };
 	// 最初の状態
-	phaseState_ = new EnemyStateApproach();
+	phaseState_ = std::make_unique<EnemyStateApproach>();
 	SetCollosionAttribute(kCollisionAttributeEnemy);
 	SetCollisionMask(kCollisionAttributePlayer);
 
@@ -29,6 +29,19 @@ void Enemy::Update()
 		bulletsItr_ != bullets_.end(); ++bulletsItr_) {
 		(*bulletsItr_)->SetPlayer(player_);
 		(*bulletsItr_)->Update();
+	}
+
+	// 終了したタイマーを削除
+	timedCalls_.remove_if([](std::unique_ptr<TimedCall>& timedCall) {
+		if (timedCall->IsFinished()) {
+			return true;
+		}
+		return false;
+		});
+
+	for (timedItr_ = timedCalls_.begin();
+		timedItr_ != timedCalls_.end(); ++timedItr_) {
+		(*timedItr_)->Update();
 	}
 
 	// デスフラグの立ったやつを消す
@@ -80,14 +93,25 @@ void Enemy::Fire()
 	bullets_.push_back(std::move(bullet));
 }
 
-void Enemy::changeState(IPhaseStateEnemy* newState)
+void Enemy::ChangeState(std::unique_ptr<IPhaseStateEnemy> newState)
 {
-	phaseState_ = newState;
+	phaseState_ = std::move(newState);
 }
 
 void Enemy::OnCollision()
 {
 	isDead_ = true;
+}
+
+void Enemy::ResetTimerAfterShot()
+{
+
+	Fire();
+
+	std::function<void(void)> callback = std::bind(&Enemy::ResetTimerAfterShot, this);
+	std::unique_ptr<TimedCall> timedCall = std::make_unique<TimedCall>(callback, 60);
+
+	timedCalls_.push_back(std::move(timedCall));
 }
 
 Vector3 Enemy::GetWorldPosition()
