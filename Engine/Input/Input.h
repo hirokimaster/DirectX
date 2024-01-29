@@ -9,7 +9,12 @@
 
 class Input{
 public:
+	struct ButtonState {
+		bool isPressed;
+		bool wasPressed;
 
+		ButtonState() : isPressed(false), wasPressed(false) {}
+	};
 
 	static Input* GetInstance();
 
@@ -23,14 +28,10 @@ public:
 
 	bool GetJoystickState(XINPUT_STATE& out) const;
 
+	bool PressedButton(XINPUT_STATE& out, WORD button);
+
 	//void SetJoystickDeadZone(int32_t deadZoneL, int32_t deadZoneR);
 
-	struct ButtonState {
-		bool isPressed;
-		bool wasPressed;
-
-		ButtonState() : isPressed(false), wasPressed(false) {}
-	};
 
 	void UpdateButtonState(ButtonState& state, bool isPressed);
 
@@ -45,7 +46,7 @@ private:
 
 	bool isInitialize = false;
 
-
+	Input::ButtonState state_;
 
 	//0x80=押している状態
 	//0x00=押してない状態

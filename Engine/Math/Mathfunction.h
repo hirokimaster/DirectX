@@ -91,6 +91,9 @@ Vector3 CatmullRomInterpolation(const Vector3& p0, const Vector3& p1, const Vect
 
 Vector3 CatmullRomPosition(const std::vector<Vector3>& points, float t);
 
+Matrix4x4 MakeViewportMatrix(
+	float left, float top, float width, float heght, float minDepth, float maxDepth);
+
 //Vector3 operator-(const Vector3& v) { return { -v.x, -v.y, -v.z }; }
 //
 //Vector3 operator+(const Vector3& v) { return v; }

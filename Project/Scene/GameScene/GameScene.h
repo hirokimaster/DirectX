@@ -60,4 +60,5 @@ private: // メンバ変数
 	std::vector<Vector3> controlPoints_;
 	std::unique_ptr<Line> line_[100];
 	WorldTransform worldTransformLine_[100];
+	bool activeRailCamera_ = false;
 };

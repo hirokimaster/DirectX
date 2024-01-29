@@ -36,3 +36,10 @@ void WorldTransform::UpdateMatrix(){
 
 }
 
+void WorldTransform::ParentUpdateMatrix()
+{
+	if (parent) {
+		matWorld = Multiply(matWorld, parent->matWorld);
+	}
+}
+

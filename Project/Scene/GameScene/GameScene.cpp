@@ -7,8 +7,9 @@ GameScene::~GameScene() {
 
 // 初期化
 void GameScene::Initialize() {
+	camera_.farZ = 1000.0f;
 	camera_.Initialize();
-	camera_.farZ = 500.0f;
+	camera_.UpdateMatrix();
 	/*----------------------------
 		 テクスチャ読み込み
 	------------------------------*/
@@ -20,9 +21,9 @@ void GameScene::Initialize() {
 	------------------------------*/
 	modelPlayer_.reset(Model::CreateObj("cube.obj"));
 	player_ = std::make_unique<Player>();
-	Vector3 playerPos = { 0,0,0 };
+	Vector3 playerPos = { 0,0,50.0f };
 	player_->Initialize(modelPlayer_.get(), playerPos, texHandlePlayer_);
-	player_->SetParent(&railCamera_->GetWorldTransform());
+	
 	/*----------------------------
 			   エネミー
 	------------------------------*/
@@ -45,7 +46,9 @@ void GameScene::Initialize() {
 		      レールカメラ
 	------------------------------*/
 	railCamera_ = std::make_unique<RailCamera>();
-	railCamera_->Initialize({ 0,0,0 }, { 0,0,0 });
+	railCamera_->Initialize(player_->GetWorldPosition(), { 0,0,0 });
+	player_->SetParent(&railCamera_->GetWorldTransform());
+
 	controlPoints_ = {
 		{0,0,0},
 		{10.0f,10.0f,0},
@@ -75,14 +78,17 @@ void GameScene::Update() {
 		worldTransformLine_[i].UpdateMatrix();
 	}
 
-	player_->Update();
+	player_->Update(camera_);
 	enemy_->Update();
 	Collision();
 	skydome_->Update();
-	railCamera_->Update();
+	if (activeRailCamera_) {
+		railCamera_->Update();
+	}
+	
 	camera_.matView = railCamera_->GetCamera().matView;
 	camera_.matProjection = railCamera_->GetCamera().matProjection;
-	camera_.UpdateMatrix();
+	camera_.TransferMatrix();
 
 }
 

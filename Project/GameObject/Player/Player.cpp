@@ -12,15 +12,19 @@ void Player::Initialize(Model* model, Vector3 position, uint32_t texHandle)
 {
 	assert(model);
 	model_ = model;
+	// レティクル用テクスチャ取得
+	textureReticle_ = TextureManager::Load("resources/2DReticle.png");
+	sprite2DReticle_.reset(Sprite::Create({ 640.0f,360.0f }, { 150.0f,150.0f }, { 0.5f,0.5f }));
 	model_->SetTexHandle(texHandle);
 	worldTransform_.Initialize();
+	worldTransform3DReticle_.Initialize();
 	worldTransform_.translate = position;
 	SetCollosionAttribute(kCollisionAttributePlayer);
 	SetCollisionMask(kCollisionAttributeEnemy);
 
 }
 
-void Player::Update()
+void Player::Update(const Camera& camera)
 {
 	Vector3 move{ 0,0,0 }; // 移動ベクトル
 
@@ -69,6 +73,32 @@ void Player::Update()
 	worldTransform_.translate.y = max(worldTransform_.translate.y, -kMoveLimitY);
 	worldTransform_.translate.y = std::min(worldTransform_.translate.y, kMoveLimitY);
 
+	// ゲームパッドの状態を得る変数(XINPUT)
+	XINPUT_STATE joyState;
+
+	POINT mousePosition;
+	// マウス座標(スクリーン座標)を取得する
+	GetCursorPos(&mousePosition);
+
+	// クライアントエリア座標に変換する
+	HWND hwnd = WinApp::GetInstance()->GetHwnd();
+	ScreenToClient(hwnd, &mousePosition);
+
+	Vector2 spritePosition = sprite2DReticle_->GetPosition();
+
+	// ジョイスティック状態取得
+	if (Input::GetInstance()->GetJoystickState(joyState)) {
+		spritePosition.x += (float)joyState.Gamepad.sThumbRX / SHRT_MAX * 5.0f;
+		spritePosition.y -= (float)joyState.Gamepad.sThumbRY / SHRT_MAX * 5.0f;
+		// スプライトの座標変更を反映
+		sprite2DReticle_->SetPosition(spritePosition);
+
+	}
+
+	// レティクル
+	Reticle(camera, Vector2((float)spritePosition.x, (float)spritePosition.y));
+
+
 	// ImGui
 	ImGui::Begin("Player");
 	ImGui::Text(
@@ -96,6 +126,8 @@ void Player::Rotate() {
 // 攻撃
 void Player::Attack() {
 
+	XINPUT_STATE joyState;
+
 	// 処理
 	if (Input::GetInstance()->PressedKey(DIK_SPACE)) {
 		// 弾の速度
@@ -109,10 +141,70 @@ void Player::Attack() {
 		// 弾をセット
 		bullets_.push_back(std::move(bullet));
 	}
+
+	// ゲームパッドの状態を得る変数(XINPUT)
+	if (Input::GetInstance()->GetJoystickState(joyState)) {
+
+		if (Input::GetInstance()->PressedButton(joyState, XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+			// 弾の速度
+			const float kBulletSpeed = 1.0f;
+				Vector3 velocity = { 0,0,kBulletSpeed };
+				// 自機から照準オブジェクトのベクトル
+				Vector3 WorldPos = GetWorldPosition();
+				Vector3 ReticleWorldPos = GetWorldPosition3DReticle();
+				velocity = Subtract(ReticleWorldPos, WorldPos);
+				velocity = Normalize(velocity);
+				velocity = Multiply(kBulletSpeed, velocity);
+				// プレイヤーの向きに速度を合わせる
+				velocity = TransformNormal(velocity, worldTransform_.matWorld);
+			// 弾を生成し、初期化
+			std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
+			bullet->Initialize(worldTransform_.translate, velocity);
+			// 弾をセット
+			bullets_.push_back(std::move(bullet));
+		}
+	}
 }
 
 void Player::OnCollision()
 {
+}
+
+void Player::Reticle(const Camera& camera, const Vector2& pos)
+{
+	// スプライトのレティクルに座標設定
+	sprite2DReticle_->SetPosition(pos);
+
+	// ビューポート行列
+	Matrix4x4 matViewport =
+		MakeViewportMatrix(0, 0, WinApp::kWindowWidth, WinApp::kWindowHeight, 0, 1);
+
+	// ビュープロジェクションビューポート合成行列
+	Matrix4x4 matVPN =
+		Multiply(camera.matView, Multiply(camera.matProjection, matViewport));
+	// 逆行列を計算
+	Matrix4x4 matInverseVPN = Inverse(matVPN);
+
+	// スクリーン座標
+	Vector3 posNear = Vector3((float)pos.x, (float)pos.y, 1);
+	Vector3 posFar = Vector3((float)pos.x, (float)pos.y, 0);
+
+	// スクリーン座標からワールド座標系へ
+	posNear = Transform(posNear, matInverseVPN);
+	posFar = Transform(posFar, matInverseVPN);
+
+	// マウスレイの方向
+	Vector3 mouseDirection = Subtract(posNear, posFar);
+	mouseDirection = Normalize(mouseDirection);
+	// カメラから照準オブジェクトの距離
+	const float kDistanceTestObject = 100.0f;
+	worldTransform3DReticle_.translate = Multiply(kDistanceTestObject, mouseDirection);
+	worldTransform3DReticle_.UpdateMatrix();
+}
+
+void Player::DrawUI(const Camera& camera)
+{
+	sprite2DReticle_->Draw(camera, textureReticle_);
 }
 
 Vector3 Player::GetWorldPosition()
@@ -123,6 +215,18 @@ Vector3 Player::GetWorldPosition()
 	worldPos.x = worldTransform_.matWorld.m[3][0];
 	worldPos.y = worldTransform_.matWorld.m[3][1];
 	worldPos.z = worldTransform_.matWorld.m[3][2];
+
+	return worldPos;
+}
+
+Vector3 Player::GetWorldPosition3DReticle()
+{
+	// ワールド座標を入れる変数
+	Vector3 worldPos;
+	// ワールド行列の平行移動成分を取得（ワールド座標）
+	worldPos.x = worldTransform3DReticle_.matWorld.m[3][0];
+	worldPos.y = worldTransform3DReticle_.matWorld.m[3][1];
+	worldPos.z = worldTransform3DReticle_.matWorld.m[3][2];
 
 	return worldPos;
 }
