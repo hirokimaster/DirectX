@@ -9,7 +9,7 @@ GameManager::GameManager() {
 	sceneArr_[GAME] = std::make_unique<GameScene>();
 
 	// 初期シーン
-	currentSceneNo_ = GAME;
+	currentSceneNo_ = TITLE;
 
 }
 

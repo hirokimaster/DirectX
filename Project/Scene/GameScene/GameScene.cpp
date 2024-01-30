@@ -41,12 +41,15 @@ void GameScene::Initialize() {
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
 	controlPoints_ = {
-		{0,0,0},
-		{10.0f,10.0f,0},
-		{10.0f,15.0f,0},
-		{20.0f,15.0f,0},
-		{20.0f,0,0},
-		{30.0f,0,0}
+		{0,0,2},
+		{0,0,4},
+		{0,0,8},
+		{0,5,16},
+		{0,0,32},
+		{0,5,64},
+		{0,10,96},
+		{-0,5,128},
+		{-0,0,0},
 	};
 
 	/*----------------------------
@@ -56,9 +59,8 @@ void GameScene::Initialize() {
 		line_[i] = std::make_unique<Line>();
 		line_[i]->Initialize();
 		worldTransformLine_[i].Initialize();
-		worldTransformLine_[i].scale = { 0.3f,0.3f,0.3f };
+		worldTransformLine_[i].scale = { 0.01f,0.01f,0.01f };
 	}
-	
 	
 }
 
@@ -94,6 +96,10 @@ void GameScene::Update() {
 	camera_.matView = railCamera_->GetCamera().matView;
 	camera_.matProjection = railCamera_->GetCamera().matProjection;
 	camera_.TransferMatrix();
+
+	if (!activeRailCamera_) {
+		camera_.UpdateMatrix();
+	}
 
 }
 

@@ -1,7 +1,8 @@
 #pragma once
 #include <memory>
+#include "Sprite/Sprite.h"
 
-enum SCENE {TITLE, GAME };
+enum SCENE { TITLE, GAME };
 
 class IScene
 {
