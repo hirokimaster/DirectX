@@ -11,7 +11,6 @@ void RailCamera::Initialize(const Vector3& position, const Vector3& rotate) {
 	worldTransform_.rotate = rotate;
 	worldTransform_.scale = { 1.0f, 1.0f, 1.0f };
 
-	camera_.farZ = 1000.0f;
 	// ビュープロジェクションの初期化
 	camera_.Initialize();
 }
@@ -33,37 +32,42 @@ void RailCamera::Update() {
 
 Vector3 RailCamera::TargetPosition(float t) const
 {
-	return CatmullRomPosition({ controlPoints_[1],controlPoints_[2],controlPoints_[3],controlPoints_[4] }, t);
+	return CatmullRomPosition(controlPoints_,t + 0.3f);
 }
 
 Vector3 RailCamera::EyePosition(float t) const
 {
-	return CatmullRomPosition({ controlPoints_[0],controlPoints_[1],controlPoints_[2],controlPoints_[3] }, t);
+	return CatmullRomPosition(controlPoints_, t);
 }
 
 void RailCamera::MoveOnRail(float dt)
 {
 	currentTime_ += dt;
-
-	// 現在の位置を保存
-	Vector3 oldEye = eye_;
-
+	
 	// 視点と注視点を更新
 	eye_ = EyePosition(currentTime_);
 	target_ = TargetPosition(currentTime_);
-	// 移動ベクトル
-	Vector3 moveForward_ = Normalize(Subtract(target_, oldEye));
+
 	// 移動
-	worldTransform_.translate = Add(worldTransform_.translate, moveForward_);
+	worldTransform_.translate = eye_;
 
 	forward_ = Normalize(Subtract(target_, eye_));
-	worldTransform_.rotate.x = std::atan2(forward_.y, forward_.z);
-	worldTransform_.rotate.y = std::atan2(forward_.z, forward_.x);
-	worldTransform_.rotate.z = std::atan2(forward_.x, forward_.y);
+
+	float velocityXZ = sqrt(forward_.x * forward_.x + forward_.z * forward_.z);
+
+	worldTransform_.rotate.y = std::atan2(forward_.x, forward_.z);
+	worldTransform_.rotate.x = std::atan2(-forward_.y, velocityXZ);
+
 
 	// ワールドトランスフォームのワールド行列再計算
 	worldTransform_.matWorld = MakeAffineMatrix(
 		worldTransform_.scale, worldTransform_.rotate, worldTransform_.translate);
+
+
+	ImGui::Begin("視点");
+	ImGui::Text("eye_ = %f %f %f", eye_.x, eye_.y, eye_.z);
+	ImGui::Text("target_ = %f %f %f", target_.x, target_.y, target_.z);
+	ImGui::End();
 
 	// ビュー行列を計算する
 	camera_.matView = Inverse(worldTransform_.matWorld);

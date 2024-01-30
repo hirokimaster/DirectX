@@ -15,7 +15,7 @@ void GameScene::Initialize() {
 	------------------------------*/
 	texHandlePlayer_ = TextureManager::Load("resources/uvChecker.png");
 	texHandleEnemy_ = TextureManager::Load("resources/circle.png");
-	texHandleSkydome_ = TextureManager::Load("resources/bg.jpg");
+	texHandleSkydome_ = TextureManager::Load("resources/uvChecker.png");
 	/*----------------------------
 		      プレイヤー
 	------------------------------*/

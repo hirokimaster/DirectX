@@ -155,15 +155,15 @@ void Player::Attack() {
 		if (Input::GetInstance()->PressedButton(joyState, XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 			// 弾の速度
 			const float kBulletSpeed = 1.0f;
-				Vector3 velocity = { 0,0,kBulletSpeed };
-				// 自機から照準オブジェクトのベクトル
-				Vector3 WorldPos = GetWorldPosition();
-				Vector3 ReticleWorldPos = GetWorldPosition3DReticle();
-				velocity = Subtract(ReticleWorldPos, WorldPos);
-				velocity = Normalize(velocity);
-				velocity = Multiply(kBulletSpeed, velocity);
-				// プレイヤーの向きに速度を合わせる
-				velocity = TransformNormal(velocity, worldTransform_.matWorld);
+			Vector3 velocity = { 0,0,kBulletSpeed };
+			// 自機から照準オブジェクトのベクトル
+			Vector3 WorldPos = GetWorldPosition();
+			Vector3 ReticleWorldPos = GetWorldPosition3DReticle();
+			velocity = Subtract(ReticleWorldPos, WorldPos);
+			velocity = Normalize(velocity);
+			velocity = Multiply(kBulletSpeed, velocity);
+			// プレイヤーの向きに速度を合わせる
+			velocity = TransformNormal(velocity, worldTransform_.matWorld);
 			// 弾を生成し、初期化
 			std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
 			bullet->Initialize(worldTransform_.translate, velocity);

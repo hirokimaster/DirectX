@@ -41,18 +41,25 @@ private:
 	Vector3 rotate_ = { 0.0f, 0.0f, 0.0f };
 	// 曲線レールカメラ用の点
 	std::vector<Vector3> controlPoints_ = {
-		{0.0f, 0.0f, 0.0f},
-		{1.0f, 1.0f, 1.0f},
-		{2.0f, -1.0f, 2.0f},
-		{3.0f, 0.0f, 3.0f},
-		{4.0f, 1.0f, 4.0f},
-		{5.0f, 0.0f, 5.0f},
+
+		{0,0,2},
+		{0,0,4},
+		{0,0,8},
+		{0,5,16},
+		{0,0,32},
+		{0,5,64},
+		{0,10,96},
+		{-0,5,128},
+		{-0,0,0},
+		
 	};
+
 
 	Vector3 eye_{};
 	Vector3 target_{};
 	Vector3 forward_{};
 	// カメラの進行時間
 	float currentTime_ = 0.0f;
-	const float kDeltaTime = 1.0f / 960.0f;
+	float t_ = 0.0f;
+	const float kDeltaTime = 1.0f / 1200.0f;
 };
