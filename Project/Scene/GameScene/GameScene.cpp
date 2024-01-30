@@ -21,8 +21,12 @@ void GameScene::Initialize() {
 	------------------------------*/
 	modelPlayer_.reset(Model::CreateObj("cube.obj"));
 	player_ = std::make_unique<Player>();
-	Vector3 playerPos = { 0,0,40.0f };
+	Vector3 playerPos = { 0,0,60.0f };
 	player_->Initialize(modelPlayer_.get(), playerPos, texHandlePlayer_);
+	/*----------------------------
+			 エネミー
+	------------------------------*/
+	LoadEnemyPopData();
 	/*------------------------
 			   天球
 	--------------------------*/
@@ -39,6 +43,7 @@ void GameScene::Initialize() {
 	railCamera_ = std::make_unique<RailCamera>();
 	railCamera_->Initialize(player_->GetWorldPosition(), { 0,0,0 });
 	player_->SetParent(&railCamera_->GetWorldTransform());
+	player_->SetParentPuropera(&railCamera_->GetWorldTransform());
 
 	controlPoints_ = {
 		{0,0,2},
@@ -59,7 +64,7 @@ void GameScene::Initialize() {
 		line_[i] = std::make_unique<Line>();
 		line_[i]->Initialize();
 		worldTransformLine_[i].Initialize();
-		worldTransformLine_[i].scale = { 0.01f,0.01f,0.01f };
+		worldTransformLine_[i].scale = { 0.3f,0.3f,0.3f };
 	}
 	
 }
@@ -67,17 +72,27 @@ void GameScene::Initialize() {
 // 更新
 void GameScene::Update() {
 
+	XINPUT_STATE joyState{};
+	if (Input::GetInstance()->GetJoystickState(joyState)) {
+
+		if (Input::GetInstance()->PressedButton(joyState, XINPUT_GAMEPAD_A)) {
+			activeRailCamera_ = true;
+		}
+	}
+
 	for (int i = 0; i < 100; ++i) {
 		worldTransformLine_[i].UpdateMatrix();
 	}
 
 	player_->Update(camera_);
 
-	EnemyRandomSpawn();
+	//EnemyRandomSpawn();
+
+	UpdateEnemyPopCommands();
+
 	for (enemysItr_ = enemys_.begin(); enemysItr_ != enemys_.end(); ++enemysItr_) {
 		(*enemysItr_)->Update();
 	}
-
 
 	enemys_.remove_if([](std::unique_ptr<Enemy>& enemy) {
 		if (enemy->IsDead()) {
@@ -97,10 +112,6 @@ void GameScene::Update() {
 	camera_.matProjection = railCamera_->GetCamera().matProjection;
 	camera_.TransferMatrix();
 
-	if (!activeRailCamera_) {
-		camera_.UpdateMatrix();
-	}
-
 }
 
 // 描画						  
@@ -112,8 +123,7 @@ void GameScene::Draw(){
 	}
 
 	skydome_->Draw(camera_);
-	player_->DrawUI(camera_);
-
+	
 	std::vector<Vector3> pointsDrawing;
 	const size_t segmentCount = 100;
 	for (size_t i = 0; i < segmentCount + 1; ++i) {
@@ -128,11 +138,14 @@ void GameScene::Draw(){
 		line_[i]->DrawLine({ pointsDrawing[i] }, { pointsDrawing[i + 1] }, worldTransformLine_[i], camera_);
 	}
 
+	player_->DrawUI(camera_);
 
-	ImGui::Begin("Camera2");
-	ImGui::SliderFloat3("CmeraTranslation2 ", &camera_.translate.x, -50.0f, 50.0f);
-	ImGui::SliderFloat3("CmeraRotate2 ", &camera_.rotate.x, 0.0f, 10.0f);
+
+#ifdef _DEBUG
+	ImGui::Begin("ActiveRailCamera");
+	ImGui::Text("PUSH A");
 	ImGui::End();
+#endif // _DEBUG
 }
 
 void GameScene::Collision()
@@ -176,5 +189,91 @@ void GameScene::EnemyRandomSpawn()
 		enemys_.push_back(std::move(enemy));
 		spawnTimer_ = 0;
 	}
+}
+
+void GameScene::LoadEnemyPopData()
+{
+	// ファイルを開く
+	std::ifstream file;
+	file.open("resources/enemyPop.csv");
+	assert(file.is_open());
+
+	// ファイルの内容を文字列ストリームにコピー
+	enemyPopCommands << file.rdbuf();
+
+	// ファイルを閉じる
+	file.close();
+}
+
+void GameScene::UpdateEnemyPopCommands()
+{
+	// 待機処理
+	if (wait) {
+		waitTimer--;
+		if (waitTimer <= 0) {
+			// 待機完了
+			wait = false;
+		}
+		return;
+	}
+
+	// 1行分の文字列を入れる変数
+	std::string line;
+
+	// コマンド実行ループ
+	while (getline(enemyPopCommands, line)) {
+		// 1行分の文字列をストリームに変換して解析しやすくする
+		std::istringstream line_stream(line);
+
+		std::string word;
+		// ,区切りで行の先頭文字列を取得
+		getline(line_stream, word, ',');
+
+		// "//"から始まる行はコメント
+		if (word.find("//") == 0) {
+			// コメント行を飛ばす
+			continue;
+		}
+
+		// POPコマンド
+		if (word.find("POP") == 0) {
+			// x座標
+			getline(line_stream, word, ',');
+			float x = (float)std::atof(word.c_str());
+
+			// y座標
+			getline(line_stream, word, ',');
+			float y = (float)std::atof(word.c_str());
+
+			// z座標
+			getline(line_stream, word, ',');
+			float z = (float)std::atof(word.c_str());
+
+			//敵を発生させる
+			EnemyPop(Vector3(x, y, z));
+
+		}
+		else if (word.find("WAIT") == 0) {
+			getline(line_stream, word, ',');
+
+			// 待ち時間
+			int32_t waitTime = atoi(word.c_str());
+
+			// 待機開始
+			wait = true;
+			waitTimer = waitTime;
+
+			// コマンドループを抜ける
+			break;
+		}
+	}
+}
+
+void GameScene::EnemyPop(const Vector3& position)
+{
+	std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>();
+	enemy->Initialize(position, texHandleEnemy_);
+	enemy->SetPlayer(player_.get());
+	enemys_.push_back(std::move(enemy));
 }
 

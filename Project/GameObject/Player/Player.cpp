@@ -15,9 +15,14 @@ void Player::Initialize(Model* model, Vector3 position, uint32_t texHandle)
 	// レティクル用テクスチャ取得
 	textureReticle_ = TextureManager::Load("resources/2DReticle.png");
 	sprite2DReticle_.reset(Sprite::Create({ 640.0f,360.0f }, { 150.0f,150.0f }, { 0.5f,0.5f }));
+	texHandlePropera_ = TextureManager::Load("resources/uvChecker.png");
+	properaModel_.reset(Model::CreateObj("puropera.obj"));
+	properaModel_->SetTexHandle(texHandlePropera_);
 	model_->SetTexHandle(texHandle);
 	worldTransform_.Initialize();
 	worldTransform3DReticle_.Initialize();
+	worldTransformPropera_.Initialize();
+	worldTransformPropera_.scale = { 1.5f,1.5f,1.5f };
 	worldTransform_.translate = position;
 	SetCollosionAttribute(kCollisionAttributePlayer);
 	SetCollisionMask(kCollisionAttributeEnemy);
@@ -105,15 +110,25 @@ void Player::Update(const Camera& camera)
 	// レティクル
 	Reticle(camera, Vector2((float)spritePosition.x, (float)spritePosition.y));
 
+	// プロペラ
+	worldTransformPropera_.translate.x = worldTransform_.translate.x;
+	worldTransformPropera_.translate.z = worldTransform_.translate.z;
+	worldTransformPropera_.translate.y = worldTransform_.translate.y + 0.5f;
+	worldTransformPropera_.rotate.y += 0.06f;
 
 	// ImGui
+#ifdef _DEBUG
 	ImGui::Begin("Player");
 	ImGui::Text(
 		"Player X[%.03f].Y[%.03f].Z[%.03f]", worldTransform_.translate.x,
 		worldTransform_.translate.y, worldTransform_.translate.z);
 	ImGui::End();
+#endif // _DEBUG
 
+	
+	
 	worldTransform_.UpdateMatrix();
+	worldTransformPropera_.UpdateMatrix();
 }
 
 void Player::Rotate() {
@@ -241,6 +256,7 @@ Vector3 Player::GetWorldPosition3DReticle()
 void Player::Draw(const Camera& camera)
 {
 	model_->Draw(worldTransform_,camera);
+	properaModel_->Draw(worldTransformPropera_, camera);
 
 	// 弾の描画
 	for (bulletsItr_ = bullets_.begin();

@@ -35,6 +35,7 @@ public:
 
 	// setter
 	void SetParent(const WorldTransform* parent) { worldTransform_.parent = parent; }
+	void SetParentPuropera(const WorldTransform* parent) { worldTransformPropera_.parent = parent; }
 
 private:
 
@@ -46,5 +47,8 @@ private:
 	WorldTransform worldTransform3DReticle_;
 	std::unique_ptr<Sprite> sprite2DReticle_;
 	uint32_t textureReticle_ = 0;
+	uint32_t texHandlePropera_ = 0;
+	std::unique_ptr<Model> properaModel_;
+	WorldTransform worldTransformPropera_{};
 
 };

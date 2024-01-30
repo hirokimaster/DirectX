@@ -46,7 +46,26 @@ public: // メンバ関数
 
 	void Collision();
 
+	// 敵をランダムに出現
 	void EnemyRandomSpawn();
+
+	// 敵発生コマンド
+	std::stringstream enemyPopCommands;
+
+	/// <summary>
+	/// 敵発生データの読み込み
+	/// </summary>
+	void LoadEnemyPopData();
+
+	/// <summary>
+	/// 敵発生コマンドの更新
+	/// </summary>
+	void UpdateEnemyPopCommands();
+
+	/// <summary>
+	/// 敵発生処理
+	/// </summary>
+	void EnemyPop(const Vector3& position);
 
 private: // メンバ変数
 	Camera camera_ = {};
@@ -69,4 +88,8 @@ private: // メンバ変数
 	uint32_t spawnTimer_ = 0;
 	std::list<std::unique_ptr<Enemy>> enemys_;
 	std::list<std::unique_ptr<Enemy>>::iterator enemysItr_;
+	// 待機中フラグ
+	bool wait = false;
+	// 待機中タイマー
+	uint32_t waitTimer = 0;
 };
