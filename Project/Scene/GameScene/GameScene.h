@@ -40,5 +40,13 @@ public: // メンバ関数
 	void Draw()override;
 
 private: // メンバ変数
-
+	Camera camera_{};
+	WorldTransform worldTransform_{};
+	std::unique_ptr<Model> model_;
+	uint32_t texHandle_ = 0;
+	bool isLighting_;
+	Lightng lighting_{};
+	PointLight pointLight_{};
+	Material material_{};
+	DirectionalLight lightingProperty_{};
 };
