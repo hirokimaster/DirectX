@@ -41,9 +41,12 @@ public: // メンバ関数
 
 private: // メンバ変数
 	Camera camera_{};
-	WorldTransform worldTransform_{};
-	std::unique_ptr<Model> model_;
-	uint32_t texHandle_ = 0;
+	WorldTransform worldTransformBunny_{};
+	WorldTransform worldTransformGround_{};
+	std::unique_ptr<Model> modelBunny_;
+	std::unique_ptr<Model> modelGround_;
+	uint32_t texHandleGround_ = 0;
+	uint32_t texHandleBunny_ = 0;
 	bool isLighting_;
 	Lightng lighting_{};
 	PointLight pointLight_{};

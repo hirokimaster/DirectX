@@ -10,38 +10,38 @@ GameScene::~GameScene() {
 void GameScene::Initialize() {
 	camera_.Initialize();
 
-	model_.reset(Model::CreateObj("sphere.obj"));
-	texHandle_ = TextureManager::Load("resources/uvChecker.png");
-	model_->SetTexHandle(texHandle_);
-	isLighting_ = true;
-	material_.enableLighting = isLighting_;
-	model_->SetEnableLighting(isLighting_); // ライティングのオンオフ
+	modelBunny_.reset(Model::CreateObj("bunny.obj"));
+	texHandleBunny_ = TextureManager::Load("resources/uvChecker.png");
+	modelBunny_->SetTexHandle(texHandleBunny_);
+	material_.enableLighting = true;
 	material_.color = { 1.0f,1.0f,1.0f,1.0f };
 	material_.shininess = 70.0f;
 	lightingProperty_.color = { 1.0f,1.0f,1.0f,1.0f };
 	lightingProperty_.intensity = 1.0f;
 	lighting_ = BlinnPhong; // ライティングの種類
 
-	worldTransform_.Initialize();
-	worldTransform_.translate.z = -50.0f;
+	worldTransformBunny_.Initialize();
+	worldTransformBunny_.translate.z = -50.0f;
+	worldTransformBunny_.rotate.y = 3.1f;
+
+	worldTransformGround_.Initialize();
 }
 
 // 更新
 void GameScene::Update() {
 
-	model_->SetEnableLighting(isLighting_); // ライトのオンオフ
-	model_->SetLightingProperty(lightingProperty_);	 // ライトの設定
-	model_->SetMaterialProperty(material_);		// マテリアルの設定
+	modelBunny_->SetLightingProperty(lightingProperty_);	 // ライトの設定
+	modelBunny_->SetMaterialProperty(material_);		// マテリアルの設定
+	material_.enableLighting = isLighting_;
 
-	ImGui::Begin("Setting");
+	ImGui::Begin("BunnySetting");
 
 	if (ImGui::TreeNode("transform")) {
-
-		ImGui::SliderAngle("rotateX", &worldTransform_.rotate.x);
-		ImGui::SliderAngle("rotateY", &worldTransform_.rotate.y);
-		ImGui::SliderAngle("rotateZ", &worldTransform_.rotate.z);
-		ImGui::DragFloat3("translate", &worldTransform_.translate.x, 0.01f);
-		ImGui::DragFloat3("scale", &worldTransform_.scale.x, 0.01f);
+		ImGui::SliderAngle("rotateX", &worldTransformBunny_.rotate.x);
+		ImGui::SliderAngle("rotateY", &worldTransformBunny_.rotate.y);
+		ImGui::SliderAngle("rotateZ", &worldTransformBunny_.rotate.z);
+		ImGui::DragFloat3("translate", &worldTransformBunny_.translate.x, 0.01f);
+		ImGui::DragFloat3("scale", &worldTransformBunny_.scale.x, 0.01f);
 		ImGui::TreePop();
 	}
 
@@ -62,10 +62,11 @@ void GameScene::Update() {
 	ImGui::End();
 
 	camera_.UpdateMatrix();
-	worldTransform_.UpdateMatrix();
+	worldTransformBunny_.UpdateMatrix();
+	worldTransformGround_.UpdateMatrix();
 }
 
 // 描画						  
 void GameScene::Draw(){
-	model_->Draw(worldTransform_, camera_, lighting_);
+	modelBunny_->Draw(worldTransformBunny_, camera_, lighting_);
 }
