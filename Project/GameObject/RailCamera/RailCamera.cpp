@@ -38,11 +38,13 @@ void RailCamera::Update() {
 	UpdateTargetPosition(kDeltaTime);
 	MoveOnRail();
 
+#ifdef _DEBUG
 	// カメラの座標を画面表示する処理
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("CmeraTranslation ", &worldTransform_.translate.x, -50.0f, 50.0f);
 	ImGui::SliderFloat3("CmeraRotate ", &worldTransform_.rotate.x, 0.0f, 10.0f);
 	ImGui::End();
+#endif // _DEBUG
 
 }
 
