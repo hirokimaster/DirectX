@@ -50,6 +50,8 @@ private: // メンバ変数
 	bool isLighting_;
 	Lightng lighting_{};
 	PointLight pointLight_{};
-	Material material_{};
-	DirectionalLight lightingProperty_{};
+	Material materialBunny_{};
+	Material materialGround_{};
+	DirectionalLight lightingPropertyBunny_{};
+	DirectionalLight lightingPropertyGround_{};
 };
