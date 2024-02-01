@@ -203,29 +203,6 @@ void Model::Draw(WorldTransform worldTransform, Camera camera)
 	DirectXCommon::GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
-void Model::DrawGLTF(WorldTransform worldTransform, Camera camera)
-{
-	worldTransform.GLTFTransferMatrix(resource_.wvpResource, modelData_, camera);
-
-	Property property = GraphicsPipeline::GetInstance()->GetPSO().Object3D;
-
-	// Rootsignatureを設定。PSOに設定してるけど別途設定が必要
-	DirectXCommon::GetCommandList()->SetGraphicsRootSignature(property.rootSignature_.Get());
-	DirectXCommon::GetCommandList()->SetPipelineState(property.graphicsPipelineState_.Get()); // PSOを設定
-	DirectXCommon::GetCommandList()->IASetVertexBuffers(0, 1, &objVertexBufferView_); // VBVを設定
-	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
-	DirectXCommon::GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	// マテリアルCBufferの場所を設定
-	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(0, resource_.materialResource->GetGPUVirtualAddress());
-	// wvp用のCBufferの場所を設定
-	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(1, resource_.wvpResource->GetGPUVirtualAddress());
-	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetGPUHandle(texHandle_));
-	// 平行光源
-	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(3, resource_.directionalLightResource->GetGPUVirtualAddress());
-	// 描画。(DrawCall/ドローコール)。
-	DirectXCommon::GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-}
-
 
 ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename)
 {

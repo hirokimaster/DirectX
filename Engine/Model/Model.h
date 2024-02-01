@@ -67,8 +67,6 @@ public:
 	/// </summary>
 	void Draw(WorldTransform worldTransform, Camera camera);
 
-	void DrawGLTF(WorldTransform worldTransform, Camera camera);
-
 	// setter
 	void SetTexHandle(uint32_t texHandle) { texHandle_ = texHandle; }
 
