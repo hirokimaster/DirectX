@@ -5,7 +5,6 @@
 #include "Mathfunction.h"
 #include "CreateResource.h"
 #include "Camera/Camera.h"
-#include "Model/Model.h"
 
 
 struct TransformationMatrix {
