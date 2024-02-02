@@ -67,6 +67,15 @@ void Model::InitializeObj(const std::string& filename)
 	pointLightData_->radius = 12.0f;
 	pointLightData_->decay = 0.6f;
 
+	resource_.spotLightResource = CreateResource::CreateBufferResource(sizeof(SpotLight));
+	resource_.spotLightResource->Map(0, nullptr, reinterpret_cast<void**>(&spotLightData_));
+	spotLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	spotLightData_->position = { 2.0f,1.25f,0.0f };
+	spotLightData_->intensity = 4.0f;
+	spotLightData_->direction = Normalize({ -1.0f, -1.0f, 0.0f });
+	spotLightData_->distance = 7.0f;
+	spotLightData_->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
+	spotLightData_->decay = 2.0f;
 
 }
 
@@ -121,6 +130,16 @@ void Model::InitializeGLTF(const std::string& filename)
 	pointLightData_->intensity = 1.0f;
 	pointLightData_->radius = 12.0f;
 	pointLightData_->decay = 0.6f;
+
+	resource_.spotLightResource = CreateResource::CreateBufferResource(sizeof(SpotLight));
+	resource_.spotLightResource->Map(0, nullptr, reinterpret_cast<void**>(&spotLightData_));
+	spotLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	spotLightData_->position = { 2.0f,1.25f,0.0f };
+	spotLightData_->intensity = 4.0f;
+	spotLightData_->direction = Normalize({ -1.0f, -1.0f, 0.0f });
+	spotLightData_->distance = 7.0f;
+	spotLightData_->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
+	spotLightData_->decay = 2.0f;
 }
 
 /// <summary>
@@ -193,6 +212,9 @@ void Model::Draw(WorldTransform worldTransform, Camera camera, Lightng light)
 	else if (light == Point) {
 		property_ = GraphicsPipeline::GetInstance()->GetPSO().PointLight;
 	}
+	else if (light == Spot) {
+		property_ = GraphicsPipeline::GetInstance()->GetPSO().SpotLight;
+	}
 	
 	   // Rootsignatureを設定。PSOに設定してるけど別途設定が必要
 	DirectXCommon::GetCommandList()->SetGraphicsRootSignature(property_.rootSignature_.Get());
@@ -218,6 +240,12 @@ void Model::Draw(WorldTransform worldTransform, Camera camera, Lightng light)
 		DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(4, resource_.cameraResource->GetGPUVirtualAddress());
 		// ポイントライト用
 		DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(5, resource_.pointLightResource->GetGPUVirtualAddress());
+	}
+	else if (light == Spot) {
+		// カメラ用
+		DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(4, resource_.cameraResource->GetGPUVirtualAddress());
+		// ポイントライト用
+		DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(5, resource_.spotLightResource->GetGPUVirtualAddress());
 	}
 
 	// 描画。(DrawCall/ドローコール)。

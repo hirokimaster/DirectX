@@ -12,6 +12,7 @@ struct Resource {
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource;
 	Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
 	Microsoft::WRL::ComPtr<ID3D12Resource> pointLightResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> spotLightResource;
 	Microsoft::WRL::ComPtr<ID3D12Resource> cameraResource;
 };
 
@@ -39,6 +40,17 @@ struct PointLight {
 	float intensity;
 	float radius;
 	float decay;
+	float padding[2];
+};
+
+struct SpotLight {
+	Vector4 color;
+	Vector3 position;
+	float intensity;
+	Vector3 direction;
+	float distance;
+	float decay;
+	float cosAngle;
 	float padding[2];
 };
 

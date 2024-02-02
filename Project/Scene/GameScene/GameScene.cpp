@@ -19,16 +19,18 @@ void GameScene::Initialize() {
 	modelBunny_->SetTexHandle(texHandleBunny_);
 	modelGround_->SetTexHandle(texHandleGround_);
 
-	materialBunny_.enableLighting = true;
+	isLightingBunny_ = true;
 	materialBunny_.color = { 1.0f,1.0f,1.0f,1.0f };
 	materialBunny_.shininess = 70.0f;
 	lightingPropertyBunny_.color = { 1.0f,1.0f,1.0f,1.0f };
+	lightingPropertyBunny_.direction = { 0.0f,-1.0f,0.0f };
 	lightingPropertyBunny_.intensity = 1.0f;
 
-	materialGround_.enableLighting = true;
+	isLightingGround_ = true;
 	materialGround_.color = { 1.0f,1.0f,1.0f,1.0f };
 	materialGround_.shininess = 70.0f;
 	lightingPropertyGround_.color = { 1.0f,1.0f,1.0f,1.0f };
+	lightingPropertyGround_.direction = { 0.0f,-1.0f,0.0f };
 	lightingPropertyGround_.intensity = 1.0f;
 
 	lighting_ = BlinnPhong; // ライティングの種類
@@ -37,6 +39,14 @@ void GameScene::Initialize() {
 	pointLight_.decay = 0.6f;
 	pointLight_.intensity = 1.0f;
 	pointLight_.radius = 5.0f;
+
+	spotLight_.color = { 1.0f,1.0f,1.0f,1.0f };
+	spotLight_.position = { 2.0f,1.25f,0.0f };
+	spotLight_.intensity = 4.0f;
+	spotLight_.direction = Normalize({ -1.0f, -1.0f, 0.0f });
+	spotLight_.distance = 7.0f;
+	spotLight_.cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
+	spotLight_.decay = 2.0f;
 
 	worldTransformBunny_.Initialize();
 	worldTransformBunny_.rotate.y = 3.1f;
@@ -50,11 +60,35 @@ void GameScene::Update() {
 	modelBunny_->SetLightingProperty(lightingPropertyBunny_); // ライトの設定
 	modelBunny_->SetMaterialProperty(materialBunny_); // マテリアルの設定
 	modelBunny_->SetCameraData(camera_.translate);
+	modelBunny_->SetPointLightProperty(pointLight_);
+	modelBunny_->SetSpotLightProperty(spotLight_);
+	materialBunny_.enableLighting = isLightingBunny_;
 
 	modelGround_->SetLightingProperty(lightingPropertyGround_); // ライトの設定
 	modelGround_->SetMaterialProperty(materialGround_);
 	modelGround_->SetCameraData(camera_.translate);
-	materialBunny_.enableLighting = isLighting_;
+	modelGround_->SetPointLightProperty(pointLight_);
+	modelGround_->SetSpotLightProperty(spotLight_);
+	materialGround_.enableLighting = isLightingGround_;
+
+	static int currentItem_ = 0;
+	const char* item[3] = { "Billin-Phong", "pointLight", "spotLight" };
+
+	ImGui::Begin("Lighting Type");
+
+	if (ImGui::Combo("LightingType", &currentItem_, item, IM_ARRAYSIZE(item))) {
+		if (currentItem_ == 0) {
+			lighting_ = BlinnPhong;
+		}
+		else if (currentItem_ == 1) {
+			lighting_ = Point;
+		}
+		else if (currentItem_ == 2) {
+			lighting_ = Spot;
+		}
+	}
+
+	ImGui::End();
 
 	/*-----------------------------
 		    bunnyの設定
@@ -77,7 +111,7 @@ void GameScene::Update() {
 	}
 
 	if (ImGui::TreeNode("Light")) {
-		ImGui::Checkbox("isLighting", &isLighting_);
+		ImGui::Checkbox("isLighting", &isLightingBunny_);
 		ImGui::ColorEdit3("color", &lightingPropertyBunny_.color.x);
 		ImGui::DragFloat3("direction", &lightingPropertyBunny_.direction.x, 0.01f, -1.0f, 1.0f);
 		ImGui::DragFloat("intensity", &lightingPropertyBunny_.intensity, 0.01f);
@@ -107,7 +141,7 @@ void GameScene::Update() {
 	}
 
 	if (ImGui::TreeNode("Light")) {
-		ImGui::Checkbox("isLighting", &isLighting_);
+		ImGui::Checkbox("isLighting", &isLightingGround_);
 		ImGui::ColorEdit3("color", &lightingPropertyGround_.color.x);
 		ImGui::DragFloat3("direction", &lightingPropertyGround_.direction.x, 0.01f, -1.0f, 1.0f);
 		ImGui::DragFloat("intensity", &lightingPropertyGround_.intensity, 0.01f);
@@ -117,11 +151,32 @@ void GameScene::Update() {
 	ImGui::End();
 
 	/*---------------------------
-			点光源の設定
+			PointLightの設定
 	------------------------------*/
 	ImGui::Begin("PointLightSetting");
 	if (ImGui::TreeNode("LightProperty")) {
+		ImGui::SliderFloat4("color", &pointLight_.color.x, 0.0f, 1.0f);
+		ImGui::SliderFloat3("position", &pointLight_.position.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("intensity", &pointLight_.intensity, 0.0f, 10.0f);
+		ImGui::SliderFloat("radius", &pointLight_.radius, 0.0f, 100.0f);
+		ImGui::SliderFloat("decay", &pointLight_.decay, 0.0f, 10.0f);
+		ImGui::TreePop();
+	}
 
+	ImGui::End();
+
+	/*---------------------------
+			SpotLightの設定
+	------------------------------*/
+	ImGui::Begin("SpotLightSetting");
+	if (ImGui::TreeNode("LightProperty")) {
+		ImGui::SliderFloat4("color", &spotLight_.color.x, 0.0f, 1.0f);
+		ImGui::SliderFloat3("position", &spotLight_.position.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("intensity", &spotLight_.intensity, 0.0f, 10.0f);
+		ImGui::SliderFloat("distance", &spotLight_.distance, 0.0f, 100.0f);
+		ImGui::DragFloat3("direction", &spotLight_.direction.x, 0.01f, -1.0f, 1.0f);
+		ImGui::SliderFloat("cosAngle", &spotLight_.cosAngle, 0.0f, 100.0f);
+		ImGui::SliderFloat("decay", &spotLight_.decay, 0.0f, 10.0f);
 		ImGui::TreePop();
 	}
 

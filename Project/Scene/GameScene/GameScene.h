@@ -47,9 +47,11 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelGround_;
 	uint32_t texHandleGround_ = 0;
 	uint32_t texHandleBunny_ = 0;
-	bool isLighting_;
+	bool isLightingBunny_;
+	bool isLightingGround_;
 	Lightng lighting_{};
 	PointLight pointLight_{};
+	SpotLight spotLight_{};
 	Material materialBunny_{};
 	Material materialGround_{};
 	DirectionalLight lightingPropertyBunny_{};

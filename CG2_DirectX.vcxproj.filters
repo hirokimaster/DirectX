@@ -294,6 +294,8 @@
     <FxCompile Include="Engine\ShaderFile\PointLight.PS.hlsl" />
     <FxCompile Include="Engine\ShaderFile\Blinn-Phong.PS.hlsl" />
     <FxCompile Include="Engine\ShaderFile\Blinn-Phong.VS.hlsl" />
+    <FxCompile Include="Engine\ShaderFile\SpotLight.PS.hlsl" />
+    <FxCompile Include="Engine\ShaderFile\SpotLight.VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\ShaderFile\Object3d.hlsli">
