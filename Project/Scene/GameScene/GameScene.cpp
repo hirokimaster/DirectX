@@ -13,11 +13,15 @@ void GameScene::Initialize() {
 	camera_.translate = { 0,10.0f,-30.0f };
 
 	modelBunny_.reset(Model::CreateObj("bunny.obj"));
-	texHandleBunny_ = TextureManager::Load("resources/uvChecker.png");
+	texHandleUVChecker_ = TextureManager::Load("resources/uvChecker.png");
 	modelGround_.reset(Model::CreateObj("terrain.obj"));
 	texHandleGround_ = TextureManager::Load("resources/grass.png");
-	modelBunny_->SetTexHandle(texHandleBunny_);
+	modelPlane_.reset(Model::CreateGFTF("Plane.gltf"));
+	modelBunny_->SetTexHandle(texHandleUVChecker_);
 	modelGround_->SetTexHandle(texHandleGround_);
+	modelPlane_->SetTexHandle(texHandleUVChecker_);
+
+	isPlaneDraw_ = false;
 
 	isLightingBunny_ = true;
 	materialBunny_.color = { 1.0f,1.0f,1.0f,1.0f };
@@ -53,6 +57,9 @@ void GameScene::Initialize() {
 	worldTransformBunny_.rotate.y = 3.1f;
 
 	worldTransformGround_.Initialize();
+	worldTransformPlane_.Initialize();
+	worldTransformPlane_.translate.y = 6.0f;
+	worldTransformPlane_.translate.z = -20.0f;
 }
 
 // 更新
@@ -190,13 +197,35 @@ void GameScene::Update() {
 
 	ImGui::End();
 
+	/*---------------------------
+			Planeの設定
+	------------------------------*/
+	ImGui::Begin("Plane.gltf");
+	ImGui::Checkbox("isDraw", &isPlaneDraw_);
+	if (ImGui::TreeNode("transform")) {
+		ImGui::SliderAngle("rotateX", &worldTransformPlane_.rotate.x);
+		ImGui::SliderAngle("rotateY", &worldTransformPlane_.rotate.y);
+		ImGui::SliderAngle("rotateZ", &worldTransformPlane_.rotate.z);
+		ImGui::DragFloat3("translate", &worldTransformPlane_.translate.x, 0.01f);
+		ImGui::DragFloat3("scale", &worldTransformPlane_.scale.x, 0.01f);
+		ImGui::TreePop();
+	}
+
+	ImGui::End();
+
+	//worldTransformPlane_.rotate.y += 0.03f;
+
 	camera_.UpdateMatrix();
 	worldTransformBunny_.UpdateMatrix();
 	worldTransformGround_.UpdateMatrix();
+	worldTransformPlane_.UpdateMatrix();
 }
 
 // 描画						  
 void GameScene::Draw(){
 	modelBunny_->Draw(worldTransformBunny_, camera_, lighting_);
 	modelGround_->Draw(worldTransformGround_, camera_, lighting_);
+	if (isPlaneDraw_) {
+		modelPlane_->Draw(worldTransformPlane_, camera_);
+	}
 }

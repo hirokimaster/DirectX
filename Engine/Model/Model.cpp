@@ -201,7 +201,6 @@ void Model::Draw(WorldTransform worldTransform, Camera camera, uint32_t texHandl
 
 void Model::Draw(WorldTransform worldTransform, Camera camera, Lightng light)
 {
-
 	worldTransform.TransferMatrix(resource_.wvpResource, camera);
 
 	if (light == None) {
@@ -218,6 +217,63 @@ void Model::Draw(WorldTransform worldTransform, Camera camera, Lightng light)
 	}
 	
 	   // Rootsignatureを設定。PSOに設定してるけど別途設定が必要
+	DirectXCommon::GetCommandList()->SetGraphicsRootSignature(property_.rootSignature_.Get());
+	DirectXCommon::GetCommandList()->SetPipelineState(property_.graphicsPipelineState_.Get()); // PSOを設定
+	DirectXCommon::GetCommandList()->IASetVertexBuffers(0, 1, &objVertexBufferView_); // VBVを設定
+	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
+	DirectXCommon::GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	// マテリアルCBufferの場所を設定
+	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(0, resource_.materialResource->GetGPUVirtualAddress());
+	// wvp用のCBufferの場所を設定
+	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(1, resource_.wvpResource->GetGPUVirtualAddress());
+	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetGPUHandle(texHandle_));
+	// 平行光源
+	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(3, resource_.directionalLightResource->GetGPUVirtualAddress());
+
+
+	if (light == BlinnPhong) {
+		// カメラ用
+		DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(4, resource_.cameraResource->GetGPUVirtualAddress());
+	}
+	else if (light == Point) {
+		// カメラ用
+		DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(4, resource_.cameraResource->GetGPUVirtualAddress());
+		// ポイントライト用
+		DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(5, resource_.pointLightResource->GetGPUVirtualAddress());
+	}
+	else if (light == Spot) {
+		// カメラ用
+		DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(4, resource_.cameraResource->GetGPUVirtualAddress());
+		// ポイントライト用
+		DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(5, resource_.spotLightResource->GetGPUVirtualAddress());
+	}
+
+	// 描画。(DrawCall/ドローコール)。
+	DirectXCommon::GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+}
+
+void Model::DrawGLTF(WorldTransform worldTransform, Camera camera, Lightng light)
+{
+	TransformationMatrix* wvp = {};
+	worldTransform.matWorld = Multiply(worldTransform.matWorld, Multiply(camera.matView, camera.matProjection));
+	resource_.wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvp));
+	wvp->WVP = Multiply(modelData_.rootNode.localMatrix, worldTransform.matWorld);
+	wvp->World = Multiply(modelData_.rootNode.localMatrix, worldTransform.worldMatrix);
+
+	if (light == None) {
+		property_ = GraphicsPipeline::GetInstance()->GetPSO().Object3D;
+	}
+	else if (light == BlinnPhong) {
+		property_ = GraphicsPipeline::GetInstance()->GetPSO().BlinnPhongObject3D;
+	}
+	else if (light == Point) {
+		property_ = GraphicsPipeline::GetInstance()->GetPSO().PointLight;
+	}
+	else if (light == Spot) {
+		property_ = GraphicsPipeline::GetInstance()->GetPSO().SpotLight;
+	}
+
+	// Rootsignatureを設定。PSOに設定してるけど別途設定が必要
 	DirectXCommon::GetCommandList()->SetGraphicsRootSignature(property_.rootSignature_.Get());
 	DirectXCommon::GetCommandList()->SetPipelineState(property_.graphicsPipelineState_.Get()); // PSOを設定
 	DirectXCommon::GetCommandList()->IASetVertexBuffers(0, 1, &objVertexBufferView_); // VBVを設定
@@ -328,6 +384,7 @@ ModelData Model::LoadGLTFFile(const std::string& directoryPath, const std::strin
 				vertex.position.x *= -1.0f;
 				vertex.normal.x *= -1.0f;
 				modelData.vertices.push_back(vertex);
+				
 			}
 		}
 	}

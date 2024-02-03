@@ -43,10 +43,12 @@ private: // メンバ変数
 	Camera camera_{};
 	WorldTransform worldTransformBunny_{};
 	WorldTransform worldTransformGround_{};
+	WorldTransform worldTransformPlane_{};
 	std::unique_ptr<Model> modelBunny_;
 	std::unique_ptr<Model> modelGround_;
+	std::unique_ptr<Model> modelPlane_;
 	uint32_t texHandleGround_ = 0;
-	uint32_t texHandleBunny_ = 0;
+	uint32_t texHandleUVChecker_ = 0;
 	bool isLightingBunny_;
 	bool isLightingGround_;
 	Lightng lighting_{};
@@ -56,4 +58,5 @@ private: // メンバ変数
 	Material materialGround_{};
 	DirectionalLight lightingPropertyBunny_{};
 	DirectionalLight lightingPropertyGround_{};
+	bool isPlaneDraw_;
 };
