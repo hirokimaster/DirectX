@@ -75,6 +75,7 @@ void Model::InitializeObj(const std::string& filename)
 	spotLightData_->direction = Normalize({ -1.0f, -1.0f, 0.0f });
 	spotLightData_->distance = 7.0f;
 	spotLightData_->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
+	spotLightData_->cosFallooffStart = 1.0f;
 	spotLightData_->decay = 2.0f;
 
 }

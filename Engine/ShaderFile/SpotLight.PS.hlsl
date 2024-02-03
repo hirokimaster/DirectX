@@ -65,7 +65,6 @@ PixelShaderOutput main(VertexShaderOutput input)
     float32_t3 spotLightDirectionOnSurface = normalize(input.worldPosition - gSpotLight.position);
     float32_t cosAngle = dot(spotLightDirectionOnSurface, gSpotLight.direction);
     float32_t falloffFactor = saturate((cosAngle - gSpotLight.cosAngle) / (gSpotLight.cosFalloffStart - gSpotLight.cosAngle));
-    float32_t3 sHalfVector = normalize(-spotLightDirectionOnSurface + toEye);
    
     if (gMaterial.enableLighting != 0)
     {
@@ -87,11 +86,11 @@ PixelShaderOutput main(VertexShaderOutput input)
         ---------------------------*/
         float sNdotL = dot(normalize(input.normal), -spotLightDirectionOnSurface);
         float sCos = pow(sNdotL * 0.5f + 0.5f, 2.0f);
-        float sNDotH = dot(normalize(input.normal), sHalfVector);
+        float sNDotH = dot(normalize(input.normal), halfVector);
         float sSpecularPow = pow(saturate(sNDotH), gMaterial.shininess); // 反射強度
        
         float32_t3 sDiffuse = gMaterial.color.rgb * textureColor.rgb * gSpotLight.color.rgb * sCos * gSpotLight.intensity * factor * falloffFactor;
-        float32_t3 sSpecular = gSpotLight.color.rgb * gSpotLight.intensity * factor * sSpecularPow * float32_t3(1.0f, 1.0f, 1.0f);
+        float32_t3 sSpecular = gSpotLight.color.rgb * gSpotLight.intensity * factor * falloffFactor * sSpecularPow * float32_t3(1.0f, 1.0f, 1.0f);
 
         output.color.rgb = diffuse + specular + sDiffuse + sSpecular;
         output.color.a = gMaterial.color.a * textureColor.a;

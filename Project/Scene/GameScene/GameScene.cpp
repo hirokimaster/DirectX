@@ -46,6 +46,7 @@ void GameScene::Initialize() {
 	spotLight_.direction = Normalize({ -1.0f, -1.0f, 0.0f });
 	spotLight_.distance = 7.0f;
 	spotLight_.cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
+	spotLight_.cosFallooffStart = 1.0f;
 	spotLight_.decay = 2.0f;
 
 	worldTransformBunny_.Initialize();
@@ -79,12 +80,18 @@ void GameScene::Update() {
 	if (ImGui::Combo("LightingType", &currentItem_, item, IM_ARRAYSIZE(item))) {
 		if (currentItem_ == 0) {
 			lighting_ = BlinnPhong;
+			lightingPropertyBunny_.intensity = 1.0f;
+			lightingPropertyGround_.intensity = 1.0f;
 		}
 		else if (currentItem_ == 1) {
 			lighting_ = Point;
+			lightingPropertyBunny_.intensity = 1.0f;
+			lightingPropertyGround_.intensity = 1.0f;
 		}
 		else if (currentItem_ == 2) {
 			lighting_ = Spot;
+			lightingPropertyBunny_.intensity = 0.0f;
+			lightingPropertyGround_.intensity = 0.0f;
 		}
 	}
 
@@ -175,7 +182,8 @@ void GameScene::Update() {
 		ImGui::SliderFloat("intensity", &spotLight_.intensity, 0.0f, 10.0f);
 		ImGui::SliderFloat("distance", &spotLight_.distance, 0.0f, 100.0f);
 		ImGui::DragFloat3("direction", &spotLight_.direction.x, 0.01f, -1.0f, 1.0f);
-		ImGui::SliderFloat("cosAngle", &spotLight_.cosAngle, 0.0f, 100.0f);
+		ImGui::SliderAngle("cosAngle", &spotLight_.cosAngle);
+		ImGui::SliderFloat("cosFallooffStart", &spotLight_.cosFallooffStart, 0.0f, 1.0f);
 		ImGui::SliderFloat("decay", &spotLight_.decay, 0.0f, 10.0f);
 		ImGui::TreePop();
 	}
