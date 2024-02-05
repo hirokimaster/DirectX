@@ -107,10 +107,15 @@ copy "$(WindowsSdkdir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="application\GameManager\GameManager.cpp" />
+    <ClCompile Include="application\Scene\GameScene\GameScene.cpp" />
+    <ClCompile Include="application\Scene\IScene\IScene.cpp" />
     <ClCompile Include="Engine\Audio\Audio.cpp" />
     <ClCompile Include="Engine\Base\DX\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
+    <ClCompile Include="engine\Framework\Framework.cpp" />
     <ClCompile Include="Engine\Model\State\ModelCube.cpp" />
+    <ClCompile Include="engine\SceneFactory\SceneFactory.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
     <ClCompile Include="externals\imgui\imgui_draw.cpp" />
@@ -138,10 +143,16 @@ copy "$(WindowsSdkdir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\TextureManager\TextureReference\TextureReference.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="application\GameManager\GameManager.h" />
+    <ClInclude Include="application\Scene\GameScene\GameScene.h" />
+    <ClInclude Include="application\Scene\IScene\IScene.h" />
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\Base\DX\DirectXCommon.h" />
     <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="engine\Framework\Framework.h" />
     <ClInclude Include="Engine\Model\State\ModelCube.h" />
+    <ClInclude Include="engine\SceneFactory\AbstractSceneFactory.h" />
+    <ClInclude Include="engine\SceneFactory\SceneFactory.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />

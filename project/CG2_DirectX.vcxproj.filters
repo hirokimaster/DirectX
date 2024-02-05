@@ -157,6 +157,21 @@
     <ClCompile Include="Engine\ParticleSystem\ParticleSystem.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="application\Scene\GameScene\GameScene.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="application\GameManager\GameManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\Framework\Framework.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\SceneFactory\SceneFactory.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="application\Scene\IScene\IScene.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\CreateResource\CreateResource.h">
@@ -260,6 +275,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Audio\Audio.h" />
     <ClInclude Include="Engine\ParticleSystem\ParticleSystem.h" />
+    <ClInclude Include="application\Scene\IScene\IScene.h" />
+    <ClInclude Include="application\Scene\GameScene\GameScene.h" />
+    <ClInclude Include="application\GameManager\GameManager.h" />
+    <ClInclude Include="engine\Framework\Framework.h" />
+    <ClInclude Include="engine\SceneFactory\SceneFactory.h" />
+    <ClInclude Include="engine\SceneFactory\AbstractSceneFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\ShaderFile\Object3d.PS.hlsl">
