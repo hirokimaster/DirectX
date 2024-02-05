@@ -65,6 +65,13 @@ bool Input::GetJoystickState(XINPUT_STATE& out) const
 	return false;
 }
 
+bool Input::PressedButton(XINPUT_STATE& out, WORD button)
+{
+	Input::GetInstance()->UpdateButtonState(state_, out.Gamepad.wButtons & button);
+
+	return (state_.isPressed && !state_.wasPressed);
+}
+
 void Input::UpdateButtonState(ButtonState& state, bool isPressed)
 {
 	state.wasPressed = state.isPressed;

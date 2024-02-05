@@ -202,6 +202,9 @@
     <ClCompile Include="Engine\ParticleSystem\ParticleSystem.cpp">
       <Filter>Engine\ParticleSystem</Filter>
     </ClCompile>
+    <ClCompile Include="application\Scene\TitleScene\TitleScene.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\CreateResource\CreateResource.h">
@@ -336,6 +339,7 @@
     <ClInclude Include="Engine\ParticleSystem\ParticleSystem.h">
       <Filter>Engine\ParticleSystem</Filter>
     </ClInclude>
+    <ClInclude Include="application\Scene\TitleScene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\ShaderFile\Object3d.PS.hlsl">
