@@ -30,7 +30,4 @@ public: // メンバ関数
 	void Draw()override;
 
 private:
-	uint32_t t = 0;
-	std::unique_ptr<Sprite> s;
-	Camera c;
 };

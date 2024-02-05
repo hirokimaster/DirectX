@@ -172,6 +172,9 @@
     <ClCompile Include="application\Scene\IScene\IScene.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="engine\Utility\CollisionManager\CollisionManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\CreateResource\CreateResource.h">
@@ -281,6 +284,9 @@
     <ClInclude Include="engine\Framework\Framework.h" />
     <ClInclude Include="engine\SceneFactory\SceneFactory.h" />
     <ClInclude Include="engine\SceneFactory\AbstractSceneFactory.h" />
+    <ClInclude Include="engine\Utility\CollisionManager\CollisionManager.h" />
+    <ClInclude Include="engine\Utility\CollisionManager\Collider\Collider.h" />
+    <ClInclude Include="engine\Utility\CollisionManager\Collider\ColliderConfig.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\ShaderFile\Object3d.PS.hlsl">
