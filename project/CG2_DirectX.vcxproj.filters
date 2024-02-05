@@ -95,6 +95,9 @@
     <Filter Include="Engine\ParticleSystem">
       <UniqueIdentifier>{d5cc0c80-c018-4e8d-a273-03ebce3fca9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application\Scene\TitleScene">
+      <UniqueIdentifier>{3eb4690d-0695-4fc5-9e7c-81dc6bbc1406}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -203,7 +206,7 @@
       <Filter>Engine\ParticleSystem</Filter>
     </ClCompile>
     <ClCompile Include="application\Scene\TitleScene\TitleScene.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Application\Scene\TitleScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -339,7 +342,9 @@
     <ClInclude Include="Engine\ParticleSystem\ParticleSystem.h">
       <Filter>Engine\ParticleSystem</Filter>
     </ClInclude>
-    <ClInclude Include="application\Scene\TitleScene\TitleScene.h" />
+    <ClInclude Include="application\Scene\TitleScene\TitleScene.h">
+      <Filter>Application\Scene\TitleScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Engine\ShaderFile\Object3d.PS.hlsl">
