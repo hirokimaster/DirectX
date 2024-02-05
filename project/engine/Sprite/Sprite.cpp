@@ -24,29 +24,29 @@ void Sprite::Initialize(uint32_t texHandle) {
 	VertexData* vertexDataSprite = nullptr;
 	sResource_.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
 
-	float left = 0.0f - anchorPoint_.x;
-	float right = 1.0f - anchorPoint_.x;
-	float top = 0.0f - anchorPoint_.y;
-	float bottom = 1.0f - anchorPoint_.y;
-
 	texHandle_ = texHandle;
 
 	AdjustTextureSize(texHandle_);
 
+	float left = (0.0f - anchorPoint_.x) * size_.x;
+	float right = (1.0f - anchorPoint_.x) * size_.x;
+	float top = (0.0f - anchorPoint_.y) * size_.y;
+	float bottom = (1.0f - anchorPoint_.y) * size_.y;
+
 	// 1枚目の三角形
-	vertexDataSprite[0].position = { 0.0f,size_.y,0.0f, 1.0f }; // 左下
-	vertexDataSprite[0].texcoord = { left, bottom };
-	vertexDataSprite[1].position = { 0.0f,0.0f,0.0f, 1.0f }; // 左上
-	vertexDataSprite[1].texcoord = { left, top, };
-	vertexDataSprite[2].position = { size_.x, size_.y, 0.0f,1.0f }; // 右下
-	vertexDataSprite[2].texcoord = { right,bottom };
+	vertexDataSprite[0].position = { left, bottom ,0.0f, 1.0f }; // 左下
+	vertexDataSprite[0].texcoord = { 0.0f, 1.0f };
+	vertexDataSprite[1].position = { left, top, 0.0f, 1.0f }; // 左上
+	vertexDataSprite[1].texcoord = { 0.0f,0.0f };
+	vertexDataSprite[2].position = { right, bottom, 0.0f,1.0f }; // 右下
+	vertexDataSprite[2].texcoord = { 1.0f,1.0f };
 	// 2枚目の三角形
-	vertexDataSprite[3].position = { 0.0f,0.0f, 0.0f, 1.0f }; // 左上
-	vertexDataSprite[3].texcoord = { left, top };
-	vertexDataSprite[4].position = { size_.x,0.0f, 0.0f, 1.0f }; // 右上
-	vertexDataSprite[4].texcoord = { right, top };
-	vertexDataSprite[5].position = { size_.x, size_.y,0.0f,1.0f }; // 右下
-	vertexDataSprite[5].texcoord = { right, bottom, };
+	vertexDataSprite[3].position = { left,top, 0.0f, 1.0f }; // 左上
+	vertexDataSprite[3].texcoord = { 0.0f,0.0f };
+	vertexDataSprite[4].position = {right,top, 0.0f, 1.0f }; // 右上
+	vertexDataSprite[4].texcoord = { 1.0f,0.0f};
+	vertexDataSprite[5].position = { right,bottom,0.0f,1.0f }; // 右下
+	vertexDataSprite[5].texcoord = { 1.0f,1.0f };
 
 #pragma endregion
 
