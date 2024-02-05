@@ -63,7 +63,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\Base\WinApp;$(ProjectDir)Engine\Base\DX;$(ProjectDir)Engine\CreateResource;$(ProjectDir)Engine\GraphicsPipeline;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Model;$(ProjectDir)Engine\ShaderFile;$(ProjectDir)Engine\Sprite;$(ProjectDir)Engine\TextureManager;$(ProjectDir)Engine\Transform;$(ProjectDir)Engine\Utility;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine;$(ProjectDir)Engine\Utility\ImGuiManager;$(ProjectDir)Engine\Model\State;$(ProjectDir)Externals\DirectTex;$(ProjectDir)Externals\imgui;$(ProjectDir)Project\GameManager;$(ProjectDir)Project\Scene\;$(ProjectDir)externals\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)engine\Base\WinApp;$(ProjectDir)engine\Base\DX;$(ProjectDir)engine\CreateResource;$(ProjectDir)engine\GraphicsPipeline;$(ProjectDir)engine\Input;$(ProjectDir)engine\Math;$(ProjectDir)engine\Model;$(ProjectDir)engine\ShaderFile;$(ProjectDir)engine\Sprite;$(ProjectDir)engine\TextureManager;$(ProjectDir)engine\Transform;$(ProjectDir)engine\Utility;$(ProjectDir)engine\Camera;$(ProjectDir)engine;$(ProjectDir)engine\Utility\ImGuiManager;$(ProjectDir)engine\Model\State;$(ProjectDir)Externals\DirectTex;$(ProjectDir)Externals\imgui;$(ProjectDir)application\GameManager;$(ProjectDir)application\Scene\;$(ProjectDir)externals\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,7 +89,7 @@ copy "$(WindowsSdkdir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine\Base\WinApp;$(ProjectDir)Engine\Base\DX;$(ProjectDir)Engine\CreateResource;$(ProjectDir)Engine\GraphicsPipeline;$(ProjectDir)Engine\Input;$(ProjectDir)Engine\Math;$(ProjectDir)Engine\Model;$(ProjectDir)Engine\ShaderFile;$(ProjectDir)Engine\Sprite;$(ProjectDir)Engine\TextureManager;$(ProjectDir)Engine\Transform;$(ProjectDir)Engine\Utility;$(ProjectDir)Engine\Camera;$(ProjectDir)Engine;$(ProjectDir)Engine\Utility\ImGuiManager;$(ProjectDir)Engine\Model\State;$(ProjectDir)Externals\DirectTex;$(ProjectDir)Externals\imgui;$(ProjectDir)Project\GameManager;$(ProjectDir)Project\Scene\;$(ProjectDir)externals\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)engine\Base\WinApp;$(ProjectDir)engine\Base\DX;$(ProjectDir)engine\CreateResource;$(ProjectDir)engine\GraphicsPipeline;$(ProjectDir)engine\Input;$(ProjectDir)engine\Math;$(ProjectDir)engine\Model;$(ProjectDir)engine\ShaderFile;$(ProjectDir)engine\Sprite;$(ProjectDir)engine\TextureManager;$(ProjectDir)engine\Transform;$(ProjectDir)engine\Utility;$(ProjectDir)engine\Camera;$(ProjectDir)engine;$(ProjectDir)engine\Utility\ImGuiManager;$(ProjectDir)engine\Model\State;$(ProjectDir)Externals\DirectTex;$(ProjectDir)Externals\imgui;$(ProjectDir)application\GameManager;$(ProjectDir)application\Scene\;$(ProjectDir)externals\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
