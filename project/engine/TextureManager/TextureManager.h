@@ -36,6 +36,8 @@ public:
 	static D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	static D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUHandle(uint32_t texHandle);
+	const DirectX::TexMetadata& GetMetaData(uint32_t textureIndex);
+
 
 	/// <summary>
 	/// 初期化
@@ -50,7 +52,7 @@ private:
 
 	static DirectX::ScratchImage LoadTexture(const std::string& filePath);
 
-	static void  LoadTex(const std::string& filePath, uint32_t index);
+	static void  LoadTexture(const std::string& filePath, uint32_t index);
 
 	static void CreateSRVFromTexture(Microsoft::WRL::ComPtr<ID3D12Resource> resource, const DirectX::TexMetadata& metadata, uint32_t index);
 
@@ -70,5 +72,6 @@ private: // メンバ変数
 	D3D12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV[128];
 	std::unordered_map <std::string, TextureReference> texCache_;
 	std::unordered_map<std::string, uint32_t> fileHandleMap;
+	DirectX::TexMetadata metadata_[128];
 	
 };

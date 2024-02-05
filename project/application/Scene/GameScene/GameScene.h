@@ -1,5 +1,6 @@
 #pragma once
 #include "application/Scene/IScene/IScene.h"
+#include "engine/Sprite/Sprite.h"
 
 class GameScene : public IScene {
 public: // メンバ関数
@@ -29,4 +30,7 @@ public: // メンバ関数
 	void Draw()override;
 
 private:
+	uint32_t t = 0;
+	std::unique_ptr<Sprite> s;
+	Camera c;
 };

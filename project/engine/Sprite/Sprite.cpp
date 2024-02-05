@@ -10,7 +10,7 @@ Sprite::~Sprite()
 /// <summary>
 /// 初期化
 /// </summary>
-void Sprite::Initialize() {
+void Sprite::Initialize(uint32_t texHandle) {
 
 #pragma region // Sprite頂点データ
 
@@ -24,20 +24,29 @@ void Sprite::Initialize() {
 	VertexData* vertexDataSprite = nullptr;
 	sResource_.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
 
+	float left = 0.0f - anchorPoint_.x;
+	float right = 1.0f - anchorPoint_.x;
+	float top = 0.0f - anchorPoint_.y;
+	float bottom = 1.0f - anchorPoint_.y;
+
+	texHandle_ = texHandle;
+
+	AdjustTextureSize(texHandle_);
+
 	// 1枚目の三角形
-	vertexDataSprite[0].position = { 0.0f, size_.y,0.0f, 1.0f}; // 左下
-	vertexDataSprite[0].texcoord = { 0.0f, 1.0f };
-	vertexDataSprite[1].position = { 0.0f, 0.0f, 0.0f, 1.0f }; // 左上
-	vertexDataSprite[1].texcoord = { 0.0f, 0.0f };
-	vertexDataSprite[2].position = { size_.x, size_.y, 0.0f,1.0f}; // 右下
-	vertexDataSprite[2].texcoord = { 1.0f,1.0f };
+	vertexDataSprite[0].position = { 0.0f,size_.y,0.0f, 1.0f }; // 左下
+	vertexDataSprite[0].texcoord = { left, bottom };
+	vertexDataSprite[1].position = { 0.0f,0.0f,0.0f, 1.0f }; // 左上
+	vertexDataSprite[1].texcoord = { left, top, };
+	vertexDataSprite[2].position = { size_.x, size_.y, 0.0f,1.0f }; // 右下
+	vertexDataSprite[2].texcoord = { right,bottom };
 	// 2枚目の三角形
-	vertexDataSprite[3].position = { 0.0f, 0.0f, 0.0f, 1.0f }; // 左上
-	vertexDataSprite[3].texcoord = { 0.0f, 0.0f };
-	vertexDataSprite[4].position = { size_.x, 0.0f, 0.0f, 1.0f }; // 右上
-	vertexDataSprite[4].texcoord = { 1.0f, 0.0f };
-	vertexDataSprite[5].position = { size_.x, size_.y, 0.0f,1.0f }; // 右下
-	vertexDataSprite[5].texcoord = { 1.0f,1.0f };
+	vertexDataSprite[3].position = { 0.0f,0.0f, 0.0f, 1.0f }; // 左上
+	vertexDataSprite[3].texcoord = { left, top };
+	vertexDataSprite[4].position = { size_.x,0.0f, 0.0f, 1.0f }; // 右上
+	vertexDataSprite[4].texcoord = { right, top };
+	vertexDataSprite[5].position = { size_.x, size_.y,0.0f,1.0f }; // 右下
+	vertexDataSprite[5].texcoord = { right, bottom, };
 
 #pragma endregion
 
@@ -57,15 +66,23 @@ void Sprite::Initialize() {
 /// </summary>
 /// <param name="position"></param>
 /// <returns></returns>
-Sprite* Sprite::Create(Vector2 position, Vector2 size, Vector4 color)
+Sprite* Sprite::Create(Vector2 position, uint32_t texHandle, Vector4 color)
 {
 	Sprite* sprite = new Sprite;
-	sprite->SetSize(size);
-	sprite->Initialize();
+	sprite->Initialize(texHandle);
     sprite->SetPosition(position);
 	sprite->SetColor(color);
 
 	return sprite;
+}
+
+void Sprite::AdjustTextureSize(uint32_t texIndex)
+{
+	const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(texIndex);
+
+	size_.x = static_cast<float>(metadata.width);
+	size_.y = static_cast<float>(metadata.height);
+
 }
 
 /// <summary>
@@ -73,7 +90,7 @@ Sprite* Sprite::Create(Vector2 position, Vector2 size, Vector4 color)
 /// </summary>
 /// <param name="v"></param>
 /// <param name="t"></param>
-void Sprite::Draw(Camera camera, uint32_t texHandle)
+void Sprite::Draw(Camera camera)
 {
 	
 	worldTransform_.STransferMatrix(sResource_.wvpResource, camera);
@@ -93,7 +110,7 @@ void Sprite::Draw(Camera camera, uint32_t texHandle)
 	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(0, sResource_.materialResource->GetGPUVirtualAddress());
 	// wvp用のCBufferの場所を設定
 	DirectXCommon::GetCommandList()->SetGraphicsRootConstantBufferView(1, sResource_.wvpResource->GetGPUVirtualAddress());
-	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetGPUHandle(texHandle));
+	DirectXCommon::GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetGPUHandle(texHandle_));
 	// 描画。(DrawCall/ドローコール)。3頂点で1つのインスタンス。インスタンスについては今後
 	DirectXCommon::GetCommandList()->DrawInstanced(6, 1, 0, 0);
 

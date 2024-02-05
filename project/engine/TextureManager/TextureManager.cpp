@@ -18,7 +18,7 @@ uint32_t TextureManager::Load(const std::string& fileName){
 	newIndex++;
 	TextureManager::GetInstance()->index_++;
 	TextureManager::GetInstance()->fileHandleMap[fileName] = newIndex;
-	LoadTex(fileName, newIndex);
+	LoadTexture(fileName, newIndex);
 
 	return newIndex;
 }
@@ -65,11 +65,11 @@ DirectX::ScratchImage TextureManager::LoadTexture(const std::string& filePath){
 	return mipImages;
 }
 
-void TextureManager::LoadTex(const std::string& filePath, uint32_t index)
+void TextureManager::LoadTexture(const std::string& filePath, uint32_t index)
 {
 
 	DirectX::ScratchImage mipImages = LoadTexture(filePath);
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
+	TextureManager::GetInstance()->metadata_[index] = mipImages.GetMetadata();
 
 	// 同じものがロードされたら再利用する
 	auto it = TextureManager::GetInstance()->texCache_.find(filePath);
@@ -78,15 +78,15 @@ void TextureManager::LoadTex(const std::string& filePath, uint32_t index)
 		TextureReference& texRef = it->second;
 		texRef.AddRef();
 		// 既にロードされているテクスチャを使用してSRVを作成
-		CreateSRVFromTexture(texRef.GetResource(), metadata, index);
+		CreateSRVFromTexture(texRef.GetResource(), TextureManager::GetInstance()->metadata_[index], index);
 		return;
 	}
 
 	// テクスチャを作成し、キャッシュに追加
-	TextureManager::GetInstance()->texResource[index] = CreateTextureResource(metadata);
+	TextureManager::GetInstance()->texResource[index] = CreateTextureResource(TextureManager::GetInstance()->metadata_[index]);
 	TextureManager::GetInstance()->texCache_.insert({ filePath, std::move(TextureReference(TextureManager::GetInstance()->texResource[index].Get())) });
 	UploadTextureData(TextureManager::GetInstance()->texResource[index].Get(), mipImages);
-	CreateSRVFromTexture(TextureManager::GetInstance()->texResource[index].Get(), metadata, index);
+	CreateSRVFromTexture(TextureManager::GetInstance()->texResource[index].Get(), TextureManager::GetInstance()->metadata_[index], index);
 
 }
 
@@ -162,4 +162,11 @@ void TextureManager::UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> te
 		assert(SUCCEEDED(hr));
 	}
 
+}
+
+const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureIndex)
+{
+	assert(textureIndex > 128);
+
+	return metadata_[textureIndex];
 }
