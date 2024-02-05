@@ -1,8 +1,8 @@
 #pragma once
-#include "DirectXCommon.h"
-#include "Vector4.h"
-#include "Vector2.h"
-#include "Vector3.h"
+#include "engine/Base/DX/DirectXCommon.h"
+#include "engine/Math/Vector4.h"
+#include "engine/Math/Vector3.h"
+#include "engine/Math/Vector2.h"
 
 struct Resource {
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;

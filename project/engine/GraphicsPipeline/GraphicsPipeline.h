@@ -1,9 +1,10 @@
 #pragma once
 
-#include "DirectXCommon.h"
-#include "StringUtility.h"
-#include "ShaderCompile.h"
-#include "CreateResource.h"
+#include "engine/Base/DX/DirectXCommon.h"
+#include "engine/Utility/StringUtility.h"
+#include "engine/Utility/ShaderCompile.h"
+#include "engine/CreateResource/CreateResource.h"
+#include "engine/Math/Vector4.h"
 
 // 共通で使うやつ
 struct Property {

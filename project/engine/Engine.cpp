@@ -25,8 +25,7 @@ void Engine::Initialize(){
 	TextureManager::GetInstance()->Initialize();
 
 	// シーンの初期化
-	gameManager_ = std::make_unique<GameManager>();
-	gameManager_->Initialize();
+	
 
 	// ImGuiの初期化
 	imguiManager_ = ImGuiManager::GetInstance();
@@ -51,7 +50,6 @@ void Engine::Run(){
 		imguiManager_->Begin();
 
 		// ゲームの処理
-		gameManager_->Run();
 
 		//imguiManager_->End();
 
@@ -59,7 +57,7 @@ void Engine::Run(){
 		dxCommon_->PreDraw();
 
 		// ゲームシーン描画
-		gameManager_->Draw();
+		
 
 		imguiManager_->End();
 

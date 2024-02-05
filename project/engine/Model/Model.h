@@ -1,14 +1,14 @@
 #pragma once
-#include "IModelState.h"
-#include "ModelSphere.h"
-#include "Vector2.h"
+#include "engine/Model/State/IModelState.h"
+#include "engine/Model/State/ModelSphere.h"
+#include "engine/Math/Vector2.h"
 #include <fstream>
 #include <sstream>
-#include "ImGuiManager/ImGuiManager.h"
-#include "Camera/Camera.h"
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include "engine/Utility/ImGuiManager/ImGuiManager.h"
+#include "engine/Camera/Camera.h"
+#include "externals/assimp/include/assimp/Importer.hpp"
+#include "externals/assimp/include/assimp/scene.h"
+#include "externals/assimp/include/assimp/postprocess.h"
 
 struct Node {
 	Matrix4x4 localMatrix;

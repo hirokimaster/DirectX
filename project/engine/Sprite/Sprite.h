@@ -1,16 +1,15 @@
 #pragma once
-#include "DirectXCommon.h"
-#include "StringUtility.h"
-#include "ShaderCompile.h"
-#include "CreateResource.h"
-#include "GraphicsPipeline.h"
-#include "Matrix4x4.h"
-#include "Mathfunction.h"
-#include "WorldTransform.h"
-#include "Camera.h"
-#include "TextureManager.h"
-#include "Vector2.h"
-
+#include "engine/Base/DX/DirectXCommon.h"
+#include "engine/Utility/StringUtility.h"
+#include "engine/Utility/ShaderCompile.h"
+#include "engine/CreateResource/CreateResource.h"
+#include "engine/GraphicsPipeline/GraphicsPipeline.h"
+#include "engine/Math/Mathfunction.h"
+#include "engine/Transform/WorldTransform.h"
+#include "engine/Camera/Camera.h"
+#include "engine/TextureManager/TextureManager.h"
+#include "engine/Math/Vector2.h"
+		  
 class Sprite {
 public: // メンバ関数
 

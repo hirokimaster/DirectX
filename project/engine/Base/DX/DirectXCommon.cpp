@@ -1,5 +1,5 @@
 #include "DirectXCommon.h"
-#include "StringUtility.h"
+#include "engine/Utility/StringUtility.h"
 
 DirectXCommon* DirectXCommon::GetInstance() {
 	static DirectXCommon instance;

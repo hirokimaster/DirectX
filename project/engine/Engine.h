@@ -1,13 +1,12 @@
 #pragma once
-#include "WinApp.h"
-#include "DirectXCommon.h"
-#include "ShaderCompile.h"
-#include "GameManager.h"
-#include "GraphicsPipeline.h"
-#include "ImGuiManager.h"
-#include "TextureManager.h"
-#include "Input.h"
-#include "Audio/Audio.h"
+#include "engine/Base/WinApp/WinApp.h"
+#include "engine/Base/DX/DirectXCommon.h"
+#include "engine/Utility/ShaderCompile.h"
+#include "engine/GraphicsPipeline/GraphicsPipeline.h"
+#include "engine/Utility/ImGuiManager/ImGuiManager.h"
+#include "engine/TextureManager/TextureManager.h"
+#include "engine/Input/Input.h"
+#include "engine/Audio/Audio.h"
 
 class Engine {
 public:
@@ -31,5 +30,5 @@ private:
 	DirectXCommon* dxCommon_;
 	Audio* audio_;
 	ImGuiManager* imguiManager_;
-	std::unique_ptr<GameManager> gameManager_;
+	
 };

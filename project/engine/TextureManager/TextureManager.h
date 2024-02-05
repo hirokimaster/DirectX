@@ -5,9 +5,9 @@
 #include <unordered_map>
 #include <wrl.h>
 #include <DirectXTex.h>
-#include "StringUtility.h"
-#include "DirectXCommon.h"
-#include "TextureManager/TextureReference/TextureReference.h"
+#include "engine/Utility/StringUtility.h"
+#include "engine/Base/DX/DirectXCommon.h"
+#include "engine/TextureManager/TextureReference/TextureReference.h"
 #include <iostream>
 
 struct descSize {

@@ -1,5 +1,5 @@
 #include "GraphicsPipeline.h"
-#include "Vector4.h"
+
 
 GraphicsPipeline* GraphicsPipeline::GetInstance() {
 	static GraphicsPipeline instance;

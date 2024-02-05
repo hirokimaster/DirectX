@@ -1,10 +1,8 @@
 #pragma once
-#include "Vector3.h"
-#include "Matrix4x4.h"
-#include "DirectXCommon.h"
-#include "Mathfunction.h"
-#include "CreateResource.h"
-#include "Camera/Camera.h"
+#include "engine/Base/DX/DirectXCommon.h"
+#include "engine/Math/Mathfunction.h"
+#include "engine/CreateResource/CreateResource.h"
+#include "engine/Camera/Camera.h"
 
 
 struct TransformationMatrix {

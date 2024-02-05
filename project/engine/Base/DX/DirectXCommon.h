@@ -11,7 +11,7 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "dxguid.lib")
 #include <chrono>
-#include "WinApp.h"
+#include "engine/Base/WinApp/WinApp.h"
 
 class DirectXCommon {
 public : // メンバ関数

@@ -1,8 +1,8 @@
 #pragma once
-#include "WorldTransform.h"
-#include "GraphicsPipeline.h"
-#include "TextureManager.h"
-#include "Camera/Camera.h"
+#include "engine/Transform/WorldTransform.h"
+#include "engine/GraphicsPipeline/GraphicsPipeline.h"
+#include "engine/TextureManager/TextureManager.h"
+#include "engine/Camera/Camera.h"
 
 class Model;
 

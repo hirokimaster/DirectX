@@ -1,6 +1,5 @@
 #pragma once
-#include "Vector3.h"
-#include "Mathfunction.h"
+#include "engine/Math/Mathfunction.h"
 
 struct Camera {
 
