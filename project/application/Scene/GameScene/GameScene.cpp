@@ -94,6 +94,7 @@ void GameScene::Update() {
 	static int currentItem_ = 0;
 	const char* item[3] = { "None", "pointLight", "spotLight" };
 
+#ifdef _DEBUG
 	ImGui::Begin("Light Type");
 
 	if (ImGui::Combo("LightType", &currentItem_, item, IM_ARRAYSIZE(item))) {
@@ -191,6 +192,7 @@ void GameScene::Update() {
 
 	ImGui::End();
 
+
 	/*---------------------------
 			SpotLightの設定
 	------------------------------*/
@@ -208,6 +210,21 @@ void GameScene::Update() {
 	}
 
 	ImGui::End();
+
+	/*----------------------------
+			パーティクル
+	------------------------------*/
+	ImGui::Begin("particle");
+	ImGui::Checkbox("DrawParticle1", &isDrawParticle1_);
+	ImGui::Checkbox("DrawParticle2", &isDrawParticle2_);
+	ImGui::End();
+
+	// スプライト
+	ImGui::Begin("sprite");
+	ImGui::Checkbox("DrawSprite", &isDrawSprite_);
+	ImGui::End();
+
+#endif // _DEBUG
 
 	/*----------------------------
 			パーティクル
@@ -243,16 +260,7 @@ void GameScene::Update() {
 		(*particleItr2).worldTransform.UpdateMatrix();
 
 	}
-
-	ImGui::Begin("particle");
-	ImGui::Checkbox("DrawParticle1", &isDrawParticle1_);
-	ImGui::Checkbox("DrawParticle2", &isDrawParticle2_);
-	ImGui::End();
-
-	ImGui::Begin("sprite");
-	ImGui::Checkbox("DrawSprite", &isDrawSprite_);
-	ImGui::End();
-
+	
 	camera_.UpdateMatrix();
 	worldTransformBunny_.UpdateMatrix();
 	worldTransformGround_.UpdateMatrix();

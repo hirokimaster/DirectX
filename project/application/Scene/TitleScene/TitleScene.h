@@ -4,6 +4,7 @@
 #include  "engine/Sprite/Sprite.h"
 #include "engine/Input/Input.h"
 #include "application/GameManager/GameManager.h"
+#include "engine/Utility/ImGuiManager/ImGuiManager.h"
 
 class TitleScene : public IScene {
 public:

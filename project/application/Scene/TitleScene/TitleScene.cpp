@@ -14,7 +14,8 @@ void TitleScene::Initialize()
 	texHandle_ = TextureManager::Load("resources/title.png");
 	sprite_.reset(Sprite::Create({ 0.0f,0.0f }, texHandle_));
 	texHandlePushA_ = TextureManager::Load("resources/pushA.png");
-	spritePushA_.reset(Sprite::Create({ 640.0f,500.0f }, texHandlePushA_));
+	spritePushA_.reset(Sprite::Create({ 340.0f,500.0f }, texHandlePushA_));
+	gameManager_ = GameManager::GetInstance();
 }
 
 void TitleScene::Update()
@@ -31,6 +32,14 @@ void TitleScene::Update()
 	if (Input::GetInstance()->PressedKey(DIK_A)) {
 		gameManager_->ChangeScene("GAME");
 	}
+
+#ifdef _DEBUG
+	ImGui::Begin("Scene");
+	ImGui::Text("pusy key A or pushButton A = GameScene");
+	ImGui::End();
+	
+#endif // _DEBUG
+
 
 	camera_.UpdateMatrix();
 }
