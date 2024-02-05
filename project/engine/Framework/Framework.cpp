@@ -10,7 +10,7 @@ void Framework::Initialize()
 	audio_ = Audio::GetInstance();
 
 	// ウィンドウの作成
-	win_->CreateGameWindow(L"DirectXGame");
+	win_->CreateGameWindow(L"LE2B_15_ニヘイ_リュウダイ_GE3_評価課題2");
 	// DirectX初期化
 	dxCommon_->Initialize(win_);
 	Input::Initialize();
