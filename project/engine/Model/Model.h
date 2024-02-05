@@ -9,6 +9,7 @@
 #include "externals/assimp/include/assimp/Importer.hpp"
 #include "externals/assimp/include/assimp/scene.h"
 #include "externals/assimp/include/assimp/postprocess.h"
+#include <numbers>
 
 struct Node {
 	Matrix4x4 localMatrix;
@@ -65,19 +66,23 @@ public:
 	/// <summary>
 	/// Objの描画
 	/// </summary>
-	void Draw(WorldTransform worldTransform, Camera camera);
+	void Draw(WorldTransform worldTransform, Camera camera, Light light);
 
 	// setter
 	void SetTexHandle(uint32_t texHandle) { texHandle_ = texHandle; }
 
 	// ライティングのsetter
 	int32_t SetEnableLighting(int32_t enableLighting) { return materialData_->enableLighting = enableLighting; }
-	// 色のsetter
-	Vector4 SetColor(Vector4 color) { return materialData_->color = color; }
+	// マテリアルの設定
+	Material SetMaterialProperty(Material materialdata) { return *materialData_ = materialdata; }
+	// directionalLightの設定
+	DirectionalLight SetLightingProperty(DirectionalLight directionalLight) { return *directionalLightData_ = directionalLight; }
 	// lightの設定
 	PointLight SetPointLightProperty(PointLight pointLight) { return *pointLightData_ = pointLight; }
+	SpotLight SetSpotLightProperty(SpotLight spotLight) { return *spotLightData_ = spotLight; }
 	// cameradataの設定
 	Vector3 SetCameraData(Vector3 camera) { return cameraData_->worldPosition = camera; }
+
 
 
 	/// <summary>
@@ -114,7 +119,9 @@ private: // メンバ変数
 	DirectionalLight* directionalLightData_ = nullptr;
 	uint32_t texHandle_ = 0;
 	PointLight* pointLightData_ = nullptr;
+	SpotLight* spotLightData_ = nullptr;
 	CameraData* cameraData_ = nullptr;
+	Property property_{};
 };
 
 

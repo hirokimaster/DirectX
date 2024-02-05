@@ -362,6 +362,8 @@
     <FxCompile Include="Engine\ShaderFile\PointLight.VS.hlsl">
       <Filter>Engine\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="engine\ShaderFile\SpotLight.VS.hlsl" />
+    <FxCompile Include="engine\ShaderFile\SpotLight.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\ShaderFile\Object3d.hlsli">

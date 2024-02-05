@@ -20,6 +20,14 @@ struct PipelineState {
 	Property Sprite2D;
 	Property Particle;
 	Property PointLight;
+	Property SpotLight;
+	Property BlinnPhongObject3D;
+};
+
+enum Light {
+	None,
+	Point,
+	Spot
 };
 
 // BlendMode
@@ -80,6 +88,8 @@ private:
 	static Property CreateParticle(Microsoft::WRL::ComPtr <ID3D12Device> device, const std::wstring& shaderName);
 
 	static Property CreatePointLight(Microsoft::WRL::ComPtr <ID3D12Device> device, const std::wstring& shaderName);
+
+	static Property CreateSpotLight(Microsoft::WRL::ComPtr <ID3D12Device> device, const std::wstring& shaderName);
 
 	PipelineState pso = {};
 
