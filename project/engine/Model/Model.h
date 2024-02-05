@@ -66,7 +66,7 @@ public:
 	/// <summary>
 	/// Objの描画
 	/// </summary>
-	void Draw(WorldTransform worldTransform, Camera camera, Light light);
+	void Draw(WorldTransform worldTransform, Camera camera, Light light = None);
 
 	// setter
 	void SetTexHandle(uint32_t texHandle) { texHandle_ = texHandle; }
