@@ -216,11 +216,9 @@ void Model::Draw(WorldTransform worldTransform, Camera camera, Light light)
 		property_ = GraphicsPipeline::GetInstance()->GetPSO().SpotLight;
 	}
 
-	Property property = GraphicsPipeline::GetInstance()->GetPSO().Object3D;
-
 	// Rootsignatureを設定。PSOに設定してるけど別途設定が必要
-	DirectXCommon::GetCommandList()->SetGraphicsRootSignature(property.rootSignature_.Get());
-	DirectXCommon::GetCommandList()->SetPipelineState(property.graphicsPipelineState_.Get()); // PSOを設定
+	DirectXCommon::GetCommandList()->SetGraphicsRootSignature(property_.rootSignature_.Get());
+	DirectXCommon::GetCommandList()->SetPipelineState(property_.graphicsPipelineState_.Get()); // PSOを設定
 	DirectXCommon::GetCommandList()->IASetVertexBuffers(0, 1, &objVertexBufferView_); // VBVを設定
 	// 形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
 	DirectXCommon::GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
