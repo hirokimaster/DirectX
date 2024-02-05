@@ -12,12 +12,31 @@ void GameScene::Initialize() {
 	camera_.rotate.x = 0.28f;
 	camera_.translate = { 0,10.0f,-30.0f };
 
+	//乱数生成器
+	randomEngine_ = particle1_->random();
+
+	emit.count = 3;
+	emit.frequency = 0.5f;
+	emit.frequencyTime = 0.0f;
+
+	texHandleCircle_ = TextureManager::Load("resources/circle.png");
 	modelBunny_.reset(Model::CreateObj("bunny.obj"));
 	texHandleUVChecker_ = TextureManager::Load("resources/uvChecker.png");
 	modelGround_.reset(Model::CreateObj("terrain.obj"));
 	texHandleGround_ = TextureManager::Load("resources/grass.png");
 	modelBunny_->SetTexHandle(texHandleUVChecker_);
 	modelGround_->SetTexHandle(texHandleGround_);
+	sprite_.reset(Sprite::Create({ 0.0f,0.0f }, texHandleUVChecker_));
+
+	particle2_ = std::make_unique<ParticleSystem>();
+	particle2_->Initialize("cube.obj");
+	particle2_->SetTexHandle(texHandleCircle_);
+	particle1_ = std::make_unique<ParticleSystem>();
+	particle1_->Initialize("plane.obj");
+	particle1_->SetTexHandle(texHandleUVChecker_);
+	accelerationField.acceleration = { 15.0f, 0.0f,0.0f };
+	accelerationField.area.min = { -1.0f,-1.0f,-1.0f };
+	accelerationField.area.max = { 1.0f,1.0f,1.0f };
 	
 	isLightingBunny_ = true;
 	materialBunny_.color = { 1.0f,1.0f,1.0f,1.0f };
@@ -190,6 +209,50 @@ void GameScene::Update() {
 
 	ImGui::End();
 
+	/*----------------------------
+			パーティクル
+	------------------------------*/
+	emit.frequencyTime += dt;
+	if (emit.frequency <= emit.frequencyTime) {
+		particles1_.splice(particles1_.end(), particle1_->Emission(emit, randomEngine_));
+		particles2_.splice(particles2_.end(), particle2_->Emission(emit, randomEngine_));
+		emit.frequencyTime -= emit.frequency;
+	}
+
+
+	for (std::list<Particle>::iterator particleItr = particles1_.begin();
+		particleItr != particles1_.end(); ++particleItr) {
+
+		if (particle1_->IsCollision(accelerationField.area, (*particleItr).worldTransform.translate)) {
+			(*particleItr).velocity = Add((*particleItr).velocity, Multiply(dt, accelerationField.acceleration));
+		}
+
+		(*particleItr).worldTransform.translate = Add((*particleItr).worldTransform.translate, Multiply(dt, (*particleItr).velocity));
+		(*particleItr).worldTransform.UpdateMatrix();
+
+	}
+
+	for (std::list<Particle>::iterator particleItr2 = particles2_.begin();
+		particleItr2 != particles2_.end(); ++particleItr2) {
+
+		if (particle2_->IsCollision(accelerationField.area, (*particleItr2).worldTransform.translate)) {
+			(*particleItr2).velocity = Add((*particleItr2).velocity, Multiply(dt, accelerationField.acceleration));
+		}
+
+		(*particleItr2).worldTransform.translate = Add((*particleItr2).worldTransform.translate, Multiply(dt, (*particleItr2).velocity));
+		(*particleItr2).worldTransform.UpdateMatrix();
+
+	}
+
+	ImGui::Begin("particle");
+	ImGui::Checkbox("DrawParticle1", &isDrawParticle1_);
+	ImGui::Checkbox("DrawParticle2", &isDrawParticle2_);
+	ImGui::End();
+
+	ImGui::Begin("sprite");
+	ImGui::Checkbox("DrawSprite", &isDrawSprite_);
+	ImGui::End();
+
 	camera_.UpdateMatrix();
 	worldTransformBunny_.UpdateMatrix();
 	worldTransformGround_.UpdateMatrix();
@@ -199,4 +262,17 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	modelBunny_->Draw(worldTransformBunny_, camera_, light_);
 	modelGround_->Draw(worldTransformGround_, camera_, light_);
+
+	if (isDrawParticle1_) {
+		particle1_->Draw(particles1_, camera_);
+	}
+
+	if (isDrawParticle2_) {
+		particle2_->Draw(particles2_, camera_);
+	}
+	
+	if (isDrawSprite_) {
+		sprite_->Draw(camera_);
+	}
+	
 }

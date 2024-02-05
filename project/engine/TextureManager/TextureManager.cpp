@@ -166,7 +166,7 @@ void TextureManager::UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> te
 
 const DirectX::TexMetadata& TextureManager::GetMetaData(uint32_t textureIndex)
 {
-	assert(textureIndex > 128);
+	//assert(textureIndex > 128);
 
 	return metadata_[textureIndex];
 }
